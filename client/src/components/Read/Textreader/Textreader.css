@@ -1,3 +1,12 @@
-.text-wrap {
-  /* white-space: normal; */
+/* .text-wrap {
+  white-space: normal;
+}
+ */
+
+.searchable-word:hover {
+  background-color: aqua;
+}
+
+.text-reader {
+  white-space: pre;
 }

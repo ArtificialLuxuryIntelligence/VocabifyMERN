@@ -24,14 +24,17 @@ const fetchArray = (wordArray, lang) => {
 // API fetch request
 async function fetchDefinitions(wordArray, lang) {
   //   console.log(wordArray);
-
-  let responses = await Promise.allSettled(fetchArray(wordArray, lang));
-  // console.log(responses);
+  let responses;
+  try {
+    responses = await Promise.allSettled(fetchArray(wordArray, lang));
+    // console.log(responses);
+  } catch (err) {
+    console.log(err);
+  }
   let obj = responses
     .map(res => (res.status === "fulfilled" ? res.value.data : null))
     .filter(def => def !== null);
   // console.log(obj);
-
   return obj;
 }
 
@@ -189,9 +192,8 @@ router.post("/definitions", isAuthenticated, async (req, res, next) => {
 // ---------- Update user word info // vocab size/known words array/unknown words array----------
 
 //---PROTECTED
-// router.post("/updateuser", isAuthenticated, (req, res, next) => {
 
-router.post("/updateuser", (req, res, next) => {
+router.post("/updateuser", isAuthenticated, (req, res, next) => {
   let token = req.body.token;
   let id = req.body.id; //note token is (currently in this version) user id (separate here for clarity)
   let unknownWords = req.body.unknownWords;

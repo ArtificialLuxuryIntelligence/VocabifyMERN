@@ -4,6 +4,7 @@ import axios from "axios";
 // import auth from "../../utils/auth";
 
 import Collapsible from "react-collapsible";
+import Spanner from "../../Spanner/Spanner";
 
 class Sidebar extends Component {
   constructor(props) {
@@ -29,24 +30,34 @@ class Sidebar extends Component {
   }
 
   render() {
+    if (this.props.isLoading) {
+      return <p> Loading words...</p>;
+    }
     return (
       <div>
+        {this.props.isNewWordLoading ? <p>adding word ... </p> : null}
         <div>
           {this.props.definitionJSON.map((word, i) => {
-            if (this.props.sidebarWords.indexOf(word[0].word) != -1) {
+            if (this.props.sidebarWords.indexOf(word[0].word) !== -1) {
               if (word.length > 1) {
                 return (
                   <div key={i}>
                     {/* <h1>{word[0].word}</h1> */}
-                    <Collapsible trigger={word[0].word}>
-                      <Word word={word} />
+                    <Collapsible
+                      handleSpanClick={this.props.handleSpanClick}
+                      trigger={word[0].word}
+                    >
+                      <Word
+                        handleSpanClick={this.props.handleSpanClick}
+                        word={word}
+                      />
                     </Collapsible>
                     {this.props.unknownWords.indexOf(word[0].word) === -1 && (
                       <button onClick={e => this.props.handleAddWord(e)}>
                         Add word
                       </button>
                     )}
-                    {this.props.unknownWords.indexOf(word[0].word) != -1 && (
+                    {this.props.unknownWords.indexOf(word[0].word) !== -1 && (
                       <button onClick={e => this.props.handleRemoveWord(e)}>
                         Remove word
                       </button>
@@ -63,8 +74,14 @@ class Sidebar extends Component {
                       return (
                         <div key={i}>
                           {/* <h1>{word.word}</h1> */}
-                          <Collapsible trigger={word.word}>
-                            <POS word={word} />
+                          <Collapsible
+                            handleSpanClick={this.props.handleSpanClick}
+                            trigger={word.word}
+                          >
+                            <POS
+                              handleSpanClick={this.props.handleSpanClick}
+                              word={word}
+                            />
                           </Collapsible>
                           {this.props.unknownWords.indexOf(word.word) ===
                             -1 && (
@@ -72,7 +89,8 @@ class Sidebar extends Component {
                               Add word
                             </button>
                           )}
-                          {this.props.unknownWords.indexOf(word.word) != -1 && (
+                          {this.props.unknownWords.indexOf(word.word) !==
+                            -1 && (
                             <button
                               onClick={e => this.props.handleRemoveWord(e)}
                             >
@@ -105,8 +123,11 @@ function Word(props) {
         return (
           <div key={i}>
             {/* <h2>{word.word}</h2> */}
-            <Collapsible trigger={word.word}>
-              <POS word={word} />
+            <Collapsible
+              handleSpanClick={props.handleSpanClick}
+              trigger={word.word}
+            >
+              <POS handleSpanClick={props.handleSpanClick} word={word} />
             </Collapsible>
           </div>
         );
@@ -121,15 +142,17 @@ function POS(props) {
   // console.log(keys);
 
   // console.log(props.word.meaning[])
-
   return (
     <div>
       {keys.map((key, i) => {
         return (
           <div key={i}>
             {/* <p>{key}</p> */}
-            <Collapsible trigger={key}>
-              <Definition def={props.word.meaning[key]} />
+            <Collapsible handleSpanClick={props.handleSpanClick} trigger={key}>
+              <Definition
+                handleSpanClick={props.handleSpanClick}
+                def={props.word.meaning[key]}
+              />
             </Collapsible>
           </div>
         );
@@ -145,7 +168,11 @@ function Definition(props) {
       {props.def.map((def, i) => {
         return (
           <div key={i}>
-            <p>{def.definition}</p>
+            <Spanner
+              handleSpanClick={props.handleSpanClick}
+              randomString={def.definition}
+            ></Spanner>
+            {/* <p>{def.definition}</p> */}
           </div>
         );
       })}

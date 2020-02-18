@@ -27,7 +27,7 @@ const UserSchema = new mongoose.Schema({
   },
   vocabSize: {
     type: Number,
-    default: 200
+    default: 90000
   }
 });
 UserSchema.methods.generateHash = function(password) {

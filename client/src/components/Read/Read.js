@@ -20,7 +20,9 @@ class Read extends Component {
       words: [],
       fullText: "",
       sidebarWords: [],
-      definitionJSON: {}
+      definitionJSON: {},
+      isLoading: false,
+      isNewWordLoading: false
     };
 
     // this.getDefinitions = this.props.getDefinitions.bind(this);
@@ -38,32 +40,6 @@ class Read extends Component {
     }
     console.log("did mount");
   }
-
-  //needs to pass this function to children
-
-  // ---- makes plain text clickable and searchable (i.e. definition lookup)
-
-  //   searchableText = (text, targetContainer) => {
-  //     let outputText = text
-  //       .split(" ")
-  //       .map(word => word.replace(word, "<span class='word'>" + word + "</span>"))
-  //       .join(" ");
-  //     targetContainer.innerHTML = outputText;
-
-  //     let words = targetContainer.getElementsByClassName("word");
-
-  //     [...words].forEach(word => {
-  //       //cloning removes eventlisteners to avoid duplicates
-  //       let clone = word.cloneNode(true);
-  //       word.parentNode.replaceChild(clone, word);
-
-  //       clone.addEventListener("click", e => {
-  //         let word = sanitizeText(e.target.innerHTML);
-  //         fetchDefinitions(word, false);
-  //         console.log(word);
-  //       });
-  //     });
-  //   };
 
   //removes dupulicates
   uniq = a => {
@@ -86,19 +62,15 @@ class Read extends Component {
   };
 
   handleSubmit = async () => {
+    this.setState({ isLoading: true });
     const textarea = document.querySelector("#textarea");
+
     let words = this.sanitizeText(textarea.value);
-    //filter: true // only get words that are probably unknown to user
-
-    //TODO save definitions to localstorage and only request definitions not already in localS
-    // let savedDefinitions = JSON.parse(localStorage.getItem("vocabify")).savedDefinitions
-    // words.filter(word => ...)
-
-    //filter == false if unknowwords <3 (otherwise it just returns all words over 200 vocabsize... (change this?))
-    // need to implement clickable text then can turn this off else >3
+    let fullText = textarea.value;
+    this.setState({ currentView: "read", words, fullText });
 
     //try catch
-    let definitions = await this.props.getDefinitions(words, "true");
+    let definitions = await this.props.getDefinitions(words, "true"); //filter: true // only get words that are probably unknown to use
     console.log(definitions);
 
     let sidebarWordsArray = [];
@@ -108,23 +80,35 @@ class Read extends Component {
       definitionJSON: definitions,
       sidebarWords: sidebarWordsArray
     });
-
-    let fullText = textarea.value;
-    this.setState({ currentView: "read", words, fullText });
+    this.setState({ isLoading: false });
   };
 
   handleSpanClick = async e => {
-    let def = await this.props.getDefinitions([e.target.innerText], "false");
-    let defs = this.state.definitionJSON;
-    this.setState({ definitionJSON: def.concat(defs) });
-
+    this.setState({ isNewWordLoading: true });
+    let word = e.target.innerText;
+    let queryWord = this.sanitizeText(word);
+    let def = await this.props.getDefinitions(queryWord, "false");
+    if (def.length === 0) {
+      this.setState({ isNewWordLoading: false });
+      return;
+    }
     let newWord = def[0][0].word;
 
+    let defs = this.state.definitionJSON;
     let sidebarWordArray = this.state.sidebarWords;
 
-    sidebarWordArray.push(newWord);
+    //----avoid duplicates in sidebar and bring new word to top
+    if (sidebarWordArray.includes(newWord)) {
+      let index = sidebarWordArray.indexOf(newWord);
+      sidebarWordArray.splice(index, 1);
+      defs.splice(index, 1);
+    }
+    //-----
 
+    this.setState({ definitionJSON: def.concat(defs) });
+    sidebarWordArray.unshift(newWord);
     this.setState({ sidebarWords: sidebarWordArray });
+    this.setState({ isNewWordLoading: false });
   };
 
   handleNewText = () => {
@@ -200,6 +184,9 @@ class Read extends Component {
             handleDeleteWord={this.handleDeleteWord}
             handleAddWord={this.handleAddWord}
             sidebarWords={this.state.sidebarWords}
+            handleSpanClick={this.handleSpanClick}
+            isLoading={this.state.isLoading}
+            isNewWordLoading={this.state.isNewWordLoading}
           />
         </div>
       );

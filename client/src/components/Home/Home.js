@@ -11,16 +11,6 @@ class Home extends Component {
     this.state = {};
   }
 
-  componentWillMount() {
-    axios
-      .post("/words/definitions", {
-        words: ["hello"],
-        lang: "en",
-        filter: "false"
-      })
-      .then(res => console.log(res.data.definitions));
-  }
-
   render() {
     return (
       <div>
