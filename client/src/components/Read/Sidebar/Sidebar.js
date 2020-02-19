@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 // import { Redirect } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
 // import auth from "../../utils/auth";
+
+import "./Sidebar.css";
 
 import Collapsible from "react-collapsible";
 import Spanner from "../../Spanner/Spanner";
@@ -44,6 +46,8 @@ class Sidebar extends Component {
                   <div key={i}>
                     {/* <h1>{word[0].word}</h1> */}
                     <Collapsible
+                      triggerClassName="clickable"
+                      triggerOpenedClassName="clickable"
                       handleSpanClick={this.props.handleSpanClick}
                       trigger={word[0].word}
                     >
@@ -75,6 +79,8 @@ class Sidebar extends Component {
                         <div key={i}>
                           {/* <h1>{word.word}</h1> */}
                           <Collapsible
+                            triggerClassName="clickable"
+                            triggerOpenedClassName="clickable"
                             handleSpanClick={this.props.handleSpanClick}
                             trigger={word.word}
                           >
@@ -124,6 +130,8 @@ function Word(props) {
           <div key={i}>
             {/* <h2>{word.word}</h2> */}
             <Collapsible
+              triggerClassName="clickable"
+              triggerOpenedClassName="clickable"
               handleSpanClick={props.handleSpanClick}
               trigger={word.word}
             >
@@ -148,7 +156,12 @@ function POS(props) {
         return (
           <div key={i}>
             {/* <p>{key}</p> */}
-            <Collapsible handleSpanClick={props.handleSpanClick} trigger={key}>
+            <Collapsible
+              triggerClassName="clickable"
+              triggerOpenedClassName="clickable"
+              handleSpanClick={props.handleSpanClick}
+              trigger={key}
+            >
               <Definition
                 handleSpanClick={props.handleSpanClick}
                 def={props.word.meaning[key]}

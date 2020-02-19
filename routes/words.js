@@ -138,6 +138,27 @@ const filterDefinitions = (
   return definitions;
 };
 
+async function getRandomWord(wordRange, lang, attempts) {
+  let randomWord = wordRange[Math.floor(Math.random() * 1000)];
+  attempts--;
+  try {
+    let definition = await fetchDefinitions([randomWord], lang);
+    console.log(randomWord, definition.length);
+    if (definition.length === 1) {
+      //definition returned
+      return { success: true, definition };
+    } else if (attempts > 0) {
+      console.log("no def, getting new word");
+      return await getRandomWord(wordRange, lang, attempts);
+    } else {
+      throw err;
+    }
+  } catch (err) {
+    console.log("unsuccessful attempt");
+    return { success: false };
+  }
+}
+
 // -------------------------------
 
 // ---------- ROUTES ----------
@@ -220,6 +241,20 @@ router.post("/updateuser", isAuthenticated, (req, res, next) => {
       }
     }
   );
+});
+
+router.post("/random", isAuthenticated, async (req, res, next) => {
+  let vocabSize = req.body.vocabSize;
+  let knownWords = req.body.knownWords;
+  let unknownWords = req.body.unknownWords;
+  let lang = req.body.lang;
+  // console.log(req.body);
+
+  let wordRange = freqList.slice(vocabSize - 500, vocabSize + 500); // set min/max-length
+
+  let response = await getRandomWord(wordRange, lang, 3).catch("err");
+
+  res.send(response);
 });
 
 module.exports = router;

@@ -17,12 +17,10 @@ class Textreader extends Component {
         <h2>Reader</h2>
         <button onClick={() => this.props.handleNewText()}>New text</button>
         <div className="text-reader">
-          <p>
-            <Spanner
-              handleSpanClick={this.props.handleSpanClick}
-              randomString={this.props.fullText}
-            ></Spanner>
-          </p>
+          <Spanner
+            handleSpanClick={this.props.handleSpanClick}
+            randomString={this.props.fullText}
+          ></Spanner>
         </div>
       </div>
     );

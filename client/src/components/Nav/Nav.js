@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
-import axios from "axios";
-import auth from "../../utils/auth";
+import "./Nav.css";
+// import axios from "axios";
+// import auth from "../../utils/auth";
 
 class Nav extends Component {
   constructor(props) {
@@ -21,14 +22,14 @@ class Nav extends Component {
       return <Redirect to="/login" push={true}></Redirect>;
     }
     return (
-      <nav>
+      <nav className="navbar">
         <ul>
           <li>
             <Link to="/">Home</Link>
           </li>
-          <li>
+          {/* <li>
             <Link to="/public">Public</Link>
-          </li>
+          </li> */}
           <li>
             <Link to="/account">Account</Link>
           </li>

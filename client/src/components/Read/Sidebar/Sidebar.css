@@ -1,3 +1,4 @@
-.closed {
-  background-color: blue;
+.clickable {
+  cursor: pointer;
+  background-color: blueviolet;
 }

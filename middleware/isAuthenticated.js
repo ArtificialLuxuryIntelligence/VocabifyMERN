@@ -13,7 +13,7 @@ async function isAuthenticated(req, res, next) {
       isDeleted: false
     });
     if (session) {
-      console.log(session);
+      // console.log(session);
       return next();
     } else {
       res.send({ message: "Your session is invalid" });

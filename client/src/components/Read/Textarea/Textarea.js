@@ -4,9 +4,9 @@ import React, { Component } from "react";
 // import auth from "../../utils/auth";
 
 class Textarea extends Component {
-  constructor(props) {
-    super(props);
-  }
+  // constructor(props) {
+  //   super(props);
+  // }
 
   render() {
     return (

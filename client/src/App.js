@@ -59,10 +59,10 @@ class App extends Component {
   //   // unload definitions onto localStorage on logout
   // }
 
-  //set App state from server data (on login)
+  //set global App state
   addToAppState(key, value) {
     this.setState({ [key]: value });
-    console.log(this.state);
+    // console.log(this.state);
     this.saveToLocal();
   }
 
@@ -110,11 +110,15 @@ class App extends Component {
       knownWords.push(word);
     }
     this.setState({ knownWords, unknownWords });
-    console.log(this.state);
+    this.saveToLocal();
+    // console.log(this.state);
   }
 
   addUnknownWord(word) {
     let { knownWords, unknownWords } = this.state;
+    // if (unknownWords.indexOf(word) !== -1) {   //shouldn't be needed
+    //   return;
+    // }
     unknownWords.push(word);
     if (knownWords.indexOf(word) > 0) {
       knownWords.splice(knownWords.indexOf(word), 1);
@@ -136,6 +140,8 @@ class App extends Component {
 
   handleSignout = async e => {
     this.saveToLocal();
+    // clear (most) local storage data
+    auth.loggingOut();
 
     e.preventDefault();
     console.log("...Signing out");
@@ -147,11 +153,8 @@ class App extends Component {
     ///end session
     let token = JSON.parse(localStorage.getItem("vocabify")).token;
     //trycatch
-    let res = await axios.get("/users/signout?token=" + token);
+    await axios.get("/users/signout?token=" + token);
     // console.log(res);
-
-    // clear local storage data
-    auth.loggingOut();
 
     // needed still?
     this.setState({ navigate: true });
@@ -203,6 +206,13 @@ class App extends Component {
             path="/"
             component={Home}
             handleSignout={this.handleSignout}
+            vocabSize={this.state.vocabSize}
+            getDefinitions={this.getDefinitions}
+            addKnownWord={this.addKnownWord}
+            addUnknownWord={this.addUnknownWord}
+            removeWord={this.removeWord}
+            unknownWords={this.state.unknownWords}
+            addToAppState={this.addToAppState}
           />
           <ProtectedRoute
             exact

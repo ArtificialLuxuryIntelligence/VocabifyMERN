@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 // import { Redirect } from "react-router-dom";
 // import auth from "../../utils/auth";
+import "./Read.css";
 
 import Nav from "../Nav/Nav";
 import Sidebar from "./Sidebar/Sidebar";
 import Textarea from "./Textarea/Textarea";
 import Textreader from "./Textreader/Textreader";
-import axios from "axios";
+// import axios from "axios";
 
 class Read extends Component {
   constructor(props) {
@@ -38,7 +39,7 @@ class Read extends Component {
       let { knownWords, unknownWords, vocabSize } = obj;
       this.setState({ knownWords, unknownWords, vocabSize });
     }
-    console.log("did mount");
+    return null;
   }
 
   //removes dupulicates
@@ -52,7 +53,7 @@ class Read extends Component {
       .replace(/\s/g, " ")
       .replace(/^\d+$/g, " ")
       //removed hyphen from list (need to add more?)
-      .replace(/[.,\/#!?$%\^&\*;:{}“”=_`~()]/g, "")
+      .replace(/[.,/#!?$%^&*;:{}“”=_`~()]/g, "")
       .toLowerCase()
       .split(" ")
       .map(word => word.trim())
@@ -75,21 +76,24 @@ class Read extends Component {
 
     let sidebarWordsArray = [];
     definitions.forEach(a => sidebarWordsArray.push(a[0].word));
+    console.log("setting state...");
 
     this.setState({
       definitionJSON: definitions,
-      sidebarWords: sidebarWordsArray
+      sidebarWords: sidebarWordsArray,
+      isLoading: false
     });
-    this.setState({ isLoading: false });
   };
 
   handleSpanClick = async e => {
+    //currently doesnt check if word is already in list...
     this.setState({ isNewWordLoading: true });
     let word = e.target.innerText;
     let queryWord = this.sanitizeText(word);
     let def = await this.props.getDefinitions(queryWord, "false");
     if (def.length === 0) {
       this.setState({ isNewWordLoading: false });
+      // show unsuccessful message
       return;
     }
     let newWord = def[0][0].word;
@@ -97,17 +101,36 @@ class Read extends Component {
     let defs = this.state.definitionJSON;
     let sidebarWordArray = this.state.sidebarWords;
 
-    //----avoid duplicates in sidebar and bring new word to top
-    if (sidebarWordArray.includes(newWord)) {
-      let index = sidebarWordArray.indexOf(newWord);
-      sidebarWordArray.splice(index, 1);
-      defs.splice(index, 1);
-    }
-    //-----
-
-    this.setState({ definitionJSON: def.concat(defs) });
+    //add new word to definition store and sidebar words (kept in sync)
+    defs = def.concat(defs);
     sidebarWordArray.unshift(newWord);
+    console.log(defs, sidebarWordArray);
+
+    //remove dupes
+    defs = Array.from(new Set(defs.map(JSON.stringify)), JSON.parse);
+    sidebarWordArray = [...new Set(sidebarWordArray)];
+
+    console.log("uniq", defs, sidebarWordArray);
+
+    this.setState({ definitionJSON: defs });
     this.setState({ sidebarWords: sidebarWordArray });
+
+    // //----avoid duplicates in sidebar and bring new word to top
+    // if (sidebarWordArray.includes(newWord)) {
+    //   let index = sidebarWordArray.indexOf(newWord);
+    //   sidebarWordArray.splice(index, 1);
+    //   // console.log(defs);
+
+    //   // defs.splice(index, 1);
+    //   // console.log(defs);
+    //   // console.log("included");
+    // }
+    // //-----
+
+    // this.setState({ definitionJSON: def.concat(defs) });
+    // sidebarWordArray.unshift(newWord);
+    // this.setState({ sidebarWords: sidebarWordArray });
+
     this.setState({ isNewWordLoading: false });
   };
 
@@ -177,9 +200,6 @@ class Read extends Component {
           <Sidebar
             definitionJSON={this.state.definitionJSON}
             unknownWords={this.props.unknownWords}
-            // addKnownWord={this.props.addKnownWord}
-            // addUnknownWord={this.props.addUnknownWord}
-            // removeWord={this.props.removeWord}
             handleRemoveWord={this.handleRemoveWord}
             handleDeleteWord={this.handleDeleteWord}
             handleAddWord={this.handleAddWord}

@@ -8,5 +8,11 @@
 }
 
 .text-reader {
-  white-space: pre;
+  white-space: pre-wrap;
+  /* word-break: break-all; */
+
+  /* width: 80%; */
+}
+
+.text-reader p {
 }
