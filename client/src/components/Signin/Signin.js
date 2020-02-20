@@ -181,16 +181,6 @@ class Signin extends Component {
             >
               Create an Account
             </button>
-            <br />
-            <br />
-            <br />
-            <p>
-              Example link to a public route that only loads a message if you
-              are signed in/have a valid session
-            </p>
-
-            <p>See isAuthenticated middleware for more details</p>
-            <Link to="/Public">Public</Link>
           </form>
         );
       // break;

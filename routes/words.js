@@ -72,6 +72,9 @@ const estimateUserVocab = (knownWords, unknownWords) => {
 
 // ------FILTERS
 const filterGivenVocabSize = (vocabSize, unknownWords, queryWords) => {
+  //unfortunately this filters out words that are not exact matches of unknown words.
+  //i.e. 'articles' filtered out if in the calculated userVocab even if 'article' is 'unknownWord';
+  //only solution is to check every word/[no] // have more sophisticated word list with conjugations etc grouped [list not readily available]
   let userVocab = freqList.slice(0, vocabSize);
   let filteredWords = queryWords.filter(
     word => userVocab.indexOf(word) === -1 || unknownWords.indexOf(word) !== -1
@@ -139,7 +142,7 @@ const filterDefinitions = (
 };
 
 async function getRandomWord(wordRange, lang, attempts) {
-  let randomWord = wordRange[Math.floor(Math.random() * 1000)];
+  let randomWord = wordRange[Math.floor(Math.random() * wordRange.length)];
   attempts--;
   try {
     let definition = await fetchDefinitions([randomWord], lang);
@@ -250,7 +253,15 @@ router.post("/random", isAuthenticated, async (req, res, next) => {
   let lang = req.body.lang;
   // console.log(req.body);
 
-  let wordRange = freqList.slice(vocabSize - 500, vocabSize + 500); // set min/max-length
+  let range = 500; //make dynamic? could get bigger for higher vocabSizes...
+  let min = vocabSize - range < 0 ? 0 : vocabSize - range;
+  let max =
+    vocabSize + range > freqList.length ? freqList.length : vocabSize + range;
+
+  console.log(min, max);
+
+  let wordRange = freqList.slice(min, max); // set min/max-length
+  console.log(wordRange);
 
   let response = await getRandomWord(wordRange, lang, 3).catch("err");
 

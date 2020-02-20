@@ -10,7 +10,6 @@ import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import Home from "./components/Home/Home";
 import Signin from "./components/Signin/Signin";
 import Account from "./components/Account/Account";
-import Public from "./components/Public/Public";
 import Read from "./components/Read/Read";
 
 class App extends Component {
@@ -81,6 +80,26 @@ class App extends Component {
     console.log(res);
   };
 
+  //removes dupulicates
+  uniq = a => {
+    return Array.from(new Set(a));
+  };
+
+  sanitizeText = text => {
+    let inputText = text
+      .toLowerCase()
+      .replace(/\s/g, " ")
+      .replace(/^\d+$/g, " ")
+      //removed hyphen from list (need to add more?)
+      .replace(/[.,/#!?$%^&*;:{}“”=_`~()]/g, "")
+      .toLowerCase()
+      .split(" ")
+      .map(word => word.trim())
+      .filter(word => word.length > 0);
+    //returns array
+    return this.uniq(inputText);
+  };
+
   // -----------------------------------------------------------------
 
   getDefinitions = async (wordArray, filter) => {
@@ -97,7 +116,7 @@ class App extends Component {
     console.log(obj);
     //try catch
     let json = await axios.post("/words/definitions", obj);
-    console.log(json.data.vocabSize);
+    console.log("vocabSize", json.data.vocabSize);
     console.log(json.data);
 
     this.setState({ vocabSize: json.data.vocabSize });
@@ -197,6 +216,7 @@ class App extends Component {
                 removeWord={this.removeWord}
                 handleSignout={this.handleSignout}
                 getDefinitions={this.getDefinitions}
+                sanitizeText={this.sanitizeText}
               />
             )}
           />
@@ -213,18 +233,13 @@ class App extends Component {
             removeWord={this.removeWord}
             unknownWords={this.state.unknownWords}
             addToAppState={this.addToAppState}
+            sanitizeText={this.sanitizeText}
           />
           <ProtectedRoute
             exact
             path="/account"
             component={Account}
             handleSignout={this.handleSignout}
-          />
-          <Route
-            exact
-            path="/public"
-            component={Public}
-            // handleSignout={this.handleSignout}
           />
         </Switch>
       </div>

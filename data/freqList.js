@@ -90348,7 +90348,6 @@ const freqList = [
   "Politique",
   "Pompeius",
   "Prospects",
-  "RECEIVED",
   "RONDEL",
   "Ramsden",
   "Rely",

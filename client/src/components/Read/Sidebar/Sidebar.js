@@ -37,6 +37,8 @@ class Sidebar extends Component {
     }
     return (
       <div>
+        {this.props.sidebarWords.length === 0 ? <p>No words to show </p> : null}
+
         {this.props.isNewWordLoading ? <p>adding word ... </p> : null}
         <div>
           {this.props.definitionJSON.map((word, i) => {
@@ -130,6 +132,7 @@ function Word(props) {
           <div key={i}>
             {/* <h2>{word.word}</h2> */}
             <Collapsible
+              open={i === 0 ? true : false}
               triggerClassName="clickable"
               triggerOpenedClassName="clickable"
               handleSpanClick={props.handleSpanClick}
@@ -157,15 +160,18 @@ function POS(props) {
           <div key={i}>
             {/* <p>{key}</p> */}
             <Collapsible
+              open={i === 0 ? true : false}
               triggerClassName="clickable"
               triggerOpenedClassName="clickable"
               handleSpanClick={props.handleSpanClick}
               trigger={key}
             >
-              <Definition
-                handleSpanClick={props.handleSpanClick}
-                def={props.word.meaning[key]}
-              />
+              <ol>
+                <Definition
+                  handleSpanClick={props.handleSpanClick}
+                  def={props.word.meaning[key]}
+                />
+              </ol>
             </Collapsible>
           </div>
         );
@@ -180,12 +186,16 @@ function Definition(props) {
     <div>
       {props.def.map((def, i) => {
         return (
-          <div key={i}>
-            <Spanner
-              handleSpanClick={props.handleSpanClick}
-              randomString={def.definition}
-            ></Spanner>
-            {/* <p>{def.definition}</p> */}
+          <div key={i + def.definition.slice(1, 6)}>
+            {def.definition && (
+              <li>
+                <Spanner
+                  handleSpanClick={props.handleSpanClick}
+                  randomString={def.definition}
+                ></Spanner>
+                {/* <p>{def.definition}</p> */}
+              </li>
+            )}
           </div>
         );
       })}

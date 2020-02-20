@@ -42,31 +42,11 @@ class Read extends Component {
     return null;
   }
 
-  //removes dupulicates
-  uniq = a => {
-    return Array.from(new Set(a));
-  };
-
-  sanitizeText = text => {
-    let inputText = text
-      .toLowerCase()
-      .replace(/\s/g, " ")
-      .replace(/^\d+$/g, " ")
-      //removed hyphen from list (need to add more?)
-      .replace(/[.,/#!?$%^&*;:{}“”=_`~()]/g, "")
-      .toLowerCase()
-      .split(" ")
-      .map(word => word.trim())
-      .filter(word => word.length > 0);
-    //returns array
-    return this.uniq(inputText);
-  };
-
   handleSubmit = async () => {
     this.setState({ isLoading: true });
     const textarea = document.querySelector("#textarea");
 
-    let words = this.sanitizeText(textarea.value);
+    let words = this.props.sanitizeText(textarea.value);
     let fullText = textarea.value;
     this.setState({ currentView: "read", words, fullText });
 
@@ -86,10 +66,13 @@ class Read extends Component {
   };
 
   handleSpanClick = async e => {
+    //should there be a separate box for lookup words instead  of adding them to the sidebar like this?
+    //see homepage
+
     //currently doesnt check if word is already in list...
     this.setState({ isNewWordLoading: true });
     let word = e.target.innerText;
-    let queryWord = this.sanitizeText(word);
+    let queryWord = this.props.sanitizeText(word);
     let def = await this.props.getDefinitions(queryWord, "false");
     if (def.length === 0) {
       this.setState({ isNewWordLoading: false });
@@ -110,7 +93,7 @@ class Read extends Component {
     defs = Array.from(new Set(defs.map(JSON.stringify)), JSON.parse);
     sidebarWordArray = [...new Set(sidebarWordArray)];
 
-    console.log("uniq", defs, sidebarWordArray);
+    console.log("unique", defs, sidebarWordArray);
 
     this.setState({ definitionJSON: defs });
     this.setState({ sidebarWords: sidebarWordArray });

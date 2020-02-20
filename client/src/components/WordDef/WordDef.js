@@ -1,95 +1,61 @@
 import React, { Component } from "react";
-import "./RandomWord.css";
+// import "./WordDef.css";
 
-// import "./RandomWord.css";
 import axios from "axios";
 // import Sidebar from "../Read/Sidebar/Sidebar";
 import Collapsible from "react-collapsible";
-import Spanner from "../Spanner/Spanner";
-
 // import Spanner from "../../Spanner/Spanner";
+
+import Spanner from "../Spanner/Spanner";
 // import { Redirect } from "react-router-dom";
 // import auth from "../../utils/auth";
 
-class RandomWord extends Component {
+class WordDef extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      newWord: "floof",
+      // newWord: this.props.word,
       wordKnown: false,
-      definition: [],
-      isLoading: true
+      isLoading: true,
+      defintionToggled: false,
+      definition: []
     };
 
-    this.getNewWord = this.getNewWord.bind(this);
+    // this.getNewWord = this.getNewWord.bind(this);
   }
 
   componentDidMount = () => {
-    console.log("myVOCAB", this.props.vocabSize);
-    console.log("rando did mount");
-
-    this.getNewWord();
-  };
-
-  getNewWord = async () => {
-    this.setState({ isLoading: true });
-    let { token, vocabSize, unknownWords, knownWords, lang } = JSON.parse(
-      localStorage.getItem("vocabify")
-    );
-    let obj = {
-      token,
-      vocabSize,
-      unknownWords,
-      knownWords,
-      lang: "en"
-    };
-    console.log(obj);
-
-    let response = await axios.post("/words/random", obj);
-    console.log(response.data); // this.setState({ definition });
-    // console.log(this.state);
-    if (response.data.success) {
-      this.setState({ newWord: response.data.definition[0][0].word });
-      this.setState({ definition: response.data.definition });
-      this.setState({ isLoading: false });
-      this.setState({ wordKnown: false });
+    if (this.props.autoload) {
+      this.getWordDef();
     }
-    this.setState({ isLoading: false });
     return;
   };
 
-  handleNewWord = () => {
-    this.getNewWord();
-  };
-  handleAddWord = () => {
-    this.props.addUnknownWord(this.state.newWord);
-    this.setState({ wordKnown: true });
-  };
-  handleRemoveWord = () => {
-    this.props.removeWord(this.state.newWord);
-    this.setState({ wordKnown: false });
-  };
+  componentDidUpdate(prevProps) {
+    if (this.props.autoload && this.props.word !== prevProps.word) {
+      this.getWordDef();
+    }
+  }
 
-  //   render() {
-  //     return (
-  //       <div>
-  //         <h2>Random Word</h2>
-  //         <p> Here is a a word you might not know:</p>
-  //         {/* <h4>{this.state.newWord}</h4> */}
-  //         {!this.state.wordKnown && (
-  //           <button onClick={() => this.handleAddWord()}>Add word</button>
-  //         )}
-  //         {this.state.wordKnown && (
-  //           <button onClick={() => this.handleRemoveWord()}>Remove word</button>
-  //         )}
-  //         <button onClick={() => this.handleNewWord()}>New word</button>
-
-  //         <div className="definition-cont">{}</div>
-  //       </div>
-  //     );
-  //   }
+  getWordDef = async () => {
+    this.setState({ isLoading: true, defintionToggled: true });
+    let definition = await this.props.getDefinitions(
+      [this.props.word],
+      "false"
+    );
+    //handle cant get from server
+    if (definition.length === 0) {
+      this.setState({ isLoading: false, defintionToggled: false });
+      return;
+    }
+    this.setState({ definition, isLoading: false });
+    // return;
+  };
 
   render() {
+    if (this.state.defintionToggled === false) {
+      return <p onClick={() => this.getWordDef()}>{this.props.word}</p>;
+    }
     if (this.state.isLoading) {
       return <p> Loading word...</p>;
     }
@@ -116,7 +82,7 @@ class RandomWord extends Component {
                         word={word}
                       />
                     </Collapsible>
-                    {!this.state.wordKnown && (
+                    {/* {!this.state.wordKnown && (
                       <button onClick={() => this.handleAddWord()}>
                         Add word
                       </button>
@@ -128,7 +94,7 @@ class RandomWord extends Component {
                     )}
                     <button onClick={() => this.handleNewWord()}>
                       New word
-                    </button>
+                    </button> */}
                   </div>
                 );
               } else {
@@ -150,7 +116,7 @@ class RandomWord extends Component {
                               word={word}
                             />
                           </Collapsible>
-                          {!this.state.wordKnown && (
+                          {/* {!this.state.wordKnown && (
                             <button onClick={() => this.handleAddWord()}>
                               Add word
                             </button>
@@ -162,7 +128,7 @@ class RandomWord extends Component {
                           )}
                           <button onClick={() => this.handleNewWord()}>
                             New word
-                          </button>
+                          </button> */}
                         </div>
                       );
                     })}
@@ -259,18 +225,4 @@ function Definition(props) {
   );
 }
 
-export default RandomWord;
-
-{
-  /* <Sidebar
-  isLoading={false}
-  isNewWordLoading={false}
-  sidebarWords={this.state.newWord}
-  definitionJSON={this.state.definition}
-  handleSpanClick={() => console.log("hi")}
-  unknownWords={this.props.unknownWords}
-  knownWords={this.props.knownWords}
-  handleAddWord={this.handleAddWord}
-  handleRemoveWord={this.handleRemoveWord}
-></Sidebar>; */
-}
+export default WordDef;
