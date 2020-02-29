@@ -3,15 +3,18 @@ const auth = {
     localStorage.setItem("vocabify", JSON.stringify({ isLoggedIn: true }));
   },
   loggingOut() {
+    //currently removes all
     localStorage.setItem(
       "vocabify",
       JSON.stringify({
         isLoggedIn: false,
         token: "",
-        knownWords: [],
-        unknownWords: [],
+        // knownWords: [], //to be removed
+        // unknownWords: [], //to be removed
         vocabSize: "",
-        savedDefinitions: []
+        savedDefinitions: [],
+        words: {},
+        lang: ""
       })
     );
   },

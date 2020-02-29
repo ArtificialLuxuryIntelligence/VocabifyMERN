@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 import axios from "axios";
 import auth from "../../utils/auth";
@@ -49,13 +49,22 @@ class Signin extends Component {
           auth.loggingIn();
           console.log(res.data);
 
-          let { token, knownWords, unknownWords, vocabSize } = res.data;
+          let {
+            token,
+            knownWords,
+            unknownWords,
+            vocabSize,
+            lang,
+            words
+          } = res.data;
 
           //setting App state
           // this.addToAppState("token", token);
-          this.addToAppState("knownWords", knownWords);
-          this.addToAppState("unknownWords", unknownWords);
+          this.addToAppState("knownWords", knownWords); // to be removed
+          this.addToAppState("unknownWords", unknownWords); // to be removed
           this.addToAppState("vocabSize", vocabSize);
+          this.addToAppState("lang", lang);
+          this.addToAppState("words", words);
           //
 
           //setting local storage ----
@@ -64,6 +73,8 @@ class Signin extends Component {
           local.knownWords = knownWords;
           local.unknownWords = unknownWords;
           local.vocabSize = vocabSize;
+          local.lang = lang;
+          local.words = words;
           localStorage.setItem("vocabify", JSON.stringify(local));
           // --------------------------
           history.push("/");

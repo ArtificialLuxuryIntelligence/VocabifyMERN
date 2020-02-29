@@ -17,17 +17,16 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now()
   },
-  knownWords: {
-    type: Array,
-    default: ["the"]
+  words: {
+    type: Object,
+    default: {
+      en: { knownWords: ["the", "and"], unknownWords: [], vocabSize: 200 },
+      es: { knownWords: ["el", "la", "y"], unknownWords: [], vocabSize: 200 }
+    }
   },
-  unknownWords: {
-    type: Array,
-    default: []
-  },
-  vocabSize: {
-    type: Number,
-    default: 90000
+  lang: {
+    type: String,
+    default: "en"
   }
 });
 UserSchema.methods.generateHash = function(password) {

@@ -116,10 +116,12 @@ router.post("/signin", (req, res) => {
         res.send({
           success: true,
           message: "Sign in success",
-          token: user._id, //nothing fancy here, session is check with middleware when userdata requests are made.
+          token: user._id, //nothing fancy here, active session is checked with middleware when userdata requests are made.
           knownWords: user.knownWords,
           unknownWords: user.unknownWords,
-          vocabSize: user.vocabSize
+          vocabSize: user.vocabSize,
+          lang: user.lang,
+          words: user.words
         });
       });
     }

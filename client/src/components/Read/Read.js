@@ -5,6 +5,8 @@ import "./Read.css";
 
 import Nav from "../Nav/Nav";
 import Sidebar from "./Sidebar/Sidebar";
+import LanguageDropdown from "../LanguageDropdown/LanguageDropdown";
+
 import Textarea from "./Textarea/Textarea";
 import Textreader from "./Textreader/Textreader";
 // import axios from "axios";
@@ -122,6 +124,7 @@ class Read extends Component {
   };
 
   handleAddWord = e => {
+    //remove
     e.stopPropagation();
     let word = e.target.parentElement.children[0].children[0].innerText;
 
@@ -132,6 +135,8 @@ class Read extends Component {
     // e.target.previousElementSibling.style.display = "block";
   };
   handleRemoveWord = e => {
+    //AKA i know this word
+    //remove
     e.stopPropagation();
     let word = e.target.parentElement.children[0].children[0].innerText;
     this.props.removeWord(word);
@@ -146,11 +151,26 @@ class Read extends Component {
     // e.target.nextElementSibling.style.display = "block";
     // e.target.parentElement.parentElement.remove();
   };
-  handleDeleteWord = e => {
-    e.stopPropagation();
-    let word = e.target.parentElement.children[0].children[0].innerText;
-    this.props.addKnownWord(word);
+  // handleDeleteWord = e => {
+  //   e.stopPropagation();
+  //   let word = e.target.parentElement.children[0].children[0].innerText;
+  //   this.props.addKnownWord(word);
+  //   //handlewithprops
+  //   // e.target.parentElement.parentElement.remove();
 
+  //   // sidebarWords.splice(sidebarWords.indexOf(word), 1);
+  //   let { sidebarWords } = this.state;
+  //   sidebarWords.splice(sidebarWords.indexOf(word), 1);
+  //   this.setState({ sidebarWords });
+  // };
+
+  handleDeleteWord = word => {
+    //removes from sidebar and sets as 'known'
+    //I know this word // addknownword ??
+
+    // e.stopPropagation();
+    // let word = e.target.parentElement.children[0].children[0].innerText;
+    this.props.addKnownWord(word);
     //handlewithprops
     // e.target.parentElement.parentElement.remove();
 
@@ -160,13 +180,24 @@ class Read extends Component {
     this.setState({ sidebarWords });
   };
 
+  handleDropdownChange = e => {
+    e.preventDefault();
+    this.setState({ sidebarWords: [] }); // clears current sidebar (not the JSONdefinitions in the state but they get overwritten on next text submission)
+    this.props.addToAppState("lang", e.target.value);
+  };
+
   render() {
     const currentView = this.state.currentView;
     if (currentView === "submit") {
       return (
         <div>
           <Nav handleSignout={this.props.handleSignout} />
+
           <h1>Submit</h1>
+          <LanguageDropdown
+            handleDropdownChange={this.handleDropdownChange}
+            lang={this.props.lang}
+          ></LanguageDropdown>
           <Textarea handleSubmit={this.handleSubmit} />
         </div>
       );
@@ -175,17 +206,26 @@ class Read extends Component {
         <div>
           <Nav handleSignout={this.props.handleSignout} />
           <h1>Read</h1>
+          <LanguageDropdown
+            handleDropdownChange={this.handleDropdownChange}
+            lang={this.props.lang}
+          ></LanguageDropdown>
           <Textreader
             fullText={this.state.fullText}
             handleNewText={this.handleNewText}
             handleSpanClick={this.handleSpanClick}
           />
           <Sidebar
+            lang={this.props.lang}
             definitionJSON={this.state.definitionJSON}
             unknownWords={this.props.unknownWords}
             handleRemoveWord={this.handleRemoveWord}
             handleDeleteWord={this.handleDeleteWord}
-            handleAddWord={this.handleAddWord}
+            // handleAddWord={this.handleAddWord}
+            // getDefinitions={this.props.getDefinitions}
+            addKnownWord={this.props.addKnownWord}
+            addUnknownWord={this.props.addUnknownWord}
+            removeWord={this.props.removeWord}
             sidebarWords={this.state.sidebarWords}
             handleSpanClick={this.handleSpanClick}
             isLoading={this.state.isLoading}

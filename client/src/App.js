@@ -16,9 +16,15 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      knownWords: [],
-      unknownWords: [],
-      vocabSize: ""
+      // knownWords: [],
+      // unknownWords: [],
+      // vocabSize: "",
+      lang: "placeholder", //can set this to a lang (EN) in case there is a problem loading a language on startup?
+      words: {
+        en: { knownWords: [], unknownWords: [], vocabSize: "" },
+        es: { knownWords: [], unknownWords: [], vocabSize: "" },
+        placeholder: { knownWords: [], unknownWords: [], vocabSize: "" }
+      }
     };
 
     this.addToAppState = this.addToAppState.bind(this);
@@ -34,8 +40,12 @@ class App extends Component {
   componentDidMount() {
     let obj = JSON.parse(localStorage.getItem("vocabify"));
     if (obj) {
-      let { knownWords, unknownWords, vocabSize } = obj;
-      this.setState({ knownWords, unknownWords, vocabSize });
+      // let { knownWords, unknownWords, vocabSize, lang, words } = obj; //to be removed
+      let { lang, words } = obj;
+
+      // this.setState({ knownWords, unknownWords, vocabSize, lang, words }); //to be removed
+      this.setState({ lang, words });
+
       // hydrate state from local (all data, including definitions)
     }
 
@@ -47,9 +57,11 @@ class App extends Component {
   // save state to local storage
   saveToLocal() {
     let obj = JSON.parse(localStorage.getItem("vocabify"));
-    obj.unknownWords = this.state.unknownWords;
-    obj.knownWords = this.state.knownWords;
-    obj.vocabSize = this.state.vocabSize;
+    // obj.unknownWords = this.state.unknownWords; //to be removed
+    // obj.knownWords = this.state.knownWords; //to be removed
+    // obj.vocabSize = this.state.vocabSize;
+    obj.lang = this.state.lang;
+    obj.words = this.state.words;
     localStorage.setItem("vocabify", JSON.stringify(obj));
   }
 
@@ -69,9 +81,11 @@ class App extends Component {
     let obj = {
       id: JSON.parse(localStorage.getItem("vocabify")).token,
       token: JSON.parse(localStorage.getItem("vocabify")).token,
-      unknownWords: this.state.unknownWords,
-      knownWords: this.state.knownWords,
-      vocabSize: this.state.vocabSize
+      words: this.state.words,
+      // unknownWords: this.state.unknownWords, // to be removed
+      // knownWords: this.state.knownWords, //to be removed
+      // vocabSize: this.state.vocabSize,
+      lang: this.state.lang
     };
     console.log(obj);
 
@@ -106,9 +120,11 @@ class App extends Component {
     let token = JSON.parse(localStorage.getItem("vocabify")).token;
     let obj = {
       token: token,
-      lang: "en",
-      knownWords: this.state.knownWords,
-      unknownWords: this.state.unknownWords,
+      lang: this.state.lang,
+      // knownWords: this.state.knownWords, //to be removed
+      // unknownWords: this.state.unknownWords, //to be removed
+      knownWords: this.state.words[this.state.lang].knownWords,
+      unknownWords: this.state.words[this.state.lang].unknownWords,
       // vocabSize: this.state.vocabSize,
       words: wordArray,
       filter: filter
@@ -119,48 +135,98 @@ class App extends Component {
     console.log("vocabSize", json.data.vocabSize);
     console.log(json.data);
 
-    this.setState({ vocabSize: json.data.vocabSize });
+    // this.setState({ vocabSize: json.data.vocabSize });
+    this.setState(prevState => ({
+      ...prevState,
+      words: {
+        ...prevState.words,
+        [this.state.lang]: {
+          ...prevState.words[this.state.lang],
+          vocabSize: json.data.vocabSize
+        }
+      }
+    }));
 
     return json.data.definitions;
   };
   addKnownWord(word) {
-    let { knownWords, unknownWords } = this.state;
+    let { knownWords, unknownWords } = this.state.words[this.state.lang];
+    //only adds as known word IF not 'unknown' -
     if (unknownWords.indexOf(word) < 0 && knownWords.indexOf(word) < 0) {
       knownWords.push(word);
     }
-    this.setState({ knownWords, unknownWords });
+    // this.setState({ knownWords, unknownWords }); //change
+
+    this.setState(prevState => ({
+      ...prevState,
+      words: {
+        ...prevState.words,
+        [this.state.lang]: {
+          ...prevState.words[this.state.lang],
+          knownWords,
+          unknownWords
+        }
+      }
+    }));
+
     this.saveToLocal();
     // console.log(this.state);
   }
 
   addUnknownWord(word) {
-    let { knownWords, unknownWords } = this.state;
+    let { knownWords, unknownWords } = this.state.words[this.state.lang];
     // if (unknownWords.indexOf(word) !== -1) {   //shouldn't be needed
     //   return;
     // }
-    unknownWords.push(word);
+    unknownWords.unshift(word);
     if (knownWords.indexOf(word) > 0) {
       knownWords.splice(knownWords.indexOf(word), 1);
     }
-    this.setState({ knownWords, unknownWords });
+    // this.setState({ knownWords, unknownWords }); //change
+
+    this.setState(prevState => ({
+      ...prevState,
+      words: {
+        ...prevState.words,
+        [this.state.lang]: {
+          ...prevState.words[this.state.lang],
+          knownWords,
+          unknownWords
+        }
+      }
+    }));
+
     this.saveToLocal();
   }
 
   removeWord(word) {
-    let { knownWords, unknownWords } = this.state;
+    //AKA i know this word ?
+    let { knownWords, unknownWords } = this.state.words[this.state.lang];
     let i = unknownWords.indexOf(word);
     if (i >= 0) {
       unknownWords.splice(i, 1);
     }
     knownWords.push(word);
-    this.setState({ knownWords, unknownWords });
+
+    // this.setState({ knownWords, unknownWords });
+
+    this.setState(prevState => ({
+      ...prevState,
+      words: {
+        ...prevState.words,
+        [this.state.lang]: {
+          ...prevState.words[this.state.lang],
+          knownWords,
+          unknownWords
+        }
+      }
+    }));
+
     this.saveToLocal();
   }
 
   handleSignout = async e => {
     this.saveToLocal();
-    // clear (most) local storage data
-    auth.loggingOut();
 
     e.preventDefault();
     console.log("...Signing out");
@@ -168,6 +234,9 @@ class App extends Component {
     //update user data on server
     let response = await this.sendAppStateToServer();
     console.log(response);
+
+    // clear (most) local storage data
+    auth.loggingOut();
 
     ///end session
     let token = JSON.parse(localStorage.getItem("vocabify")).token;
@@ -207,15 +276,17 @@ class App extends Component {
             render={props => (
               <Read
                 {...props}
+                lang={this.state.lang}
                 token={this.state.token}
-                knownWords={this.state.knownWords}
-                unknownWords={this.state.unknownWords}
-                vocabSize={this.state.vocabSize}
+                knownWords={this.state.words[this.state.lang].knownWords}
+                unknownWords={this.state.words[this.state.lang].unknownWords}
+                vocabSize={this.state.words[this.state.lang].vocabSize}
                 addKnownWord={this.addKnownWord}
                 addUnknownWord={this.addUnknownWord}
                 removeWord={this.removeWord}
                 handleSignout={this.handleSignout}
                 getDefinitions={this.getDefinitions}
+                addToAppState={this.addToAppState}
                 sanitizeText={this.sanitizeText}
               />
             )}
@@ -225,13 +296,14 @@ class App extends Component {
             exact
             path="/"
             component={Home}
+            lang={this.state.lang}
             handleSignout={this.handleSignout}
-            vocabSize={this.state.vocabSize}
+            vocabSize={this.state.words[this.state.lang].vocabSize}
             getDefinitions={this.getDefinitions}
             addKnownWord={this.addKnownWord}
             addUnknownWord={this.addUnknownWord}
             removeWord={this.removeWord}
-            unknownWords={this.state.unknownWords}
+            unknownWords={this.state.words[this.state.lang].unknownWords}
             addToAppState={this.addToAppState}
             sanitizeText={this.sanitizeText}
           />
@@ -239,7 +311,16 @@ class App extends Component {
             exact
             path="/account"
             component={Account}
+            lang={this.state.lang}
             handleSignout={this.handleSignout}
+            vocabSize={this.state.words[this.state.lang].vocabSize}
+            getDefinitions={this.getDefinitions}
+            addKnownWord={this.addKnownWord}
+            addUnknownWord={this.addUnknownWord}
+            removeWord={this.removeWord}
+            unknownWords={this.state.words[this.state.lang].unknownWords}
+            addToAppState={this.addToAppState}
+            sanitizeText={this.sanitizeText}
           />
         </Switch>
       </div>

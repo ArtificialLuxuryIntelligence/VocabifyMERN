@@ -7,7 +7,6 @@ import "./Sidebar.css";
 
 import Collapsible from "react-collapsible";
 import Spanner from "../../Spanner/Spanner";
-import WordDef from "../../WordDef/WordDef";
 
 class Sidebar extends Component {
   constructor(props) {
@@ -44,31 +43,79 @@ class Sidebar extends Component {
         <div>
           {this.props.definitionJSON.map((word, i) => {
             if (this.props.sidebarWords.indexOf(word[0].word) !== -1) {
-              //   console.log(word);
-
-              return (
-                <div key={word[0].word}>
-                  <WordDef
-                    autoload={true}
-                    definition={[word]}
-                    word={word[0].word}
-                    lang={this.props.lang}
-                    handleSpanClick={this.props.handleSpanClick}
-                    vocabSize={this.props.vocabSize}
-                    getDefinitions={this.props.getDefinitions}
-                    addKnownWord={this.props.addKnownWord}
-                    addUnknownWord={this.props.addUnknownWord}
-                    removeWord={this.props.removeWord}
-                    unknownWords={this.props.unknownWords}
-                    addToAppState={this.props.addToAppState}
-                  ></WordDef>
-                  <button
-                    onClick={() => this.props.handleDeleteWord(word[0].word)}
-                  >
-                    x
-                  </button>
-                </div>
-              );
+              if (word.length > 1) {
+                return (
+                  <div key={i}>
+                    {/* <h1>{word[0].word}</h1> */}
+                    <Collapsible
+                      triggerClassName="clickable"
+                      triggerOpenedClassName="clickable"
+                      handleSpanClick={this.props.handleSpanClick}
+                      trigger={word[0].word}
+                      transitionTime={120}
+                    >
+                      <Word
+                        handleSpanClick={this.props.handleSpanClick}
+                        word={word}
+                      />
+                    </Collapsible>
+                    {this.props.unknownWords.indexOf(word[0].word) === -1 && (
+                      <button onClick={e => this.props.handleAddWord(e)}>
+                        Add word
+                      </button>
+                    )}
+                    {this.props.unknownWords.indexOf(word[0].word) !== -1 && (
+                      <button onClick={e => this.props.handleRemoveWord(e)}>
+                        Remove word
+                      </button>
+                    )}
+                    <button onClick={e => this.props.handleDeleteWord(e)}>
+                      x
+                    </button>
+                  </div>
+                );
+              } else {
+                return (
+                  <div key={i}>
+                    {word.map((word, i) => {
+                      return (
+                        <div key={i}>
+                          {/* <h1>{word.word}</h1> */}
+                          <Collapsible
+                            triggerClassName="clickable"
+                            triggerOpenedClassName="clickable"
+                            handleSpanClick={this.props.handleSpanClick}
+                            trigger={word.word}
+                            transitionTime={120}
+                          >
+                            <POS
+                              handleSpanClick={this.props.handleSpanClick}
+                              word={word}
+                            />
+                          </Collapsible>
+                          {this.props.unknownWords.indexOf(word.word) ===
+                            -1 && (
+                            <button onClick={e => this.props.handleAddWord(e)}>
+                              Add word
+                            </button>
+                          )}
+                          {this.props.unknownWords.indexOf(word.word) !==
+                            -1 && (
+                            <button
+                              onClick={e => this.props.handleRemoveWord(e)}
+                            >
+                              Remove word
+                            </button>
+                          )}
+                          <button onClick={e => this.props.handleDeleteWord(e)}>
+                            x
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              }
             }
           })}
         </div>

@@ -3,11 +3,24 @@ var router = express.Router();
 const axios = require("axios");
 
 const User = require("../models/User");
-const freqList = require("../data/freqList");
+const freqListEN = require("../data/freqListEN");
+const freqListES = require("../data/freqListES");
 
 var isAuthenticated = require("../middleware/isAuthenticated");
 
 // --- Helper functions
+
+//get correct language frequency list
+
+const getFreqList = lang => {
+  switch (lang) {
+    case "en":
+      return freqListEN;
+    case "es":
+      return freqListES;
+  }
+};
+
 // API requests
 
 // generates array of fetch requests (one per word)
@@ -42,9 +55,11 @@ async function fetchDefinitions(wordArray, lang) {
 
 // estimates users vocab size
 
-const estimateUserVocab = (knownWords, unknownWords) => {
+const estimateUserVocab = (lang, knownWords, unknownWords) => {
   console.log("estimating vocab size ...");
   console.log(unknownWords);
+
+  let freqList = getFreqList(lang);
 
   if (unknownWords.length < 3) {
     return 200;
@@ -71,10 +86,12 @@ const estimateUserVocab = (knownWords, unknownWords) => {
 //filter word array based on vocab size // duplicates etc handled client side
 
 // ------FILTERS
-const filterGivenVocabSize = (vocabSize, unknownWords, queryWords) => {
+const filterGivenVocabSize = (lang, vocabSize, unknownWords, queryWords) => {
   //unfortunately this filters out words that are not exact matches of unknown words.
   //i.e. 'articles' filtered out if in the calculated userVocab even if 'article' is 'unknownWord';
   //only solution is to check every word/[no] // have more sophisticated word list with conjugations etc grouped [list not readily available]
+
+  let freqList = getFreqList(lang);
   let userVocab = freqList.slice(0, vocabSize);
   let filteredWords = queryWords.filter(
     word => userVocab.indexOf(word) === -1 || unknownWords.indexOf(word) !== -1
@@ -94,6 +111,7 @@ const filterGivenUserWords = (knownWords, unknownWords, queryWords) => {
     word => knownWords.indexOf(word) === -1 || unknownWords.indexOf(word) !== -1
   );
   console.log(
+    //fancy way of showing what was removed
     "removed (reason: given user words)",
     queryWords
       .filter(x => !filteredWords.includes(x))
@@ -103,22 +121,25 @@ const filterGivenUserWords = (knownWords, unknownWords, queryWords) => {
 };
 
 const filterDefinitions = (
+  lang,
   knownWords,
   unknownWords,
   vocabSize,
   definitions
 ) => {
+  let freqList = getFreqList(lang);
   let userVocab = freqList.slice(0, vocabSize);
+  console.log(definitions);
 
   let definitionWords = definitions.map(x => x[0].word);
   console.log("definitions received: ", definitionWords.length);
-  console.log("definitions:", definitions.length);
 
   definitionWords.forEach(word => {
-    console.log("checking", word);
+    console.log("checking:", word);
     let bool = userVocab.indexOf(word) >= 0 ? true : false;
     let bool2 = knownWords.indexOf(word) >= 0 ? true : false;
 
+    //need to check for duplicates at this stage too (e.g. Charon's and Charon were both searched for and returned two 'Charon' entries)
     if (bool || bool2) {
       if (unknownWords.indexOf(word) !== -1) {
         return; // don't filter out unknown words
@@ -142,6 +163,8 @@ const filterDefinitions = (
 };
 
 async function getRandomWord(wordRange, lang, attempts) {
+  console.log("lang", lang);
+
   let randomWord = wordRange[Math.floor(Math.random() * wordRange.length)];
   attempts--;
   try {
@@ -179,14 +202,19 @@ router.post("/definitions", isAuthenticated, async (req, res, next) => {
   let knownWords = req.body.knownWords;
   let unknownWords = req.body.unknownWords;
 
-  let vocabSize = estimateUserVocab(knownWords, unknownWords);
+  let vocabSize = estimateUserVocab(lang, knownWords, unknownWords);
   console.log("Vocab Size:", vocabSize);
 
   // filters out words that are calculated to be known by user ----
   if (filter === "true") {
     console.log(" ----------------------------filtering...");
     console.log(queryWords);
-    queryWords = filterGivenVocabSize(vocabSize, unknownWords, queryWords);
+    queryWords = filterGivenVocabSize(
+      lang,
+      vocabSize,
+      unknownWords,
+      queryWords
+    );
     // console.log(queryWords);
     queryWords = filterGivenUserWords(knownWords, unknownWords, queryWords);
     // console.log(queryWords);
@@ -195,11 +223,14 @@ router.post("/definitions", isAuthenticated, async (req, res, next) => {
   console.log("fetching...");
   console.log(queryWords, lang);
 
-  let definitions = await fetchDefinitions(queryWords, lang).catch(err => err);
+  let definitions = await fetchDefinitions(queryWords, lang).catch(err =>
+    console.log(err)
+  );
 
   // filter returned defintions for known words
   if (filter === "true") {
     definitions = filterDefinitions(
+      lang,
       knownWords,
       unknownWords,
       vocabSize,
@@ -217,21 +248,25 @@ router.post("/definitions", isAuthenticated, async (req, res, next) => {
 
 //---PROTECTED
 
+// put in user route??
+
 router.post("/updateuser", isAuthenticated, (req, res, next) => {
-  let token = req.body.token;
+  // let token = req.body.token;
   let id = req.body.id; //note token is (currently in this version) user id (separate here for clarity)
-  let unknownWords = req.body.unknownWords;
-  let knownWords = req.body.knownWords;
+  // let unknownWords = req.body.unknownWords;
+  // let knownWords = req.body.knownWords;
+  let words = req.body.words;
   let vocabSize = req.body.vocabSize;
+  let lang = req.body.lang;
 
   User.findOneAndUpdate(
     {
       _id: id
     },
     {
-      unknownWords,
-      knownWords,
-      vocabSize
+      words,
+      vocabSize,
+      lang
     },
     { upsert: true },
     (err, user) => {
@@ -247,11 +282,15 @@ router.post("/updateuser", isAuthenticated, (req, res, next) => {
 });
 
 router.post("/random", isAuthenticated, async (req, res, next) => {
+  //this route doesnt estimate vocab size (uses previous calculation)
   let vocabSize = req.body.vocabSize;
   let knownWords = req.body.knownWords;
   let unknownWords = req.body.unknownWords;
   let lang = req.body.lang;
-  // console.log(req.body);
+  // console.log("request language", req.body.lang);
+
+  let freqList = getFreqList(lang);
+  // console.log("freqList", freqList);
 
   let range = 500; //make dynamic? could get bigger for higher vocabSizes...
   let min = vocabSize - range < 0 ? 0 : vocabSize - range;
@@ -261,9 +300,11 @@ router.post("/random", isAuthenticated, async (req, res, next) => {
   console.log(min, max);
 
   let wordRange = freqList.slice(min, max); // set min/max-length
-  console.log(wordRange);
+  // console.log(wordRange);
 
-  let response = await getRandomWord(wordRange, lang, 3).catch("err");
+  let response = await getRandomWord(wordRange, lang, 2).catch(err =>
+    console.log(err)
+  );
 
   res.send(response);
 });
