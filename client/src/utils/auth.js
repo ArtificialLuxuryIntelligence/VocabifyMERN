@@ -8,13 +8,11 @@ const auth = {
       "vocabify",
       JSON.stringify({
         isLoggedIn: false,
-        token: "",
-        // knownWords: [], //to be removed
-        // unknownWords: [], //to be removed
-        vocabSize: "",
-        savedDefinitions: [],
-        words: {},
-        lang: ""
+        token: null,
+        vocabSize: null,
+        savedDefinitions: null,
+        words: null,
+        lang: null
       })
     );
   },
