@@ -18,7 +18,7 @@ class App extends Component {
     this.state = {
       // knownWords: [],
       // unknownWords: [],
-      // vocabSize: "",
+      vocabSize: 0,
       lang: "placeholder", //can set this to a lang (EN) in case there is a problem loading a language on startup?
       words: {
         en: { knownWords: [], unknownWords: [], vocabSize: "" },
@@ -39,7 +39,7 @@ class App extends Component {
   }
   componentDidMount() {
     let obj = JSON.parse(localStorage.getItem("vocabify"));
-    if (obj) {
+    if (obj && obj.isLoggedIn) {
       // let { knownWords, unknownWords, vocabSize, lang, words } = obj; //to be removed
       let { lang, words } = obj;
 
@@ -47,6 +47,7 @@ class App extends Component {
       this.setState({ lang, words });
 
       // hydrate state from local (all data, including definitions)
+      console.log("did mount and is logged in");
     }
 
     console.log("did mount");

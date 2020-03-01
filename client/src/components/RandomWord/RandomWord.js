@@ -53,8 +53,8 @@ class RandomWord extends Component {
   }
 
   componentDidMount = () => {
-    console.log("myVOCAB", this.props.vocabSize);
-    console.log("did mount");
+    // console.log("myVOCAB", this.props.vocabSize);
+    // console.log("did mount");
     if (this.state.definition.length === 0) {
       this.getNewWord();
     }
