@@ -129,7 +129,21 @@ const filterDefinitions = (
 ) => {
   let freqList = getFreqList(lang);
   let userVocab = freqList.slice(0, vocabSize);
-  console.log(definitions);
+
+  /// ----- removes duplicate words from nested array: //note: this removes duplicate results even if the object is not exactly identical (e.g. result from spanish search of 'zona' and 'zonas' both return 'zona' definition but in non-identical objects (in one there is a "" in synonyms and the other nothing..!)) therefore cannot use normal method to elimate dupes
+  function removeDupes(arr) {
+    let noDupes = [];
+    let words = [];
+    arr.map(function(x) {
+      if (!words.includes(x[0].word)) {
+        words.push(x[0].word);
+        noDupes.push(x);
+      }
+    });
+    return noDupes;
+  }
+  definitions = removeDupes(definitions);
+  /// ----------------------------------------------------
 
   let definitionWords = definitions.map(x => x[0].word);
   console.log("definitions received: ", definitionWords.length);
@@ -139,14 +153,13 @@ const filterDefinitions = (
     let bool = userVocab.indexOf(word) >= 0 ? true : false;
     let bool2 = knownWords.indexOf(word) >= 0 ? true : false;
 
-    //need to check for duplicates at this stage too (e.g. Charon's and Charon were both searched for and returned two 'Charon' entries)
     if (bool || bool2) {
       if (unknownWords.indexOf(word) !== -1) {
         return; // don't filter out unknown words
       }
       let i = definitionWords.indexOf(word);
       console.log(
-        "***definition removed from results (reason: found in calculated vocabsize or is in knownwords):",
+        "***definition removed from results (reason: found in calculated vocabsize or is in knownwords or is duplicate):",
         // definitions[i],
         definitionWords[i],
         "at index:",
