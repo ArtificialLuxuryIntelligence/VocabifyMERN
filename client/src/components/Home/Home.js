@@ -7,6 +7,7 @@ import Nav from "../Nav/Nav";
 import RandomWord from "../RandomWord/RandomWord";
 import WordDef from "../WordDef/WordDef";
 import LanguageDropdown from "../LanguageDropdown/LanguageDropdown";
+import SearchResults from "../SearchResults/SearchResults";
 
 class Home extends Component {
   constructor(props) {
@@ -94,8 +95,6 @@ class Home extends Component {
             //make separate component 'wrapper' with all the update methods from randoWord comp
 
             <>
-              <h3>Word search result: </h3>
-
               <SearchResults
                 autoload={true}
                 word={this.state.searchWord}
@@ -118,49 +117,3 @@ class Home extends Component {
 }
 
 export default Home;
-
-class SearchResults extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      lang: this.props.lang
-    };
-  }
-
-  // static getDerivedStateFromProps(props, state) {
-  //   if (props.lang !== state.lang) {
-  //     return {
-  //       lang: props.lang
-  //     };
-  //   }
-  // }
-
-  // componentDidUpdate(prevProps) {
-  //   //glitches if you refresh (calls didmount and didupdate?)
-  //   if (this.props.lang != prevProps.lang) {
-  //     console.log("did update");
-  //     this.getNewWord();
-  //   }
-  //   console.log("updated-  no lang change");
-  // }
-
-  render() {
-    return (
-      <>
-        <WordDef
-          autoload={this.props.autoload}
-          word={this.props.word}
-          lang={this.props.lang}
-          handleSpanClick={this.props.handleSpanClick}
-          vocabSize={this.props.vocabSize}
-          getDefinitions={this.props.getDefinitions}
-          addKnownWord={this.props.addKnownWord}
-          addUnknownWord={this.props.addUnknownWord}
-          removeWord={this.props.removeWord}
-          unknownWords={this.props.unknownWords}
-          addToAppState={this.props.addToAppState}
-        />
-      </>
-    );
-  }
-}

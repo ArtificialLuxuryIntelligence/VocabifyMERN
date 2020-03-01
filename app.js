@@ -27,7 +27,13 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/words", wordsRouter);
-
 app.use("/api", apiRouter);
+
+app.use(express.static(path.join(__dirname, "./client/build")));
+
+/*React root*/
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname + "./client/build/index.html"));
+});
 
 module.exports = app;
