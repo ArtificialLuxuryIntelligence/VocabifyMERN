@@ -21,7 +21,8 @@ const UserSchema = new mongoose.Schema({
     type: Object,
     default: {
       en: { knownWords: ["the", "and"], unknownWords: [], vocabSize: 200 },
-      es: { knownWords: ["el", "la", "y"], unknownWords: [], vocabSize: 200 }
+      es: { knownWords: ["el", "la", "y"], unknownWords: [], vocabSize: 200 },
+      fr: { knownWords: ["le", "la", "et"], unknownWords: [], vocabSize: 200 }
     }
   },
   lang: {

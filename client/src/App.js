@@ -23,6 +23,8 @@ class App extends Component {
       words: {
         en: { knownWords: [], unknownWords: [], vocabSize: "" },
         es: { knownWords: [], unknownWords: [], vocabSize: "" },
+        fr: { knownWords: [], unknownWords: [], vocabSize: "" },
+
         placeholder: { knownWords: [], unknownWords: [], vocabSize: "" }
       }
     };

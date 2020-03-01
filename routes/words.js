@@ -3,8 +3,11 @@ var router = express.Router();
 const axios = require("axios");
 
 const User = require("../models/User");
+
+// one data souce for freq words. better lists in next version https://github.com/hermitdave/FrequencyWords/tree/master/content/2018/fr
 const freqListEN = require("../data/freqListEN");
 const freqListES = require("../data/freqListES");
+const freqListFR = require("../data/freqListFR");
 
 var isAuthenticated = require("../middleware/isAuthenticated");
 
@@ -18,6 +21,8 @@ const getFreqList = lang => {
       return freqListEN;
     case "es":
       return freqListES;
+    case "fr":
+      return freqListFR;
   }
 };
 

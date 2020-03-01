@@ -14,6 +14,7 @@ class LanguageDropdown extends Component {
       >
         <option value="en">English</option>
         <option value="es">Spanish</option>
+        <option value="fr">French</option>
       </select>
     );
   }

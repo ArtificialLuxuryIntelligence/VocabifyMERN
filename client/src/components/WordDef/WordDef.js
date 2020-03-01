@@ -220,64 +220,33 @@ function POS(props) {
 
   // console.log(props.word.meaning[])
 
-  switch (props.lang) {
-    case "en":
-      return (
-        <div>
-          {keys.map((key, i) => {
-            return (
-              <div key={i}>
-                {/* <p>{key}</p> */}
-                <Collapsible
-                  open={i === 0 ? true : false}
-                  triggerClassName="clickable"
-                  triggerOpenedClassName="clickable"
+  return (
+    <div>
+      {keys.map((key, i) => {
+        return (
+          <div key={i}>
+            {/* <p>{key}</p> */}
+            <Collapsible
+              open={i === 0 ? true : false}
+              triggerClassName="clickable"
+              triggerOpenedClassName="clickable"
+              handleSpanClick={props.handleSpanClick}
+              trigger={key}
+              transitionTime={120}
+            >
+              <ol>
+                <Definition
                   handleSpanClick={props.handleSpanClick}
-                  trigger={key}
-                  transitionTime={120}
-                >
-                  <ol>
-                    <Definition
-                      handleSpanClick={props.handleSpanClick}
-                      def={props.word.meaning[key]}
-                      lang={props.lang}
-                    />
-                  </ol>
-                </Collapsible>
-              </div>
-            );
-          })}
-        </div>
-      );
-    case "es":
-      return (
-        <div>
-          {keys.map((key, i) => {
-            return (
-              <div key={i}>
-                {/* <p>{key}</p> */}
-                <Collapsible
-                  open={i === 0 ? true : false}
-                  triggerClassName="clickable"
-                  triggerOpenedClassName="clickable"
-                  handleSpanClick={props.handleSpanClick}
-                  trigger={key}
-                  transitionTime={120}
-                >
-                  <ol>
-                    <Definition
-                      handleSpanClick={props.handleSpanClick}
-                      def={props.word.meaning[key]}
-                      lang={props.lang}
-                    />
-                  </ol>
-                </Collapsible>
-              </div>
-            );
-          })}
-        </div>
-      );
-  }
+                  def={props.word.meaning[key]}
+                  lang={props.lang}
+                />
+              </ol>
+            </Collapsible>
+          </div>
+        );
+      })}
+    </div>
+  );
 }
 
 function Definition(props) {
@@ -306,6 +275,7 @@ function Definition(props) {
           })}
         </div>
       );
+    case "fr":
     case "es":
       return (
         <div>
