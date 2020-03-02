@@ -26,18 +26,23 @@ const getFreqList = lang => {
   }
 };
 
+const encodeCharacters = string => {
+  return encodeURI(string);
+};
+
 // API requests
 
 // generates array of fetch requests (one per word)
 const fetchArray = (wordArray, lang) => {
-  return wordArray.map(word =>
+  let result = wordArray.map(word =>
     axios.get(
-      "https://mydictionaryapi.appspot.com/?define=" +
-        word.trim() +
-        "&lang=" +
-        lang
+      `https://mydictionaryapi.appspot.com/?define=${encodeCharacters(
+        word.trim()
+      )}&lang=${lang}`
     )
   );
+
+  return result;
 };
 // API fetch request
 async function fetchDefinitions(wordArray, lang) {
@@ -47,12 +52,12 @@ async function fetchDefinitions(wordArray, lang) {
     responses = await Promise.allSettled(fetchArray(wordArray, lang));
     // console.log(responses);
   } catch (err) {
-    console.log(err);
+    err => console.log(err);
   }
   let obj = responses
     .map(res => (res.status === "fulfilled" ? res.value.data : null))
     .filter(def => def !== null);
-  // console.log(obj);
+  //obj can be empty
   return obj;
 }
 
@@ -62,7 +67,7 @@ async function fetchDefinitions(wordArray, lang) {
 
 const estimateUserVocab = (lang, knownWords, unknownWords) => {
   console.log("estimating vocab size ...");
-  console.log(unknownWords);
+  // console.log(unknownWords);
 
   let freqList = getFreqList(lang);
 
@@ -73,7 +78,7 @@ const estimateUserVocab = (lang, knownWords, unknownWords) => {
 
     unknownWords.forEach(word => {
       indexArray.push(freqList.indexOf(word));
-      console.log(word, freqList.indexOf(word));
+      // console.log(word, freqList.indexOf(word));
 
       indexArray = indexArray.filter(index => index > 0); // only uses words that are in the freqList
       vocabSize = indexArray.reduce((a, b) => a + b, 0) / indexArray.length;
@@ -187,8 +192,8 @@ async function getRandomWord(wordRange, lang, attempts) {
   attempts--;
   try {
     let definition = await fetchDefinitions([randomWord], lang);
-    console.log(randomWord, definition.length);
-    if (definition.length === 1) {
+    console.log("RandomWord:", randomWord);
+    if (definition.length !== 0) {
       //definition returned
       return { success: true, definition };
     } else if (attempts > 0) {
@@ -308,6 +313,8 @@ router.post("/random", isAuthenticated, async (req, res, next) => {
   // console.log("request language", req.body.lang);
 
   let freqList = getFreqList(lang);
+  console.log("vocabSize", vocabSize);
+
   // console.log("freqList", freqList);
 
   let range = 500; //make dynamic? could get bigger for higher vocabSizes...
@@ -315,14 +322,15 @@ router.post("/random", isAuthenticated, async (req, res, next) => {
   let max =
     vocabSize + range > freqList.length ? freqList.length : vocabSize + range;
 
-  console.log(min, max);
+  console.log("range", min, max);
 
   let wordRange = freqList.slice(min, max); // set min/max-length
   // console.log(wordRange);
 
   let response = await getRandomWord(wordRange, lang, 2).catch(err =>
-    console.log(err)
+    console.log("can't get random word", err)
   );
+  console.log("response", response);
 
   res.send(response);
 });

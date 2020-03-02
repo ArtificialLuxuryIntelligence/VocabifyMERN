@@ -1,4 +1,4 @@
-const freqList = [
+const freqListES = [
   "de",
   "que",
   "no",
@@ -4891,4 +4891,4 @@ const freqList = [
   "fresca"
 ];
 
-module.exports = freqList;
+module.exports = freqListES;
