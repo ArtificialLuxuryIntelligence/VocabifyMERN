@@ -73,6 +73,10 @@ class Read extends Component {
 
     //currently doesnt check if word is already in list...
     this.setState({ isNewWordLoading: true });
+    // console.log(e.target.classList[1]);
+
+    let parentWord = e.target.classList[1];
+
     let word = e.target.innerText;
     let queryWord = this.props.sanitizeText(word);
     let def = await this.props.getDefinitions(queryWord, "false");
@@ -83,39 +87,32 @@ class Read extends Component {
     }
     let newWord = def[0][0].word;
 
-    let defs = this.state.definitionJSON;
-    let sidebarWordArray = this.state.sidebarWords;
+    let defs = [...this.state.definitionJSON]; //dont mutate state
+    let sidebarWordArray = [...this.state.sidebarWords];
 
-    //add new word to definition store and sidebar words (kept in sync)
-    defs = def.concat(defs);
-    sidebarWordArray.unshift(newWord);
+    if (sidebarWordArray.indexOf(parentWord) >= 0) {
+      // console.log("index of", parentWord, sidebarWordArray.indexOf(parentWord));
+      let index = sidebarWordArray.indexOf(parentWord);
+      defs.splice(index + 1, 0, def[0]);
+      sidebarWordArray.splice(index + 1, 0, newWord);
+    } else {
+      defs = def.concat(defs);
+      sidebarWordArray.unshift(newWord);
+    }
+
+    //add new word to definition store and sidebar words (kept in sync) //sidebarwords not strictly needed but makes it a bit clearer to keep track of words; note- it is used when changed langage cf. dropdown
+
+    //TO DO - add new def under entry that called it...
+
     console.log(defs, sidebarWordArray);
 
     //remove dupes
     defs = Array.from(new Set(defs.map(JSON.stringify)), JSON.parse);
     sidebarWordArray = [...new Set(sidebarWordArray)];
-
-    console.log("unique", defs, sidebarWordArray);
+    //
 
     this.setState({ definitionJSON: defs });
     this.setState({ sidebarWords: sidebarWordArray });
-
-    // //----avoid duplicates in sidebar and bring new word to top
-    // if (sidebarWordArray.includes(newWord)) {
-    //   let index = sidebarWordArray.indexOf(newWord);
-    //   sidebarWordArray.splice(index, 1);
-    //   // console.log(defs);
-
-    //   // defs.splice(index, 1);
-    //   // console.log(defs);
-    //   // console.log("included");
-    // }
-    // //-----
-
-    // this.setState({ definitionJSON: def.concat(defs) });
-    // sidebarWordArray.unshift(newWord);
-    // this.setState({ sidebarWords: sidebarWordArray });
-
     this.setState({ isNewWordLoading: false });
   };
 
@@ -192,12 +189,14 @@ class Read extends Component {
       return (
         <div>
           <Nav handleSignout={this.props.handleSignout} />
+          <h1>Read</h1>
+          <h2>Submit</h2>
 
-          <h1>Submit</h1>
           <LanguageDropdown
             handleDropdownChange={this.handleDropdownChange}
             lang={this.props.lang}
           ></LanguageDropdown>
+
           <Textarea handleSubmit={this.handleSubmit} />
         </div>
       );
@@ -206,31 +205,36 @@ class Read extends Component {
         <div>
           <Nav handleSignout={this.props.handleSignout} />
           <h1>Read</h1>
+
           <LanguageDropdown
             handleDropdownChange={this.handleDropdownChange}
             lang={this.props.lang}
           ></LanguageDropdown>
-          <Textreader
-            fullText={this.state.fullText}
-            handleNewText={this.handleNewText}
-            handleSpanClick={this.handleSpanClick}
-          />
-          <Sidebar
-            lang={this.props.lang}
-            definitionJSON={this.state.definitionJSON}
-            unknownWords={this.props.unknownWords}
-            handleRemoveWord={this.handleRemoveWord}
-            handleDeleteWord={this.handleDeleteWord}
-            // handleAddWord={this.handleAddWord}
-            // getDefinitions={this.props.getDefinitions}
-            addKnownWord={this.props.addKnownWord}
-            addUnknownWord={this.props.addUnknownWord}
-            removeWord={this.props.removeWord}
-            sidebarWords={this.state.sidebarWords}
-            handleSpanClick={this.handleSpanClick}
-            isLoading={this.state.isLoading}
-            isNewWordLoading={this.state.isNewWordLoading}
-          />
+
+          <div className={""}>
+            <Textreader
+              fullText={this.state.fullText}
+              handleNewText={this.handleNewText}
+              handleSpanClick={this.handleSpanClick}
+            />
+            <Sidebar
+              // className={"sidebar"}
+              lang={this.props.lang}
+              definitionJSON={this.state.definitionJSON}
+              unknownWords={this.props.unknownWords}
+              handleRemoveWord={this.handleRemoveWord}
+              handleDeleteWord={this.handleDeleteWord}
+              // handleAddWord={this.handleAddWord}
+              // getDefinitions={this.props.getDefinitions}
+              addKnownWord={this.props.addKnownWord}
+              addUnknownWord={this.props.addUnknownWord}
+              removeWord={this.props.removeWord}
+              sidebarWords={this.state.sidebarWords}
+              handleSpanClick={this.handleSpanClick}
+              isLoading={this.state.isLoading}
+              isNewWordLoading={this.state.isNewWordLoading}
+            />
+          </div>
         </div>
       );
     }

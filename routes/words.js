@@ -67,7 +67,6 @@ async function fetchDefinitions(wordArray, lang) {
 
 const estimateUserVocab = (lang, knownWords, unknownWords) => {
   console.log("estimating vocab size ...");
-  // console.log(unknownWords);
 
   let freqList = getFreqList(lang);
 
@@ -212,8 +211,6 @@ async function getRandomWord(wordRange, lang, attempts) {
 
 // ---------- ROUTES ----------
 
-//these should be get requests with token in header.. right?
-
 //Get word definitions
 
 router.post("/definitions", isAuthenticated, async (req, res, next) => {
@@ -250,7 +247,7 @@ router.post("/definitions", isAuthenticated, async (req, res, next) => {
     console.log(err)
   );
 
-  // filter returned defintions for known words
+  // filter returned returned defintion words for known words (may be slightly different from requested words e.g. conjugations etc)
   if (filter === "true") {
     definitions = filterDefinitions(
       lang,

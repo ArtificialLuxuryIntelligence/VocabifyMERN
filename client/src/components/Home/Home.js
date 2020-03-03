@@ -5,7 +5,7 @@ import React, { Component } from "react";
 
 import Nav from "../Nav/Nav";
 import RandomWord from "../RandomWord/RandomWord";
-import WordDef from "../WordDef/WordDef";
+// import WordDef from "../WordDef/WordDef";
 import LanguageDropdown from "../LanguageDropdown/LanguageDropdown";
 import SearchResults from "../SearchResults/SearchResults";
 

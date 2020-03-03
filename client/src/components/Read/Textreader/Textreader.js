@@ -13,7 +13,7 @@ class Textreader extends Component {
 
   render() {
     return (
-      <div>
+      <div className={"textreader"}>
         <h2>Reader</h2>
         <button onClick={() => this.props.handleNewText()}>New text</button>
         <div className="text-reader">

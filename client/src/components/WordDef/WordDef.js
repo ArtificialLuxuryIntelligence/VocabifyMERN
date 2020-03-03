@@ -10,7 +10,7 @@
 ///
 
 import React, { Component } from "react";
-// import "./WordDef.css";
+import "./WordDef.css";
 
 // import axios from "axios";
 // import Sidebar from "../Read/Sidebar/Sidebar";
@@ -102,11 +102,26 @@ class WordDef extends Component {
               if (word.length > 1) {
                 return (
                   <div key={i}>
-                    {/* <h1>{word[0].word}</h1> */}
+                    {this.props.unknownWords.indexOf(word[0].word) === -1 && (
+                      <button
+                        className={"add-button"}
+                        onClick={e => this.handleAddWord()}
+                      >
+                        Add word
+                      </button>
+                    )}
+                    {this.props.unknownWords.indexOf(word[0].word) !== -1 && (
+                      <button
+                        className={"remove-button"}
+                        onClick={e => this.handleRemoveWord()}
+                      >
+                        Remove word
+                      </button>
+                    )}{" "}
                     <Collapsible
-                      open={true}
-                      triggerClassName="clickable"
-                      triggerOpenedClassName="clickable"
+                      // open={true}
+                      triggerClassName="clickable word-heading"
+                      triggerOpenedClassName="clickable word-heading"
                       handleSpanClick={this.props.handleSpanClick}
                       trigger={word[0].word}
                       transitionTime={120}
@@ -115,18 +130,9 @@ class WordDef extends Component {
                         handleSpanClick={this.props.handleSpanClick}
                         word={word}
                         lang={this.props.lang}
+                        wordHeading={word[0].word}
                       />
                     </Collapsible>
-                    {this.props.unknownWords.indexOf(word[0].word) === -1 && (
-                      <button onClick={e => this.handleAddWord()}>
-                        Add word
-                      </button>
-                    )}
-                    {this.props.unknownWords.indexOf(word[0].word) !== -1 && (
-                      <button onClick={e => this.handleRemoveWord()}>
-                        Remove word
-                      </button>
-                    )}
                     {/* <button onClick={e => this.props.handleDeleteWord(e)}>
                   x
                 </button> */}
@@ -138,36 +144,41 @@ class WordDef extends Component {
                     {word.map((word, i) => {
                       return (
                         <div key={i}>
-                          {/* <h1>{word.word}</h1> */}
-                          <Collapsible
-                            open={true}
-                            triggerClassName="clickable"
-                            triggerOpenedClassName="clickable"
-                            handleSpanClick={this.props.handleSpanClick}
-                            trigger={word.word}
-                            transitionTime={120}
-                          >
-                            <POS
-                              handleSpanClick={this.props.handleSpanClick}
-                              word={word}
-                              lang={this.props.lang}
-                            />
-                          </Collapsible>
                           {this.props.unknownWords.indexOf(word.word) ===
                             -1 && (
-                            <button onClick={e => this.handleAddWord()}>
+                            <button
+                              className={"add-button"}
+                              onClick={e => this.handleAddWord()}
+                            >
                               Add word
                             </button>
                           )}
                           {this.props.unknownWords.indexOf(word.word) !==
                             -1 && (
-                            <button onClick={e => this.handleRemoveWord()}>
+                            <button
+                              className={"remove-button"}
+                              onClick={e => this.handleRemoveWord()}
+                            >
                               Remove word
                             </button>
                           )}
-                          {/* <button onClick={e => this.props.handleDeleteWord(e)}>
-                  x
-                </button> */}
+
+                          <Collapsible
+                            // open={true}
+                            triggerClassName="clickable word-heading"
+                            triggerOpenedClassName="clickable word-heading"
+                            handleSpanClick={this.props.handleSpanClick}
+                            trigger={word.word}
+                            transitionTime={120}
+                            wordHeading={word.word}
+                          >
+                            <POS
+                              handleSpanClick={this.props.handleSpanClick}
+                              word={word}
+                              lang={this.props.lang}
+                              wordHeading={word.word}
+                            />
+                          </Collapsible>
                         </div>
                       );
                     })}
@@ -194,8 +205,8 @@ function Word(props) {
             {/* <h2>{word.word}</h2> */}
             <Collapsible
               open={i === 0 ? true : false}
-              triggerClassName="clickable"
-              triggerOpenedClassName="clickable"
+              triggerClassName="clickable word"
+              triggerOpenedClassName="clickable word"
               handleSpanClick={props.handleSpanClick}
               trigger={word.word}
               transitionTime={120}
@@ -204,6 +215,7 @@ function Word(props) {
                 handleSpanClick={props.handleSpanClick}
                 word={word}
                 lang={props.lang}
+                wordHeading={props.wordHeading}
               />
             </Collapsible>
           </div>
@@ -228,8 +240,8 @@ function POS(props) {
             {/* <p>{key}</p> */}
             <Collapsible
               open={i === 0 ? true : false}
-              triggerClassName="clickable"
-              triggerOpenedClassName="clickable"
+              triggerClassName="clickable pos"
+              triggerOpenedClassName="clickable pos"
               handleSpanClick={props.handleSpanClick}
               trigger={key}
               transitionTime={120}
@@ -239,6 +251,7 @@ function POS(props) {
                   handleSpanClick={props.handleSpanClick}
                   def={props.word.meaning[key]}
                   lang={props.lang}
+                  wordHeading={props.wordHeading}
                 />
               </ol>
             </Collapsible>
@@ -265,6 +278,7 @@ function Definition(props) {
                         handleSpanClick={props.handleSpanClick}
                         randomString={def.definition}
                         lang={props.lang}
+                        wordHeading={props.wordHeading}
                       ></Spanner>
                       {/* <p>{def.definition}</p> */}
                     </li>
@@ -272,6 +286,7 @@ function Definition(props) {
                 </div>
               );
             }
+            return null;
           })}
         </div>
       );
@@ -289,6 +304,7 @@ function Definition(props) {
                         handleSpanClick={props.handleSpanClick}
                         randomString={def.definition}
                         lang={props.lang}
+                        wordHeading={props.wordHeading}
                       ></Spanner>
                       {/* <p>{def.definition}</p> */}
                     </li>
@@ -296,9 +312,12 @@ function Definition(props) {
                 </div>
               );
             }
+            return null;
           })}
         </div>
       );
+    default:
+      return null;
   }
 }
 

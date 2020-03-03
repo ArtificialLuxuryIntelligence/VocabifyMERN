@@ -10,7 +10,7 @@ const Spanner = props => {
   //splits text by space and by newline
   return randomString.split(" ").map((stringPart, index) => {
     return (
-      <React.Fragment key={index + stringPart.slice(1, 6)}>
+      <React.Fragment key={index}>
         {index === 0 ? null : " "}
 
         {stringPart.includes("\n") ? (
@@ -18,7 +18,10 @@ const Spanner = props => {
             <>
               {i === 0 ? null : "\n"}
               <span
-                className="searchable-word"
+                // key={i + stringPart.slice(1, 6)}
+                className={`searchable-word ${
+                  props.wordHeading ? props.wordHeading : ""
+                }`}
                 onClick={e => props.handleSpanClick(e)}
               >
                 {part}
@@ -27,7 +30,10 @@ const Spanner = props => {
           ))
         ) : (
           <span
-            className="searchable-word"
+            // key={index}
+            className={`searchable-word ${
+              props.wordHeading ? props.wordHeading : ""
+            }`}
             onClick={e => props.handleSpanClick(e)}
           >
             {stringPart}

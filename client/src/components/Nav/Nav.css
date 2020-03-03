@@ -6,8 +6,10 @@
   display: flex;
   list-style: none;
   flex-direction: row;
-  margin-left: auto;
+  /* margin-left: auto; */
+  /* margin-right: auto; */
   /* background-color: blue; */
+  padding-inline-start: 0px;
 }
 
 .nav ul li {
@@ -16,4 +18,8 @@
 .navbar ul li a {
   padding: 1rem;
   text-decoration: none;
+}
+
+.navbar ul li:first-of-type a {
+  padding-left: 0rem;
 }

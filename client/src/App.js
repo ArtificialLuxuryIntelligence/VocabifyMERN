@@ -132,9 +132,18 @@ class App extends Component {
       words: wordArray,
       filter: filter
     };
-    console.log(obj);
+    let headers = {
+      token
+    };
+    // console.log(obj);
     //try catch
-    let json = await axios.post("/words/definitions", obj);
+
+    let json = await axios
+      .post("/words/definitions", obj, { headers })
+      .catch(err => {
+        console.log(("error", err));
+      });
+
     console.log("vocabSize", json.data.vocabSize);
     console.log(json.data);
 

@@ -5,7 +5,7 @@ const User = require("../models/User");
 const UserSession = require("../models/UserSession");
 
 async function isAuthenticated(req, res, next) {
-  let token = req.body.token;
+  let token = req.headers.token;
 
   try {
     let session = await UserSession.findOne({

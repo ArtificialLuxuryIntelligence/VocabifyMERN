@@ -12,12 +12,7 @@ class Textarea extends Component {
     return (
       <div>
         <h2>Textarea</h2>
-        <textarea
-          id="textarea"
-          defaultValue="Welcome to the MDN learning area. This set of articles aims to provide complete beginners to web development with all that they need to start coding websites.
-
-"
-        ></textarea>
+        <textarea id="textarea" defaultValue="Just a bit of text"></textarea>
         <button onClick={() => this.props.handleSubmit()}>Submit</button>
       </div>
     );

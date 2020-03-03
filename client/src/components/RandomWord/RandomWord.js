@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./RandomWord.css";
 
-// import "./RandomWord.css";
+import "./RandomWord.css";
 import axios from "axios";
 // import Sidebar from "../Read/Sidebar/Sidebar";
 // import Collapsible from "react-collapsible";
@@ -42,7 +42,7 @@ class RandomWord extends Component {
 
   componentDidUpdate(prevProps) {
     //glitches if you refresh (calls didmount and didupdate?)
-    if (this.props.lang != prevProps.lang) {
+    if (this.props.lang !== prevProps.lang) {
       console.log("did update");
       console.log("props", this.props.lang);
       console.log("preV", prevProps.lang);
@@ -62,17 +62,18 @@ class RandomWord extends Component {
 
   getNewWord = async () => {
     this.setState({ isLoading: true });
-    let { token, words, lang } = JSON.parse(localStorage.getItem("vocabify"));
+    let { token } = JSON.parse(localStorage.getItem("vocabify"));
     let obj = {
-      token,
+      // token,
       vocabSize: this.props.vocabSize,
       unknownWords: this.props.unknownWords,
       knownWords: this.props.knownWords,
       lang: this.props.lang
     };
-    console.log(obj);
+    let headers = { token };
+    // console.log(obj);
 
-    let response = await axios.post("/words/random", obj);
+    let response = await axios.post("/words/random", obj, { headers });
     console.log(response.data); // this.setState({ definition });
     // console.log(this.state);
     if (response.data.success) {
@@ -91,11 +92,15 @@ class RandomWord extends Component {
 
   render() {
     if (this.state.isLoading) {
-      return <p> Loading new word...</p>;
+      return (
+        <div className={"random-word"}>
+          <p> Loading new word...</p>;
+        </div>
+      );
     }
     if (this.state.definition.length === 0) {
       return (
-        <div>
+        <div className={"random-word"}>
           <p>
             Sorry, we couldn't find a word.
             <button onClick={() => this.handleNewWord()}>Try again</button>
@@ -105,7 +110,7 @@ class RandomWord extends Component {
     }
 
     return (
-      <>
+      <div className={"random-word"}>
         <button onClick={() => this.handleNewWord()}>New word</button>
         <WordDef
           lang={this.props.lang}
@@ -121,7 +126,7 @@ class RandomWord extends Component {
           unknownWords={this.props.unknownWords}
           addToAppState={this.props.addToAppState}
         />
-      </>
+      </div>
     );
   }
 }

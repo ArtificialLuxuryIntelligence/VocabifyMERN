@@ -1,0 +1,10 @@
+.random-word {
+  display: flex;
+  flex-direction: column;
+}
+
+.random-word button {
+  align-self: flex-start;
+  display: inline-block;
+  float: none;
+}

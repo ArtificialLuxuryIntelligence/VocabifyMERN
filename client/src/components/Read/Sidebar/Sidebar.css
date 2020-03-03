@@ -1,4 +1,3 @@
-.clickable {
-  cursor: pointer;
-  background-color: blueviolet;
+.delete-button {
+  float: right;
 }
