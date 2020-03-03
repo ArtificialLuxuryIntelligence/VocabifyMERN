@@ -8,12 +8,17 @@ import "./Sidebar.css";
 // import Collapsible from "react-collapsible";
 // import Spanner from "../../Spanner/Spanner";
 import WordDef from "../../WordDef/WordDef";
+import SearchResults from "../../SearchResults/SearchResults";
+import SearchForm from "../../SearchForm/SearchForm";
 
 class Sidebar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      sidebarOpen: false
+      sidebarOpen: false,
+      searchWord: null,
+      searchTerm: "",
+      searchBoxOpen: true
     };
   }
 
@@ -32,6 +37,24 @@ class Sidebar extends Component {
   }
   toggleSidebar = () => {
     this.setState({ sidebarOpen: !this.state.sidebarOpen });
+  };
+  toggleSearchBox = e => {
+    this.setState({ searchBoxOpen: !this.state.searchBoxOpen });
+  };
+
+  handleChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
+    if (this.state.searchTerm.length === 0) {
+      return;
+    }
+    this.setState({ searchWord: this.state.searchTerm, searchTerm: "" });
+    document.getElementById("searchForm").reset();
   };
 
   render() {
@@ -59,6 +82,44 @@ class Sidebar extends Component {
         <button onClick={() => this.toggleSidebar()}>
           {this.state.sidebarOpen ? ">>" : "<<"}
         </button>
+
+        <button onClick={() => this.toggleSearchBox()}>
+          {this.state.searchBoxOpen ? "close search" : "search"}
+        </button>
+        <div
+          className={
+            this.state.searchBoxOpen
+              ? "search-box search-box-open"
+              : "search-box search-box-closed"
+          }
+        >
+          <SearchForm
+            value={this.state.searchTerm}
+            handleChange={this.handleChange}
+            lang={this.props.lang}
+            handleSubmit={this.handleSubmit}
+          />
+
+          <div>
+            {this.state.searchWord !== null && (
+              <>
+                <SearchResults
+                  autoload={true}
+                  word={this.state.searchWord}
+                  lang={this.props.lang}
+                  handleSpanClick={this.props.handleSpanClick}
+                  vocabSize={this.props.vocabSize}
+                  getDefinitions={this.props.getDefinitions}
+                  addKnownWord={this.props.addKnownWord}
+                  addUnknownWord={this.props.addUnknownWord}
+                  removeWord={this.props.removeWord}
+                  unknownWords={this.props.unknownWords}
+                  addToAppState={this.props.addToAppState}
+                />
+              </>
+            )}
+          </div>
+        </div>
         {this.props.sidebarWords.length === 0 ? <p>No words to show </p> : null}
 
         {this.props.isNewWordLoading ? <p>adding word ... </p> : null}

@@ -1,3 +1,25 @@
 .delete-button {
   float: right;
 }
+
+.search-box {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  /* border-bottom: 2px solid black; */
+  overflow: hidden;
+
+  transition: all 1s ease;
+}
+
+.search-box-closed {
+  /* border: 4px solid blue; */
+  height: 0px;
+}
+
+.search-box-open {
+  height: auto;
+}
+
+.search-box .search-form {
+  margin-bottom: 2rem;
+}

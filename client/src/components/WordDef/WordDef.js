@@ -119,7 +119,7 @@ class WordDef extends Component {
                       </button>
                     )}{" "}
                     <Collapsible
-                      // open={true}
+                      open={true}
                       triggerClassName="clickable word-heading"
                       triggerOpenedClassName="clickable word-heading"
                       handleSpanClick={this.props.handleSpanClick}
@@ -164,7 +164,7 @@ class WordDef extends Component {
                           )}
 
                           <Collapsible
-                            // open={true}
+                            open={true}
                             triggerClassName="clickable word-heading"
                             triggerOpenedClassName="clickable word-heading"
                             handleSpanClick={this.props.handleSpanClick}

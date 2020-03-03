@@ -94,7 +94,7 @@ class RandomWord extends Component {
     if (this.state.isLoading) {
       return (
         <div className={"random-word"}>
-          <p> Loading new word...</p>;
+          <p> Loading new word...</p>
         </div>
       );
     }

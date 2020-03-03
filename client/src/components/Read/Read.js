@@ -225,7 +225,7 @@ class Read extends Component {
               handleRemoveWord={this.handleRemoveWord}
               handleDeleteWord={this.handleDeleteWord}
               // handleAddWord={this.handleAddWord}
-              // getDefinitions={this.props.getDefinitions}
+              getDefinitions={this.props.getDefinitions}
               addKnownWord={this.props.addKnownWord}
               addUnknownWord={this.props.addUnknownWord}
               removeWord={this.props.removeWord}

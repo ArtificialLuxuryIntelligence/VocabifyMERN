@@ -8,6 +8,7 @@ import RandomWord from "../RandomWord/RandomWord";
 // import WordDef from "../WordDef/WordDef";
 import LanguageDropdown from "../LanguageDropdown/LanguageDropdown";
 import SearchResults from "../SearchResults/SearchResults";
+import SearchForm from "../SearchForm/SearchForm";
 
 class Home extends Component {
   constructor(props) {
@@ -42,7 +43,7 @@ class Home extends Component {
     if (this.state.searchTerm.length === 0) {
       return;
     }
-    this.setState({ searchWord: this.state.searchTerm });
+    this.setState({ searchWord: this.state.searchTerm, searchTerm: "" });
     document.getElementById("searchForm").reset();
   };
 
@@ -50,6 +51,7 @@ class Home extends Component {
     let word = this.props.sanitizeText(e.target.innerText)[0];
     this.setState({ searchWord: word });
   };
+
   render() {
     return (
       <div>
@@ -62,19 +64,7 @@ class Home extends Component {
             lang={this.props.lang}
           ></LanguageDropdown>
         </div>
-        <div>
-          <h3>Search for a word:</h3>
-          <form id="searchForm">
-            <input
-              name="searchTerm"
-              ref="searchTerm"
-              value={this.state.searchTerm}
-              onChange={this.handleChange}
-              lang={this.props.lang}
-            />
-            <button onClick={this.handleSubmit}>submit</button>
-          </form>
-        </div>
+
         <div>
           <h2>Here is a word you might not know:</h2>
           <RandomWord
@@ -90,26 +80,36 @@ class Home extends Component {
           />
         </div>
 
-        <div>
-          {this.state.searchWord !== null && (
-            //make separate component 'wrapper' with all the update methods from randoWord comp
+        <div className="sidebar sidebar-closed">
+          <div className="search-box">
+            <SearchForm
+              value={this.state.searchTerm}
+              handleChange={this.handleChange}
+              lang={this.props.lang}
+              handleSubmit={this.handleSubmit}
+            />
+            <div>
+              {this.state.searchWord !== null && (
+                //make separate component 'wrapper' with all the update methods from randoWord comp
 
-            <>
-              <SearchResults
-                autoload={true}
-                word={this.state.searchWord}
-                lang={this.props.lang}
-                handleSpanClick={this.handleSpanClick}
-                vocabSize={this.props.vocabSize}
-                getDefinitions={this.props.getDefinitions}
-                addKnownWord={this.props.addKnownWord}
-                addUnknownWord={this.props.addUnknownWord}
-                removeWord={this.props.removeWord}
-                unknownWords={this.props.unknownWords}
-                addToAppState={this.props.addToAppState}
-              />
-            </>
-          )}
+                <>
+                  <SearchResults
+                    autoload={true}
+                    word={this.state.searchWord}
+                    lang={this.props.lang}
+                    handleSpanClick={this.handleSpanClick}
+                    vocabSize={this.props.vocabSize}
+                    getDefinitions={this.props.getDefinitions}
+                    addKnownWord={this.props.addKnownWord}
+                    addUnknownWord={this.props.addUnknownWord}
+                    removeWord={this.props.removeWord}
+                    unknownWords={this.props.unknownWords}
+                    addToAppState={this.props.addToAppState}
+                  />
+                </>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     );

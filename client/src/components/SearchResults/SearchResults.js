@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 import WordDef from "../WordDef/WordDef";
+import "./SearchResults.css";
 
 class SearchResults extends Component {
   constructor(props) {
@@ -29,8 +30,8 @@ class SearchResults extends Component {
 
   render() {
     return (
-      <>
-        <h3>Word search result: </h3>
+      <div className="search-results">
+        {/* <h3>Word search result: </h3> */}
 
         <WordDef
           autoload={this.props.autoload}
@@ -45,7 +46,7 @@ class SearchResults extends Component {
           unknownWords={this.props.unknownWords}
           addToAppState={this.props.addToAppState}
         />
-      </>
+      </div>
     );
   }
 }
