@@ -85,6 +85,14 @@ class WordDef extends Component {
   };
 
   render() {
+    if (this.state.defintionToggled === false && this.props.autoload) {
+      return (
+        <p onClick={() => this.getWordDef()}>
+          Cannot find definiton of <em>{this.props.word}</em>. Click here to try
+          again
+        </p>
+      );
+    }
     if (this.state.defintionToggled === false) {
       return <p onClick={() => this.getWordDef()}>{this.props.word}</p>;
     }

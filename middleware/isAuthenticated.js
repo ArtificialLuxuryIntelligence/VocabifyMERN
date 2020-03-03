@@ -9,8 +9,8 @@ async function isAuthenticated(req, res, next) {
 
   try {
     let session = await UserSession.findOne({
-      userId: token,
-      isDeleted: false
+      userId: token
+      // isDeleted: false
     });
     if (session) {
       // console.log(session);

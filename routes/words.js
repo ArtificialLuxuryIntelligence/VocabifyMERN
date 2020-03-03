@@ -270,37 +270,6 @@ router.post("/definitions", isAuthenticated, async (req, res, next) => {
 
 // put in user route??
 
-router.post("/updateuser", isAuthenticated, (req, res, next) => {
-  // let token = req.body.token;
-  let id = req.body.id; //note token is (currently in this version) user id (separate here for clarity)
-  // let unknownWords = req.body.unknownWords;
-  // let knownWords = req.body.knownWords;
-  let words = req.body.words;
-  let vocabSize = req.body.vocabSize;
-  let lang = req.body.lang;
-
-  User.findOneAndUpdate(
-    {
-      _id: id
-    },
-    {
-      words,
-      vocabSize,
-      lang
-    },
-    { upsert: true },
-    (err, user) => {
-      if (err) {
-        res.send({
-          message: err
-        });
-      } else {
-        res.send({ message: "user updated", user });
-      }
-    }
-  );
-});
-
 router.post("/random", isAuthenticated, async (req, res, next) => {
   //this route doesnt estimate vocab size (uses previous calculation)
   let vocabSize = req.body.vocabSize;

@@ -22,10 +22,13 @@ class Read extends Component {
       vocabSize: this.props.vocabSize,
       words: [],
       fullText: "",
+      fullTextSplit: [],
       sidebarWords: [],
-      definitionJSON: {},
+      definitionJSON: [],
       isLoading: false,
-      isNewWordLoading: false
+      isNewWordLoading: false,
+      pageNumber: 0,
+      largestLoadedPageNumber: -1
     };
 
     // this.getDefinitions = this.props.getDefinitions.bind(this);
@@ -44,26 +47,92 @@ class Read extends Component {
     return null;
   }
 
-  handleSubmit = async () => {
-    this.setState({ isLoading: true });
-    const textarea = document.querySelector("#textarea");
+  splitText(string, cutoff = 50) {
+    let arr = [];
+    let i = 0;
+    while (i < string.length) {
+      arr.push(string.slice(i, i + cutoff));
+      i += cutoff;
+    }
+    return arr;
+  }
 
-    let words = this.props.sanitizeText(textarea.value);
-    let fullText = textarea.value;
-    this.setState({ currentView: "read", words, fullText });
+  removeWordArrayDupes = arr => {
+    let noDupes = [];
+    let words = [];
+    arr.map(function(x) {
+      if (!words.includes(x[0].word)) {
+        words.push(x[0].word);
+        noDupes.push(x);
+      }
+    });
+    return noDupes;
+  };
 
-    //try catch
+  loadPageDefinitions = async () => {
+    let words = this.props.sanitizeText(
+      this.state.fullTextSplit[this.state.pageNumber]
+    );
+
     let definitions = await this.props.getDefinitions(words, "true"); //filter: true // only get words that are probably unknown to use
-    console.log(definitions);
+    // console.log(definitions);
 
     let sidebarWordsArray = [];
     definitions.forEach(a => sidebarWordsArray.push(a[0].word));
-    console.log("setting state...");
 
+    //adds new defs to sidebar and removes duplicates
     this.setState({
-      definitionJSON: definitions,
-      sidebarWords: sidebarWordsArray,
+      definitionJSON: this.removeWordArrayDupes([
+        ...this.state.definitionJSON,
+        ...definitions
+      ]),
+      sidebarWords: [
+        ...new Set([...this.state.sidebarWords, ...sidebarWordsArray])
+      ],
       isLoading: false
+    });
+  };
+
+  handleSubmit = async () => {
+    const length = 1000; //SET ELSEWHERE (props based on available space in browser e.g. innerwidth )
+    const textarea = document.querySelector("#textarea");
+
+    this.setState({ isLoading: true });
+
+    let fullText = textarea.value;
+    let fullTextSplit = this.splitText(fullText, length);
+
+    this.setState({ currentView: "read", fullText, fullTextSplit }, () =>
+      this.loadPageDefinitions()
+    );
+    // this.loadDefinitions();
+    // let pageText = this.state.fullTextSplit[this.state.pageNumber];
+  };
+
+  handleNextPage = () => {
+    this.setState(
+      {
+        pageNumber:
+          this.state.pageNumber < this.state.fullTextSplit.length - 1
+            ? this.state.pageNumber + 1
+            : this.state.pageNumber
+      },
+      () => {
+        if (this.state.pageNumber > this.state.largestLoadedPageNumber) {
+          this.setState({ largestLoadedPageNumber: this.state.pageNumber });
+          this.loadPageDefinitions();
+        } else {
+          console.log("definitions already loaded");
+        }
+      }
+
+      //
+    );
+  };
+
+  handlePrevPage = () => {
+    this.setState({
+      pageNumber: this.state.pageNumber === 0 ? 0 : this.state.pageNumber - 1
     });
   };
 
@@ -117,7 +186,15 @@ class Read extends Component {
   };
 
   handleNewText = () => {
-    this.setState({ currentView: "submit", words: "", fullText: "" });
+    this.setState({
+      currentView: "submit",
+      words: "",
+      fullText: "",
+      fullTextSplit: [],
+      pageNumber: 0,
+      sidebarWords: [],
+      definitionJSON: []
+    });
   };
 
   handleAddWord = e => {
@@ -213,9 +290,13 @@ class Read extends Component {
 
           <div className={""}>
             <Textreader
-              fullText={this.state.fullText}
+              fullText={this.state.fullText} //remove
+              fullTextSplit={this.state.fullTextSplit}
               handleNewText={this.handleNewText}
               handleSpanClick={this.handleSpanClick}
+              pageNumber={this.state.pageNumber}
+              handleNextPage={this.handleNextPage}
+              handlePrevPage={this.handlePrevPage}
             />
             <Sidebar
               // className={"sidebar"}
@@ -233,6 +314,7 @@ class Read extends Component {
               handleSpanClick={this.handleSpanClick}
               isLoading={this.state.isLoading}
               isNewWordLoading={this.state.isNewWordLoading}
+              pageNumber={this.state.pageNumber}
             />
           </div>
         </div>

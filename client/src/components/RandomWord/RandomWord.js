@@ -43,13 +43,8 @@ class RandomWord extends Component {
   componentDidUpdate(prevProps) {
     //glitches if you refresh (calls didmount and didupdate?)
     if (this.props.lang !== prevProps.lang) {
-      console.log("did update");
-      console.log("props", this.props.lang);
-      console.log("preV", prevProps.lang);
-
       this.getNewWord();
     }
-    console.log("updated-  no lang change");
   }
 
   componentDidMount = () => {

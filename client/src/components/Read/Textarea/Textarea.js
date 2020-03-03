@@ -12,7 +12,14 @@ class Textarea extends Component {
     return (
       <div>
         <h2>Textarea</h2>
-        <textarea id="textarea" defaultValue="Just a bit of text"></textarea>
+        <textarea
+          id="textarea"
+          defaultValue="A number of senior Iranian officials have contracted the virus. Among the latest is the head of the emergency medical services, Pirhossein Kolivand.
+
+Twenty-three of the 290 members of parliament have also tested positive.
+
+"
+        ></textarea>
         <button onClick={() => this.props.handleSubmit()}>Submit</button>
       </div>
     );

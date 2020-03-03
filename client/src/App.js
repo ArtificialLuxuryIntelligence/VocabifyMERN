@@ -83,17 +83,15 @@ class App extends Component {
   sendAppStateToServer = async () => {
     let obj = {
       id: JSON.parse(localStorage.getItem("vocabify")).token,
-      token: JSON.parse(localStorage.getItem("vocabify")).token,
       words: this.state.words,
-      // unknownWords: this.state.unknownWords, // to be removed
-      // knownWords: this.state.knownWords, //to be removed
-      // vocabSize: this.state.vocabSize,
       lang: this.state.lang
     };
     console.log(obj);
 
     //trycatch
-    let res = await axios.post("/words/updateuser", obj);
+    let res = await axios.post("/users/updateuser", obj, {
+      headers: { token: JSON.parse(localStorage.getItem("vocabify")).token }
+    });
     console.log(res);
   };
 
@@ -244,17 +242,20 @@ class App extends Component {
     console.log("...Signing out");
 
     //update user data on server
-    let response = await this.sendAppStateToServer();
-    console.log(response);
-
-    // clear (most) local storage data
-    auth.loggingOut();
+    await this.sendAppStateToServer();
 
     ///end session
     let token = JSON.parse(localStorage.getItem("vocabify")).token;
     //trycatch
-    await axios.get("/users/signout?token=" + token);
+    await axios.post("/users/signout?token=" + token, {
+      headers: {
+        token
+      }
+    });
     // console.log(res);
+
+    // clear (most) local storage data
+    auth.loggingOut();
 
     // needed still?
     this.setState({ navigate: true });

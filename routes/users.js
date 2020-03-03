@@ -4,6 +4,8 @@ var router = express.Router();
 const User = require("../models/User");
 const UserSession = require("../models/UserSession");
 
+var isAuthenticated = require("../middleware/isAuthenticated");
+
 //Signup route
 
 router.post("/signup", (req, res) => {
@@ -130,7 +132,7 @@ router.post("/signin", (req, res) => {
 
 //Signout route
 
-router.get("/signout", (req, res) => {
+router.post("/signout", (req, res) => {
   const { query } = req;
   const { token } = query;
   // Check to see if the token is unique and acitive (isDeleted:false)
@@ -152,6 +154,39 @@ router.get("/signout", (req, res) => {
         success: true,
         message: "session ended"
       });
+    }
+  );
+});
+
+//update user
+
+router.post("/updateuser", isAuthenticated, (req, res, next) => {
+  // let token = req.body.token;
+  let id = req.body.id; //note token is (currently in this version) user id (separate here for clarity)
+  // let unknownWords = req.body.unknownWords;
+  // let knownWords = req.body.knownWords;
+  let words = req.body.words;
+  let vocabSize = req.body.vocabSize;
+  let lang = req.body.lang;
+
+  User.findOneAndUpdate(
+    {
+      _id: id
+    },
+    {
+      words,
+      vocabSize,
+      lang
+    },
+    { upsert: true },
+    (err, user) => {
+      if (err) {
+        res.send({
+          message: err
+        });
+      } else {
+        res.send({ message: "user updated", user });
+      }
     }
   );
 });
