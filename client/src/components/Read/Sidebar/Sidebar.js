@@ -83,7 +83,6 @@ class Sidebar extends Component {
           <button onClick={() => this.toggleSidebar()}>
             {this.state.sidebarOpen ? ">>" : "<<"}
           </button>
-
           <button onClick={() => this.toggleSearchBox()}>
             {this.state.searchBoxOpen ? "close search" : "search"}
           </button>
@@ -121,13 +120,20 @@ class Sidebar extends Component {
               )}
             </div>
           </div>
+          {this.props.isNewWordLoading ? <p>adding word ... </p> : null}
+
+          {this.props.sidebarMessage.length > 0 ? (
+            <p>
+              Could not find defintion of <em> {this.props.sidebarMessage}</em>
+            </p>
+          ) : null}
         </div>
+
         <div className="definitions-container">
           {this.props.sidebarWords.length === 0 ? (
             <p>No words to show </p>
           ) : null}
 
-          {this.props.isNewWordLoading ? <p>adding word ... </p> : null}
           <div>
             {this.props.definitionJSON.map((word, i) => {
               if (this.props.sidebarWords.includes(word[0].word)) {

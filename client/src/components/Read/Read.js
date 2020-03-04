@@ -30,7 +30,8 @@ class Read extends Component {
       isLoading: false,
       isNewWordLoading: false,
       pageNumber: 0,
-      largestLoadedPageNumber: -1
+      largestLoadedPageNumber: -1,
+      sidebarMessage: ""
     };
 
     // this.getDefinitions = this.props.getDefinitions.bind(this);
@@ -72,13 +73,21 @@ class Read extends Component {
     });
     return noDupes;
   };
+  //TO DO //
+  removeCaps(string) {
+    //function to remove proper names from text.
+    //not capitalized words at start of sentences.
+    // only words midsentence
+    // /[a-z][ ][A-Z][a-z]/g something like this??
+    return string;
+  }
 
   loadPageDefinitions = async () => {
-    let words = this.props.sanitizeText(
-      this.state.fullTextSplit[this.state.pageNumber]
-    );
+    let currentPageText = this.state.fullTextSplit[this.state.pageNumber];
 
-    let definitions = await this.props.getDefinitions(words, "true"); //filter: true // only get words that are probably unknown to use
+    let words = this.props.sanitizeText(this.removeCaps(currentPageText));
+
+    let definitions = await this.props.getDefinitions(words, "true"); //filter: true // only get words that are probably unknown to user
     // console.log(definitions);
 
     let sidebarWordsArray = [];
@@ -141,10 +150,7 @@ class Read extends Component {
   };
 
   handleSpanClick = async e => {
-    //should there be a separate box for lookup words instead  of adding them to the sidebar like this?
-    //see homepage
-
-    //currently doesnt check if word is already in list...
+    //currently doesnt check if word is already in list BEFORE requesting...
     this.setState({ isNewWordLoading: true });
     // console.log(e.target.classList[1]);
 
@@ -155,6 +161,10 @@ class Read extends Component {
     let def = await this.props.getDefinitions(queryWord, "false");
     if (def.length === 0) {
       this.setState({ isNewWordLoading: false });
+      this.setState({
+        sidebarMessage: queryWord
+      });
+      setTimeout(() => this.setState({ sidebarMessage: "" }), 2000);
       // show unsuccessful message
       return;
     }
@@ -172,14 +182,9 @@ class Read extends Component {
       defs = def.concat(defs);
       sidebarWordArray.unshift(newWord);
     }
+    // console.log(defs, sidebarWordArray);
 
-    //add new word to definition store and sidebar words (kept in sync) //sidebarwords not strictly needed but makes it a bit clearer to keep track of words; note- it is used when changed langage cf. dropdown
-
-    //TO DO - add new def under entry that called it...
-
-    console.log(defs, sidebarWordArray);
-
-    //remove dupes
+    //remove dupes (shouldn't be any?)
     defs = Array.from(new Set(defs.map(JSON.stringify)), JSON.parse);
     sidebarWordArray = [...new Set(sidebarWordArray)];
     //
@@ -187,6 +192,7 @@ class Read extends Component {
     this.setState({ definitionJSON: defs });
     this.setState({ sidebarWords: sidebarWordArray });
     this.setState({ isNewWordLoading: false });
+    this.setState({ sidebarMessage: "" });
   };
 
   handleNewText = () => {
@@ -320,6 +326,7 @@ class Read extends Component {
               isLoading={this.state.isLoading}
               isNewWordLoading={this.state.isNewWordLoading}
               pageNumber={this.state.pageNumber}
+              sidebarMessage={this.state.sidebarMessage}
             />
           </div>
         </div>
