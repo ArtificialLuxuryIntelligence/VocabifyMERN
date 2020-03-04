@@ -16,12 +16,6 @@
 .reading-cont {
   position: relative;
 }
-.textreader {
-  width: 65%;
-  padding: 1rem;
-  border: 1px solid rgba(0, 0, 0, 0.397);
-  margin: 1rem;
-}
 
 .read .sidebar-sticky {
   border-bottom: 1px solid rgba(0, 0, 0, 0.589);

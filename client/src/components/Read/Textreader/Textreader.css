@@ -3,6 +3,13 @@
 }
  */
 
+.textreader {
+  width: 65%;
+  /* padding: 1rem; */
+  /* border: 1px solid rgba(0, 0, 0, 0.397); */
+  /* margin: 1rem; */
+}
+
 .searchable-word:hover {
   background-color: aqua;
 }

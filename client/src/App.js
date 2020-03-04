@@ -114,7 +114,9 @@ class App extends Component {
       .filter(word => word.length > 0);
 
     if (lang === "fr") {
-      inputText = inputText.map(word => word.replace(/^l'|^l’/gi, ""));
+      inputText = inputText.map(word =>
+        word.replace(/^l'|^l’|^m'|^m’|^t'|^t’/gi, "")
+      );
       console.log(lang);
     }
     return this.uniq(inputText);

@@ -83,6 +83,8 @@ class Read extends Component {
   }
 
   loadPageDefinitions = async () => {
+    this.setState({ isLoading: true });
+
     let currentPageText = this.state.fullTextSplit[this.state.pageNumber];
 
     let words = this.props.sanitizeText(this.removeCaps(currentPageText));
@@ -107,10 +109,8 @@ class Read extends Component {
   };
 
   handleSubmit = async () => {
-    const length = 300; //SET ELSEWHERE (props based on available space in browser e.g. innerwidth )
+    const length = 50; //SET ELSEWHERE (props based on available space in browser e.g. innerwidth )
     const textarea = document.querySelector("#textarea");
-
-    this.setState({ isLoading: true });
 
     let fullText = textarea.value;
     let fullTextSplit = this.splitText(fullText, length);
@@ -135,6 +135,8 @@ class Read extends Component {
           this.setState({ largestLoadedPageNumber: this.state.pageNumber });
           this.loadPageDefinitions();
         } else {
+          this.setState({ isLoading: false });
+
           console.log("definitions already loaded");
         }
       }
@@ -164,7 +166,9 @@ class Read extends Component {
       this.setState({
         sidebarMessage: queryWord
       });
-      setTimeout(() => this.setState({ sidebarMessage: "" }), 2000);
+
+      setTimeout(() => this.setState({ sidebarMessage: "" }), 1500);
+
       // show unsuccessful message
       return;
     }

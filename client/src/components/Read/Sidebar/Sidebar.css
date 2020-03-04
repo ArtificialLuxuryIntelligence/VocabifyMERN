@@ -52,3 +52,7 @@
 .search-box .search-form {
   margin-bottom: 2rem;
 }
+
+.sidebar-message {
+  color: rgba(255, 0, 0, 0.829);
+}

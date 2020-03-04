@@ -58,19 +58,19 @@ class Sidebar extends Component {
   };
 
   render() {
-    if (this.props.isLoading) {
-      return (
-        <div
-          className={
-            this.state.sidebarOpen
-              ? "sidebar sidebar-open"
-              : "sidebar sidebar-closed"
-          }
-        >
-          <p> Loading words...</p>
-        </div>
-      );
-    }
+    // if (this.props.isLoading) {
+    //   return (
+    //     <div
+    //       className={
+    //         this.state.sidebarOpen
+    //           ? "sidebar sidebar-open"
+    //           : "sidebar sidebar-closed"
+    //       }
+    //     >
+    //       <p> Loading words...</p>
+    //     </div>
+    //   );
+    // }
     return (
       <div
         className={
@@ -121,9 +121,9 @@ class Sidebar extends Component {
             </div>
           </div>
           {this.props.isNewWordLoading ? <p>adding word ... </p> : null}
-
+          {this.props.isLoading ? <p> Loading words...</p> : null}
           {this.props.sidebarMessage.length > 0 ? (
-            <p>
+            <p className="sidebar-message">
               Could not find defintion of <em> {this.props.sidebarMessage}</em>
             </p>
           ) : null}
