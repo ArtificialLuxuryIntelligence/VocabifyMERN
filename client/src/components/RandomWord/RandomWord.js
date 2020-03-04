@@ -38,6 +38,7 @@ class RandomWord extends Component {
         definition: []
       };
     }
+    return null;
   }
 
   componentDidUpdate(prevProps) {

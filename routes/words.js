@@ -159,20 +159,24 @@ const filterDefinitions = (
 
   definitionWords.forEach(word => {
     console.log("checking:", word);
-    let bool = userVocab.indexOf(word) >= 0 ? true : false;
-    let bool2 = knownWords.indexOf(word) >= 0 ? true : false;
+    let inUserVocab = userVocab.indexOf(word) >= 0 ? true : false;
+    let inKnownWords = knownWords.indexOf(word) >= 0 ? true : false;
 
-    if (bool || bool2) {
+    if (inUserVocab || inKnownWords) {
+      console.log(
+        `in user vocab: ${inUserVocab} ; in know words ${inKnownWords} `
+      );
+
       if (unknownWords.indexOf(word) !== -1) {
         return; // don't filter out unknown words
       }
       let i = definitionWords.indexOf(word);
+
       console.log(
-        "***definition removed from results (reason: found in calculated vocabsize or is in knownwords or is duplicate):",
+        "***definition removed from results",
+
         // definitions[i],
-        definitionWords[i],
-        "at index:",
-        i
+        definitionWords[i]
       );
 
       definitionWords = definitionWords.filter((def, index) => index != i);

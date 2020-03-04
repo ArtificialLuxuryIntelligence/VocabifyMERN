@@ -1,3 +1,5 @@
+//NOTE handle submit function currently sets the length of page text. to be moved
+
 import React, { Component } from "react";
 // import { Redirect } from "react-router-dom";
 // import auth from "../../utils/auth";
@@ -47,11 +49,13 @@ class Read extends Component {
     return null;
   }
 
-  splitText(string, cutoff = 50) {
+  splitText(string, cutoff) {
+    let words = string.split(" ");
+
     let arr = [];
     let i = 0;
-    while (i < string.length) {
-      arr.push(string.slice(i, i + cutoff));
+    while (i < words.length) {
+      arr.push(words.slice(i, i + cutoff).join(" "));
       i += cutoff;
     }
     return arr;
@@ -94,7 +98,7 @@ class Read extends Component {
   };
 
   handleSubmit = async () => {
-    const length = 1000; //SET ELSEWHERE (props based on available space in browser e.g. innerwidth )
+    const length = 300; //SET ELSEWHERE (props based on available space in browser e.g. innerwidth )
     const textarea = document.querySelector("#textarea");
 
     this.setState({ isLoading: true });
@@ -192,6 +196,7 @@ class Read extends Component {
       fullText: "",
       fullTextSplit: [],
       pageNumber: 0,
+      largestLoadedPageNumber: 0,
       sidebarWords: [],
       definitionJSON: []
     });
@@ -264,7 +269,7 @@ class Read extends Component {
     const currentView = this.state.currentView;
     if (currentView === "submit") {
       return (
-        <div>
+        <div className="read">
           <Nav handleSignout={this.props.handleSignout} />
           <h1>Read</h1>
           <h2>Submit</h2>
@@ -279,7 +284,7 @@ class Read extends Component {
       );
     } else {
       return (
-        <div>
+        <div className="read">
           <Nav handleSignout={this.props.handleSignout} />
           <h1>Read</h1>
 

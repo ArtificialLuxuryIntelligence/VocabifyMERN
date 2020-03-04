@@ -100,8 +100,9 @@ class App extends Component {
     return Array.from(new Set(a));
   };
 
-  sanitizeText = text => {
-    let inputText = text
+  //returns array
+  sanitizeText = (string, lang = this.state.lang) => {
+    let inputText = string
       .toLowerCase()
       .replace(/\s/g, " ")
       .replace(/^\d+$/g, " ")
@@ -111,7 +112,11 @@ class App extends Component {
       .split(" ")
       .map(word => word.trim())
       .filter(word => word.length > 0);
-    //returns array
+
+    if (lang === "fr") {
+      inputText = inputText.map(word => word.replace(/^l'|^l’/gi, ""));
+      console.log(lang);
+    }
     return this.uniq(inputText);
   };
 
@@ -247,27 +252,22 @@ class App extends Component {
     ///end session
     let token = JSON.parse(localStorage.getItem("vocabify")).token;
     //trycatch
-    await axios.post("/users/signout?token=" + token, {
+    let res = await axios.post("/users/signout?token=" + token, {
       headers: {
         token
       }
     });
-    // console.log(res);
 
-    // clear (most) local storage data
-    auth.loggingOut();
-
-    // needed still?
-    this.setState({ navigate: true });
+    if (res.data.success) {
+      auth.loggingOut();
+      this.setState({ navigate: true });
+    } else {
+      //send message to user here
+      console.log("could not log out");
+    }
   };
 
   render() {
-    // let wordData = {
-    //   token: this.state.token,
-    //   knownWords: this.state.knownWords,
-    //   unknownWords: this.state.unknownWords,
-    //   vocabSize: this.state.vocabSize
-    // };
     return (
       <div className="app-routes">
         <Switch>

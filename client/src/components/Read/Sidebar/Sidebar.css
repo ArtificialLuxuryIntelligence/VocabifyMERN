@@ -1,11 +1,38 @@
 .delete-button {
   float: right;
 }
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  border: 1px solid black;
+  background-color: aliceblue;
+  padding: 1rem;
+  right: 0;
+  top: 0;
+  transition: all 0.3s ease;
+  height: 100vh;
+  overflow: hidden;
+}
+.sidebar-open {
+  width: 80%;
+}
+.sidebar-closed {
+  width: 30%;
+}
+
+.sidebar-sticky {
+  /* position: fixed; */
+}
+
+.definitions-container {
+  overflow-y: scroll;
+}
 
 .search-box {
+  /* position: fixed; */
   /* margin-bottom: 2rem; */
-  padding: 1rem;
-  /* border-bottom: 2px solid black; */
+  /* padding: 1rem; */
   overflow: hidden;
 
   transition: all 1s ease;

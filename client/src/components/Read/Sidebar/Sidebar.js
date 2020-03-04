@@ -79,67 +79,34 @@ class Sidebar extends Component {
             : "sidebar sidebar-closed"
         }
       >
-        <button onClick={() => this.toggleSidebar()}>
-          {this.state.sidebarOpen ? ">>" : "<<"}
-        </button>
+        <div className="sidebar-sticky">
+          <button onClick={() => this.toggleSidebar()}>
+            {this.state.sidebarOpen ? ">>" : "<<"}
+          </button>
 
-        <button onClick={() => this.toggleSearchBox()}>
-          {this.state.searchBoxOpen ? "close search" : "search"}
-        </button>
-        <div
-          className={
-            this.state.searchBoxOpen
-              ? "search-box search-box-open"
-              : "search-box search-box-closed"
-          }
-        >
-          <SearchForm
-            value={this.state.searchTerm}
-            handleChange={this.handleChange}
-            lang={this.props.lang}
-            handleSubmit={this.handleSubmit}
-          />
+          <button onClick={() => this.toggleSearchBox()}>
+            {this.state.searchBoxOpen ? "close search" : "search"}
+          </button>
+          <div
+            className={
+              this.state.searchBoxOpen
+                ? "search-box search-box-open"
+                : "search-box search-box-closed"
+            }
+          >
+            <SearchForm
+              value={this.state.searchTerm}
+              handleChange={this.handleChange}
+              lang={this.props.lang}
+              handleSubmit={this.handleSubmit}
+            />
 
-          <div>
-            {this.state.searchWord !== null && (
-              <>
-                <SearchResults
-                  autoload={true}
-                  word={this.state.searchWord}
-                  lang={this.props.lang}
-                  handleSpanClick={this.props.handleSpanClick}
-                  vocabSize={this.props.vocabSize}
-                  getDefinitions={this.props.getDefinitions}
-                  addKnownWord={this.props.addKnownWord}
-                  addUnknownWord={this.props.addUnknownWord}
-                  removeWord={this.props.removeWord}
-                  unknownWords={this.props.unknownWords}
-                  addToAppState={this.props.addToAppState}
-                />
-              </>
-            )}
-          </div>
-        </div>
-        {this.props.sidebarWords.length === 0 ? <p>No words to show </p> : null}
-
-        {this.props.isNewWordLoading ? <p>adding word ... </p> : null}
-        <div>
-          {this.props.definitionJSON.map((word, i) => {
-            if (this.props.sidebarWords.includes(word[0].word)) {
-              return (
-                <div key={word[0].word}>
-                  <hr />
-
-                  <button
-                    className={"delete-button"}
-                    onClick={() => this.props.handleDeleteWord(word[0].word)}
-                  >
-                    x
-                  </button>
-                  <WordDef
+            <div>
+              {this.state.searchWord !== null && (
+                <>
+                  <SearchResults
                     autoload={true}
-                    definition={[word]}
-                    word={word[0].word}
+                    word={this.state.searchWord}
                     lang={this.props.lang}
                     handleSpanClick={this.props.handleSpanClick}
                     vocabSize={this.props.vocabSize}
@@ -149,13 +116,52 @@ class Sidebar extends Component {
                     removeWord={this.props.removeWord}
                     unknownWords={this.props.unknownWords}
                     addToAppState={this.props.addToAppState}
-                  ></WordDef>
-                  <hr />
-                </div>
-              );
-            }
-            return null;
-          })}
+                  />
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+        <div className="definitions-container">
+          {this.props.sidebarWords.length === 0 ? (
+            <p>No words to show </p>
+          ) : null}
+
+          {this.props.isNewWordLoading ? <p>adding word ... </p> : null}
+          <div>
+            {this.props.definitionJSON.map((word, i) => {
+              if (this.props.sidebarWords.includes(word[0].word)) {
+                return (
+                  <div key={word[0].word}>
+                    <hr />
+
+                    <button
+                      className={"delete-button"}
+                      onClick={() => this.props.handleDeleteWord(word[0].word)}
+                    >
+                      x
+                    </button>
+                    <WordDef
+                      autoload={true}
+                      definition={[word]}
+                      word={word[0].word}
+                      lang={this.props.lang}
+                      handleSpanClick={this.props.handleSpanClick}
+                      vocabSize={this.props.vocabSize}
+                      getDefinitions={this.props.getDefinitions}
+                      addKnownWord={this.props.addKnownWord}
+                      addUnknownWord={this.props.addUnknownWord}
+                      removeWord={this.props.removeWord}
+                      unknownWords={this.props.unknownWords}
+                      addToAppState={this.props.addToAppState}
+                    ></WordDef>
+                    <hr />
+                  </div>
+                );
+              }
+              return null;
+            })}
+          </div>
         </div>
       </div>
     );
