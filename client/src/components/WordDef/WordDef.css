@@ -10,7 +10,7 @@
 .word-heading {
   font-size: 1.6rem;
   /* color: green; */
-  animation: fade-in 0.4s ease;
+  animation: fade-in 1s ease;
 }
 
 .word {
@@ -22,7 +22,10 @@
   font-size: 1.2rem;
   margin-left: 1rem;
 }
-
+span {
+  /* display: flex;
+  justify-content: space-between; */
+}
 .add-button {
   float: right;
 }
@@ -38,7 +41,7 @@
   }
   50% {
     opacity: 1;
-    color: red;
+    color: rgb(0, 60, 255);
     /* transform: translateY(0); */
   }
   100% {

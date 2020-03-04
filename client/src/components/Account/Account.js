@@ -8,6 +8,8 @@ import Nav from "../Nav/Nav";
 import WordDef from "../WordDef/WordDef";
 import LanguageDropdown from "../LanguageDropdown/LanguageDropdown";
 
+import "./Account.css";
+
 class Account extends Component {
   constructor(props) {
     super(props);
@@ -40,62 +42,67 @@ class Account extends Component {
           handleDropdownChange={this.handleDropdownChange}
           lang={this.props.lang}
         ></LanguageDropdown>
-        <div>
-          {this.state.searchWord !== null && (
-            <>
-              <h3>Word search result </h3>
-              <WordDef
-                lang={this.props.lang}
-                autoload={true}
-                word={this.state.searchWord}
-                handleSpanClick={this.handleSpanClick}
-                vocabSize={this.props.vocabSize}
-                getDefinitions={this.props.getDefinitions}
-                addKnownWord={this.props.addKnownWord}
-                addUnknownWord={this.props.addUnknownWord}
-                removeWord={this.props.removeWord}
-                unknownWords={this.props.unknownWords}
-                addToAppState={this.props.addToAppState}
-              />
-            </>
-          )}
-        </div>
 
-        <div>
-          <h2>Your saved words: </h2>
+        <div className="account-content">
+          <div>
+            {this.state.searchWord !== null && (
+              <div className="sidebar sidebar-closed">
+                <h3>Word search result </h3>
+                <WordDef
+                  lang={this.props.lang}
+                  autoload={true}
+                  word={this.state.searchWord}
+                  handleSpanClick={this.handleSpanClick}
+                  vocabSize={this.props.vocabSize}
+                  getDefinitions={this.props.getDefinitions}
+                  addKnownWord={this.props.addKnownWord}
+                  addUnknownWord={this.props.addUnknownWord}
+                  removeWord={this.props.removeWord}
+                  unknownWords={this.props.unknownWords}
+                  addToAppState={this.props.addToAppState}
+                />
+              </div>
+            )}
+          </div>
 
-          <ul>
-            {this.props.unknownWords.map((word, i) => {
-              return (
-                <li key={word}>
-                  {/* hides 'remove' button from span (wordDef component has own button) [alternate/better 'React' version of this is to keep track of words with fetched definitions...]*/}
-                  <span
-                    onClick={e =>
-                      e.target.tagName === "P"
-                        ? (e.target.nextElementSibling.style.display = "none")
-                        : console.log("clicked")
-                    }
-                  >
-                    <WordDef
-                      lang={this.props.lang}
-                      word={word}
-                      handleSpanClick={this.handleSpanClick}
-                      vocabSize={this.props.vocabSize}
-                      getDefinitions={this.props.getDefinitions}
-                      addKnownWord={this.props.addKnownWord}
-                      addUnknownWord={this.props.addUnknownWord}
-                      removeWord={this.props.removeWord}
-                      unknownWords={this.props.unknownWords}
-                      addToAppState={this.props.addToAppState}
-                    />
-                    <button onClick={() => this.props.removeWord(word)}>
-                      Remove
-                    </button>
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
+          <div className="saved-words">
+            <h2>Your saved words: </h2>
+            <ul>
+              {this.props.unknownWords.map((word, i) => {
+                return (
+                  <li key={word}>
+                    {/* hides 'remove' button from span (wordDef component has own button) [alternate/better 'React' version of this is to keep track of words with fetched definitions...] .reason: there is a remove button rendered by the worddef component when definition is fetched*/}
+                    <span
+                      onClick={e =>
+                        e.target.tagName === "P"
+                          ? (e.target.nextElementSibling.style.display = "none")
+                          : null
+                      }
+                    >
+                      <WordDef
+                        lang={this.props.lang}
+                        word={word}
+                        handleSpanClick={this.handleSpanClick}
+                        vocabSize={this.props.vocabSize}
+                        getDefinitions={this.props.getDefinitions}
+                        addKnownWord={this.props.addKnownWord}
+                        addUnknownWord={this.props.addUnknownWord}
+                        removeWord={this.props.removeWord}
+                        unknownWords={this.props.unknownWords}
+                        addToAppState={this.props.addToAppState}
+                      />
+                      <button
+                        className="remove-button-unloaded"
+                        onClick={() => this.props.removeWord(word)}
+                      >
+                        Remove
+                      </button>
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </div>
       </div>
     );

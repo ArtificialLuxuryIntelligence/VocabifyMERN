@@ -10,6 +10,8 @@ import LanguageDropdown from "../LanguageDropdown/LanguageDropdown";
 import SearchResults from "../SearchResults/SearchResults";
 import SearchForm from "../SearchForm/SearchForm";
 
+import "./Home.css";
+
 class Home extends Component {
   constructor(props) {
     super(props);
