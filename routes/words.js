@@ -15,7 +15,7 @@ var isAuthenticated = require("../middleware/isAuthenticated");
 
 //get correct language frequency list
 
-const getFreqList = lang => {
+const getFreqList = async lang => {
   switch (lang) {
     case "en":
       return freqListEN;
@@ -65,10 +65,10 @@ async function fetchDefinitions(wordArray, lang) {
 
 // estimates users vocab size
 
-const estimateUserVocab = (lang, knownWords, unknownWords) => {
+const estimateUserVocab = async (lang, knownWords, unknownWords) => {
   console.log("estimating vocab size ...");
 
-  let freqList = getFreqList(lang);
+  let freqList = await getFreqList(lang);
 
   if (unknownWords.length < 3) {
     return 200;
@@ -77,7 +77,7 @@ const estimateUserVocab = (lang, knownWords, unknownWords) => {
 
     unknownWords.forEach(word => {
       indexArray.push(freqList.indexOf(word));
-      // console.log(word, freqList.indexOf(word));
+      console.log(word, freqList.indexOf(word));
 
       indexArray = indexArray.filter(index => index > 0); // only uses words that are in the freqList
       vocabSize = indexArray.reduce((a, b) => a + b, 0) / indexArray.length;
@@ -95,12 +95,17 @@ const estimateUserVocab = (lang, knownWords, unknownWords) => {
 //filter word array based on vocab size // duplicates etc handled client side
 
 // ------FILTERS
-const filterGivenVocabSize = (lang, vocabSize, unknownWords, queryWords) => {
+const filterGivenVocabSize = async (
+  lang,
+  vocabSize,
+  unknownWords,
+  queryWords
+) => {
   //unfortunately this filters out words that are not exact matches of unknown words.
   //i.e. 'articles' filtered out if in the calculated userVocab even if 'article' is 'unknownWord';
   //only solution is to check every word/[no] // have more sophisticated word list with conjugations etc grouped [list not readily available]
 
-  let freqList = getFreqList(lang);
+  let freqList = await getFreqList(lang);
   let userVocab = freqList.slice(0, vocabSize);
   let filteredWords = queryWords.filter(
     word => userVocab.indexOf(word) === -1 || unknownWords.indexOf(word) !== -1
@@ -129,14 +134,14 @@ const filterGivenUserWords = (knownWords, unknownWords, queryWords) => {
   return filteredWords;
 };
 
-const filterDefinitions = (
+const filterDefinitions = async (
   lang,
   knownWords,
   unknownWords,
   vocabSize,
   definitions
 ) => {
-  let freqList = getFreqList(lang);
+  let freqList = await getFreqList(lang);
   let userVocab = freqList.slice(0, vocabSize);
 
   /// ----- removes duplicate words from nested array: //note: this removes duplicate results even if the object is not exactly identical (e.g. result from spanish search of 'zona' and 'zonas' both return 'zona' definition but in non-identical objects (in one there is a "" in synonyms and the other nothing..!)) therefore cannot use normal method to elimate dupes
@@ -282,7 +287,7 @@ router.post("/random", isAuthenticated, async (req, res, next) => {
   let lang = req.body.lang;
   // console.log("request language", req.body.lang);
 
-  let freqList = getFreqList(lang);
+  let freqList = await getFreqList(lang);
   console.log("vocabSize", vocabSize);
 
   // console.log("freqList", freqList);
@@ -300,7 +305,7 @@ router.post("/random", isAuthenticated, async (req, res, next) => {
   let response = await getRandomWord(wordRange, lang, 2).catch(err =>
     console.log("can't get random word", err)
   );
-  console.log("response", response);
+  // console.log("response", response);
 
   res.send(response);
 });

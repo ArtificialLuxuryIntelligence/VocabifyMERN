@@ -89,14 +89,14 @@ class RandomWord extends Component {
   render() {
     if (this.state.isLoading) {
       return (
-        <div className={"random-word"}>
+        <div className="random-word">
           <p> Loading new word...</p>
         </div>
       );
     }
     if (this.state.definition.length === 0) {
       return (
-        <div className={"random-word"}>
+        <div className="random-word">
           <p>
             Sorry, we couldn't find a word.
             <button onClick={() => this.handleNewWord()}>Try again</button>
@@ -105,25 +105,39 @@ class RandomWord extends Component {
       );
     }
 
-    return (
-      <div className={"random-word"}>
-        <button onClick={() => this.handleNewWord()}>New word</button>
-        <WordDef
-          lang={this.props.lang}
-          autoload={true}
-          word={this.state.newWord}
-          definition={this.state.definition}
-          handleSpanClick={this.props.handleSpanClick}
-          vocabSize={this.props.vocabSize}
-          getDefinitions={this.props.getDefinitions}
-          addKnownWord={this.props.addKnownWord}
-          addUnknownWord={this.props.addUnknownWord}
-          removeWord={this.props.removeWord}
-          unknownWords={this.props.unknownWords}
-          addToAppState={this.props.addToAppState}
-        />
-      </div>
-    );
+    if (this.props.unknownWords.length < 5) {
+      return (
+        <div>
+          <p>
+            It looks like you don't have enough saved words for us to get a good
+            idea of your level.
+          </p>
+          <p>
+            Click <a onClick={() => this.props.redirectToRead()}>here</a> to
+            read some text and save some words you don't know
+          </p>
+        </div>
+      );
+    } else
+      return (
+        <div className={"random-word"}>
+          <button onClick={() => this.handleNewWord()}>New word</button>
+          <WordDef
+            lang={this.props.lang}
+            autoload={true}
+            word={this.state.newWord}
+            definition={this.state.definition}
+            handleSpanClick={this.props.handleSpanClick}
+            vocabSize={this.props.vocabSize}
+            getDefinitions={this.props.getDefinitions}
+            addKnownWord={this.props.addKnownWord}
+            addUnknownWord={this.props.addUnknownWord}
+            removeWord={this.props.removeWord}
+            unknownWords={this.props.unknownWords}
+            addToAppState={this.props.addToAppState}
+          />
+        </div>
+      );
   }
 }
 

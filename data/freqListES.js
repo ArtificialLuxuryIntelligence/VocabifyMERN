@@ -1,3 +1,4 @@
+// https://github.com/hermitdave/FrequencyWords
 const freqListES = [
   "de",
   "que",

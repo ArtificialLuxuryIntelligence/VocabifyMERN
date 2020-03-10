@@ -1,3 +1,5 @@
+// https://github.com/hermitdave/FrequencyWords
+
 const freqListEN = [
   "the",
   "of",

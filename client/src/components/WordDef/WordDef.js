@@ -55,20 +55,29 @@ class WordDef extends Component {
   }
 
   getWordDef = async () => {
-    this.setState({ isLoading: true, defintionToggled: true });
+    this.setState({
+      isLoading: true,
+      defintionToggled: true,
+      fetchFail: false
+    });
     let definition = await this.props.getDefinitions(
       [this.props.word],
       "false"
     );
     //handle cant get from server
     if (definition.length === 0) {
-      this.setState({ isLoading: false, defintionToggled: false });
+      this.setState({
+        isLoading: false,
+        defintionToggled: false,
+        fetchFail: true
+      });
       return;
     }
     this.setState({
       definition,
       isLoading: false,
-      word: definition[0][0].word
+      word: definition[0][0].word,
+      fetchFail: false
     });
 
     // return;
@@ -85,7 +94,10 @@ class WordDef extends Component {
   };
 
   render() {
-    if (this.state.defintionToggled === false && this.props.autoload) {
+    if (
+      this.state.fetchFail ||
+      (this.state.defintionToggled === false && this.props.autoload)
+    ) {
       return (
         <p onClick={() => this.getWordDef()}>
           Cannot find definiton of <em>{this.props.word}</em>. Click here to try
@@ -93,6 +105,14 @@ class WordDef extends Component {
         </p>
       );
     }
+    // if (this.state.defintionToggled === false && this.props.autoload) {
+    //   return (
+    //     <p onClick={() => this.getWordDef()}>
+    //       Cannot find definiton of <em>{this.props.word}</em>. Click here to try
+    //       again
+    //     </p>
+    //   );
+    // }
     if (this.state.defintionToggled === false) {
       return <p onClick={() => this.getWordDef()}>{this.props.word}</p>;
     }
@@ -125,7 +145,7 @@ class WordDef extends Component {
                       >
                         Remove word
                       </button>
-                    )}{" "}
+                    )}
                     <Collapsible
                       open={true}
                       triggerClassName="clickable word-heading"

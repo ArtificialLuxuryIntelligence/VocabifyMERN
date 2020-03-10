@@ -289,7 +289,11 @@ class Read extends Component {
             lang={this.props.lang}
           ></LanguageDropdown>
 
-          <Textarea handleSubmit={this.handleSubmit} />
+          <Textarea
+            handleSubmit={this.handleSubmit}
+            unknownWords={this.props.unknownWords}
+            lang={this.props.lang}
+          />
         </div>
       );
     } else {

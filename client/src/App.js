@@ -115,7 +115,7 @@ class App extends Component {
 
     if (lang === "fr") {
       inputText = inputText.map(word =>
-        word.replace(/^l'|^l’|^m'|^m’|^t'|^t’/gi, "")
+        word.replace(/^l'|^l’|^m'|^m’|^t'|^t’|^s'|^s’/gi, "")
       );
       console.log(lang);
     }

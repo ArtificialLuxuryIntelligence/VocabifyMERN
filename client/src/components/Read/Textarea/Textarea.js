@@ -8,17 +8,28 @@ class Textarea extends Component {
   //   super(props);
   // }
 
+  renderText = () => {
+    switch (this.props.lang) {
+      case "en":
+        return "English Test";
+      case "fr":
+        return "French TEST";
+      case "es":
+        return "spansih TEST";
+    }
+  };
+
   render() {
     return (
       <div>
         <h2>Textarea</h2>
         <textarea
           id="textarea"
-          defaultValue="A number of senior Iranian officials have contracted the virus. Among the latest is the head of the emergency medical services, Pirhossein Kolivand.
-
-Twenty-three of the 290 members of parliament have also tested positive.
-
-"
+          defaultValue={
+            this.props.unknownWords.length < 5
+              ? this.renderText()
+              : "Paste your text here"
+          }
         ></textarea>
         <button onClick={() => this.props.handleSubmit()}>Submit</button>
       </div>

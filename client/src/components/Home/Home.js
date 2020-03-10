@@ -53,7 +53,9 @@ class Home extends Component {
     let word = this.props.sanitizeText(e.target.innerText)[0];
     this.setState({ searchWord: word });
   };
-
+  redirectToRead = () => {
+    this.props.history.push("/read");
+  };
   render() {
     return (
       <div>
@@ -70,6 +72,7 @@ class Home extends Component {
         <div>
           <h2>Here is a word you might not know:</h2>
           <RandomWord
+            redirectToRead={this.redirectToRead}
             vocabSize={this.props.vocabSize}
             lang={this.props.lang}
             handleSpanClick={this.handleSpanClick}
