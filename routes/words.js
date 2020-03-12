@@ -77,7 +77,7 @@ const estimateUserVocab = async (lang, knownWords, unknownWords) => {
 
     unknownWords.forEach(word => {
       indexArray.push(freqList.indexOf(word));
-      console.log(word, freqList.indexOf(word));
+      console.log("saved word", word, freqList.indexOf(word));
 
       indexArray = indexArray.filter(index => index > 0); // only uses words that are in the freqList
       vocabSize = indexArray.reduce((a, b) => a + b, 0) / indexArray.length;
@@ -120,7 +120,7 @@ const filterGivenVocabSize = async (
   return filteredWords;
 };
 
-const filterGivenUserWords = (knownWords, unknownWords, queryWords) => {
+const filterGivenUserWords = async (knownWords, unknownWords, queryWords) => {
   let filteredWords = queryWords.filter(
     word => knownWords.indexOf(word) === -1 || unknownWords.indexOf(word) !== -1
   );
@@ -188,7 +188,9 @@ const filterDefinitions = async (
       definitions = definitions.filter((def, index) => index != i);
     }
   });
+
   console.log("returning definitions of", definitionWords);
+  console.log(definitions);
 
   return definitions;
 };
@@ -231,21 +233,25 @@ router.post("/definitions", isAuthenticated, async (req, res, next) => {
   let knownWords = req.body.knownWords;
   let unknownWords = req.body.unknownWords;
 
-  let vocabSize = estimateUserVocab(lang, knownWords, unknownWords);
+  let vocabSize = await estimateUserVocab(lang, knownWords, unknownWords);
   console.log("Vocab Size:", vocabSize);
 
   // filters out words that are calculated to be known by user ----
   if (filter === "true") {
     console.log(" ----------------------------filtering...");
     console.log(queryWords);
-    queryWords = filterGivenVocabSize(
+    queryWords = await filterGivenVocabSize(
       lang,
       vocabSize,
       unknownWords,
       queryWords
     );
     // console.log(queryWords);
-    queryWords = filterGivenUserWords(knownWords, unknownWords, queryWords);
+    queryWords = await filterGivenUserWords(
+      knownWords,
+      unknownWords,
+      queryWords
+    );
     // console.log(queryWords);
   }
   // ---------------------------------------------------------------
@@ -258,7 +264,7 @@ router.post("/definitions", isAuthenticated, async (req, res, next) => {
 
   // filter returned returned defintion words for known words (may be slightly different from requested words e.g. conjugations etc)
   if (filter === "true") {
-    definitions = filterDefinitions(
+    definitions = await filterDefinitions(
       lang,
       knownWords,
       unknownWords,
@@ -266,6 +272,8 @@ router.post("/definitions", isAuthenticated, async (req, res, next) => {
       definitions
     );
   }
+
+  console.log("defs", definitions);
 
   let response = { definitions, vocabSize };
   // console.log(response);
