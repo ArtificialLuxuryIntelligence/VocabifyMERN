@@ -4,17 +4,7 @@ const auth = {
   },
   loggingOut() {
     //currently removes all
-    localStorage.setItem(
-      "vocabify",
-      JSON.stringify({
-        isLoggedIn: false,
-        token: null,
-        vocabSize: null,
-        savedDefinitions: null,
-        words: null,
-        lang: null
-      })
-    );
+    localStorage.setItem("vocabify", JSON.stringify({}));
   },
 
   isLoggedIn() {
@@ -24,7 +14,7 @@ const auth = {
     } else {
       return false;
     }
-  }
+  },
 };
 
 export default auth;

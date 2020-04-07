@@ -11,6 +11,7 @@ import LanguageDropdown from "../LanguageDropdown/LanguageDropdown";
 
 import Textarea from "./Textarea/Textarea";
 import Textreader from "./Textreader/Textreader";
+import { Logger } from "mongodb";
 // import axios from "axios";
 
 class Read extends Component {
@@ -31,7 +32,7 @@ class Read extends Component {
       isNewWordLoading: false,
       pageNumber: 0,
       largestLoadedPageNumber: -1,
-      sidebarMessage: ""
+      sidebarMessage: "",
     };
 
     // this.getDefinitions = this.props.getDefinitions.bind(this);
@@ -62,10 +63,10 @@ class Read extends Component {
     return arr;
   }
 
-  removeWordArrayDupes = arr => {
+  removeWordArrayDupes = (arr) => {
     let noDupes = [];
     let words = [];
-    arr.map(function(x) {
+    arr.map(function (x) {
       if (!words.includes(x[0].word)) {
         words.push(x[0].word);
         noDupes.push(x);
@@ -93,18 +94,18 @@ class Read extends Component {
     // console.log(definitions);
 
     let sidebarWordsArray = [];
-    definitions.forEach(a => sidebarWordsArray.push(a[0].word));
+    definitions.forEach((a) => sidebarWordsArray.push(a[0].word));
 
     //adds new defs to sidebar and removes duplicates
     this.setState({
       definitionJSON: this.removeWordArrayDupes([
         ...this.state.definitionJSON,
-        ...definitions
+        ...definitions,
       ]),
       sidebarWords: [
-        ...new Set([...this.state.sidebarWords, ...sidebarWordsArray])
+        ...new Set([...this.state.sidebarWords, ...sidebarWordsArray]),
       ],
-      isLoading: false
+      isLoading: false,
     });
   };
 
@@ -128,7 +129,7 @@ class Read extends Component {
         pageNumber:
           this.state.pageNumber < this.state.fullTextSplit.length - 1
             ? this.state.pageNumber + 1
-            : this.state.pageNumber
+            : this.state.pageNumber,
       },
       () => {
         if (this.state.pageNumber > this.state.largestLoadedPageNumber) {
@@ -147,24 +148,35 @@ class Read extends Component {
 
   handlePrevPage = () => {
     this.setState({
-      pageNumber: this.state.pageNumber === 0 ? 0 : this.state.pageNumber - 1
+      pageNumber: this.state.pageNumber === 0 ? 0 : this.state.pageNumber - 1,
     });
   };
 
-  handleSpanClick = async e => {
+  handleSpanClick = async (e) => {
     //currently doesnt check if word is already in list BEFORE requesting...
+
     this.setState({ isNewWordLoading: true });
     // console.log(e.target.classList[1]);
 
     let parentWord = e.target.classList[1];
 
     let word = e.target.innerText;
+
+    if (this.state.sidebarWords.indexOf(word) > 0) {
+      this.setState({
+        sidebarMessage: `Definition of ${word} is already loaded!`,
+      });
+      setTimeout(() => this.setState({ sidebarMessage: "" }), 1500);
+      this.setState({ isNewWordLoading: false });
+      return;
+    }
     let queryWord = this.props.sanitizeText(word);
+
     let def = await this.props.getDefinitions(queryWord, "false");
     if (def.length === 0) {
       this.setState({ isNewWordLoading: false });
       this.setState({
-        sidebarMessage: queryWord
+        sidebarMessage: `Could not find definition of ${queryWord}`,
       });
 
       setTimeout(() => this.setState({ sidebarMessage: "" }), 1500);
@@ -173,6 +185,18 @@ class Read extends Component {
       return;
     }
     let newWord = def[0][0].word;
+    console.log(newWord);
+
+    if (this.state.sidebarWords.indexOf(newWord) > 0) {
+      this.setState({
+        sidebarMessage: `Definition of ${newWord} already loaded!`,
+      });
+      setTimeout(() => this.setState({ sidebarMessage: "" }), 1500);
+
+      this.setState({ isNewWordLoading: false });
+
+      return;
+    }
 
     let defs = [...this.state.definitionJSON]; //dont mutate state
     let sidebarWordArray = [...this.state.sidebarWords];
@@ -208,11 +232,11 @@ class Read extends Component {
       pageNumber: 0,
       largestLoadedPageNumber: 0,
       sidebarWords: [],
-      definitionJSON: []
+      definitionJSON: [],
     });
   };
 
-  handleAddWord = e => {
+  handleAddWord = (e) => {
     //remove
     e.stopPropagation();
     let word = e.target.parentElement.children[0].children[0].innerText;
@@ -223,7 +247,7 @@ class Read extends Component {
     // e.target.style.display = "none";
     // e.target.previousElementSibling.style.display = "block";
   };
-  handleRemoveWord = e => {
+  handleRemoveWord = (e) => {
     //AKA i know this word
     //remove
     e.stopPropagation();
@@ -253,7 +277,7 @@ class Read extends Component {
   //   this.setState({ sidebarWords });
   // };
 
-  handleDeleteWord = word => {
+  handleDeleteWord = (word) => {
     //removes from sidebar and sets as 'known'
     //I know this word // addknownword ??
 
@@ -269,7 +293,7 @@ class Read extends Component {
     this.setState({ sidebarWords });
   };
 
-  handleDropdownChange = e => {
+  handleDropdownChange = (e) => {
     e.preventDefault();
     this.setState({ sidebarWords: [] }); // clears current sidebar (not the JSONdefinitions in the state but they get overwritten on next text submission)
     this.props.addToAppState("lang", e.target.value);

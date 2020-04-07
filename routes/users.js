@@ -1,5 +1,6 @@
 var express = require("express");
 var router = express.Router();
+const jwt = require("jsonwebtoken");
 
 const User = require("../models/User");
 const UserSession = require("../models/UserSession");
@@ -14,13 +15,13 @@ router.post("/signup", (req, res) => {
   if (!email) {
     return res.send({
       success: false,
-      message: "Sign up Failed: Email cannot be blank"
+      message: "Sign up Failed: Email cannot be blank",
     });
   }
   if (!password) {
     return res.send({
       success: false,
-      message: "Sign up Failed: Password cannot be blank"
+      message: "Sign up Failed: Password cannot be blank",
     });
   }
 
@@ -28,18 +29,18 @@ router.post("/signup", (req, res) => {
 
   User.find(
     {
-      email
+      email,
     },
     (err, existingUsers) => {
       if (err) {
         return res.send({
           success: false,
-          message: "Server error"
+          message: "Server error",
         });
       } else if (existingUsers.length > 0) {
         return res.send({
           success: false,
-          message: "Sign up failed: Accout already exists with that e-mail"
+          message: "Sign up failed: Accout already exists with that e-mail",
         });
       }
       const newUser = new User();
@@ -49,12 +50,12 @@ router.post("/signup", (req, res) => {
         if (err) {
           return res.send({
             success: false,
-            message: "Server error"
+            message: "Server error",
           });
         }
         return res.send({
           success: true,
-          messaged: "Signed up"
+          messaged: "Signed up",
         });
       });
     }
@@ -69,13 +70,13 @@ router.post("/signin", (req, res) => {
   if (!email) {
     return res.send({
       success: false,
-      message: "Sign in Failed: Email cannot be blank"
+      message: "Sign in Failed: Email cannot be blank",
     });
   }
   if (!password) {
     return res.send({
       success: false,
-      message: "Sign in Failed: Password cannot be blank"
+      message: "Sign in Failed: Password cannot be blank",
     });
   }
 
@@ -83,86 +84,95 @@ router.post("/signin", (req, res) => {
 
   User.find(
     {
-      email
+      email,
     },
     (err, users) => {
       if (err) {
         return res.send({
           success: false,
-          message: "Server error"
+          message: "Server error",
         });
       } else if (users.length != 1) {
         return res.send({
           success: false,
-          message: "Cannot find user"
+          message: "Cannot find user",
         });
       }
       const user = users[0];
       if (!user.validPassword(password)) {
         return res.send({
           success: false,
-          message: "Wrong password"
+          message: "Wrong password",
         });
       }
       //success - start session
-      const userSession = new UserSession();
-      userSession.userId = user._id;
-      userSession.save((err, doc) => {
-        if (err) {
-          console.log(err);
-          return res.send({
-            success: false,
-            message: "Server error"
-          });
+      // const userSession = new UserSession();
+      // userSession.userId = user._id;
+      // userSession.save((err, doc) => {
+      //   if (err) {
+      //     console.log(err);
+      //     return res.send({
+      //       success: false,
+      //       message: "Server error"
+      //     });
+      //   }
+
+      const token = jwt.sign(
+        { name: user.name, id: user._id },
+        process.env.JWT_KEY,
+        {
+          expiresIn: "1h",
         }
-        res.send({
-          success: true,
-          message: "Sign in success",
-          token: user._id, //nothing fancy here, active session is checked with middleware when userdata requests are made.
-          knownWords: user.knownWords,
-          unknownWords: user.unknownWords,
-          vocabSize: user.vocabSize,
-          lang: user.lang,
-          words: user.words
-        });
+      );
+      res.send({
+        success: true,
+        message: "Sign in success",
+        // token: user._id, //nothing fancy here, active session is checked with middleware when userdata requests are made.
+        token: token,
+        knownWords: user.knownWords,
+        unknownWords: user.unknownWords,
+        vocabSize: user.vocabSize,
+        lang: user.lang,
+        words: user.words,
       });
+      // });
     }
   );
 });
 
 //Signout route
 
-router.post("/signout", (req, res) => {
-  const { query } = req;
-  const { token } = query;
-  // Check to see if the token is unique and acitive (isDeleted:false)
+// router.post("/signout", (req, res) => {
+// const { query } = req;
+// const { token } = query;
+// Check to see if the token is unique and acitive (isDeleted:false)
 
-  UserSession.findOneAndRemove(
-    {
-      userId: token,
-      isDeleted: false
-    },
-    err => {
-      if (err) {
-        console.log(err);
-        return res.send({
-          success: false,
-          message: "Server error"
-        });
-      }
-      return res.send({
-        success: true,
-        message: "session ended"
-      });
-    }
-  );
-});
+// UserSession.findOneAndRemove(
+//   {
+//     userId: token,
+//     isDeleted: false,
+//   },
+//   (err) => {
+//     if (err) {
+//       console.log(err);
+//       return res.send({
+//         success: false,
+//         message: "Server error",
+//       });
+//     }
+//     return res.send({
+//       success: true,
+//       message: "session ended",
+//     });
+//   }
+// );
+// });
 
 //update user
 
 router.post("/updateuser", isAuthenticated, (req, res, next) => {
   // let token = req.body.token;
-  let id = req.body.id; //note token is (currently in this version) user id (separate here for clarity)
+  // let id = req.body.id; //note token is (currently in this version) user id (separate here for clarity)
   // let unknownWords = req.body.unknownWords;
   // let knownWords = req.body.knownWords;
   let words = req.body.words;
@@ -171,21 +181,21 @@ router.post("/updateuser", isAuthenticated, (req, res, next) => {
 
   User.findOneAndUpdate(
     {
-      _id: id
+      _id: req.userData.id,
     },
     {
       words,
       vocabSize,
-      lang
+      lang,
     },
     { upsert: true },
     (err, user) => {
       if (err) {
         res.send({
-          message: err
+          message: err,
         });
       } else {
-        res.send({ message: "user updated", user });
+        res.send({ message: "User updated", user });
       }
     }
   );
@@ -204,26 +214,26 @@ router.get("/verify", (req, res, next) => {
   UserSession.find(
     {
       _id: token,
-      isDeleted: false
+      isDeleted: false,
     },
     (err, sessions) => {
       if (err) {
         console.log(err);
         return res.send({
           success: false,
-          message: "Error: Server error"
+          message: "Error: Server error",
         });
       }
 
       if (sessions.length != 1) {
         return res.send({
           success: false,
-          message: "Error: Invalid"
+          message: "Error: Invalid",
         });
       } else {
         return res.send({
           success: true,
-          message: "Good"
+          message: "Good",
         });
       }
     }

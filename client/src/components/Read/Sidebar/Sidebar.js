@@ -18,7 +18,7 @@ class Sidebar extends Component {
       sidebarOpen: false,
       searchWord: null,
       searchTerm: "",
-      searchBoxOpen: true
+      searchBoxOpen: true,
     };
   }
 
@@ -38,17 +38,17 @@ class Sidebar extends Component {
   toggleSidebar = () => {
     this.setState({ sidebarOpen: !this.state.sidebarOpen });
   };
-  toggleSearchBox = e => {
+  toggleSearchBox = (e) => {
     this.setState({ searchBoxOpen: !this.state.searchBoxOpen });
   };
 
-  handleChange = e => {
+  handleChange = (e) => {
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
     if (this.state.searchTerm.length === 0) {
       return;
@@ -123,9 +123,7 @@ class Sidebar extends Component {
           {this.props.isNewWordLoading ? <p>adding word ... </p> : null}
           {this.props.isLoading ? <p> Loading words...</p> : null}
           {this.props.sidebarMessage.length > 0 ? (
-            <p className="sidebar-message">
-              Could not find defintion of <em> {this.props.sidebarMessage}</em>
-            </p>
+            <p className="sidebar-message">{this.props.sidebarMessage}</p>
           ) : null}
         </div>
 

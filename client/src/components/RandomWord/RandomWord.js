@@ -20,7 +20,7 @@ class RandomWord extends Component {
       wordKnown: false,
       definition: [],
       isLoading: true,
-      lang: this.props.lang
+      lang: this.props.lang,
       // isLoading: false
     };
 
@@ -35,7 +35,7 @@ class RandomWord extends Component {
     if (props.lang !== state.lang) {
       return {
         lang: props.lang,
-        definition: []
+        definition: [],
       };
     }
     return null;
@@ -58,15 +58,18 @@ class RandomWord extends Component {
 
   getNewWord = async () => {
     this.setState({ isLoading: true });
-    let { token } = JSON.parse(localStorage.getItem("vocabify"));
+    let token = JSON.parse(localStorage.getItem("vocabify")).token;
     let obj = {
       // token,
       vocabSize: this.props.vocabSize,
       unknownWords: this.props.unknownWords,
       knownWords: this.props.knownWords,
-      lang: this.props.lang
+      lang: this.props.lang,
     };
-    let headers = { token };
+    let headers = {
+      "Content-Type": "application/json",
+      Authorization: `bearer ${token}`,
+    };
     // console.log(obj);
 
     let response = await axios.post("/words/random", obj, { headers });

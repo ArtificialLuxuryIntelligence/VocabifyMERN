@@ -24,9 +24,9 @@ class App extends Component {
         en: { knownWords: [], unknownWords: [], vocabSize: "" },
         es: { knownWords: [], unknownWords: [], vocabSize: "" },
         fr: { knownWords: [], unknownWords: [], vocabSize: "" },
-
-        placeholder: { knownWords: [], unknownWords: [], vocabSize: "" }
-      }
+        //before language is set..:
+        placeholder: { knownWords: [], unknownWords: [], vocabSize: "" },
+      },
     };
 
     this.addToAppState = this.addToAppState.bind(this);
@@ -82,21 +82,28 @@ class App extends Component {
 
   sendAppStateToServer = async () => {
     let obj = {
-      id: JSON.parse(localStorage.getItem("vocabify")).token,
+      // id: JSON.parse(localStorage.getItem("vocabify")).token,
       words: this.state.words,
-      lang: this.state.lang
+      lang: this.state.lang,
     };
     console.log(obj);
-
+    let token = JSON.parse(localStorage.getItem("vocabify")).token;
     //trycatch
     let res = await axios.post("/users/updateuser", obj, {
-      headers: { token: JSON.parse(localStorage.getItem("vocabify")).token }
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `bearer ${token}`,
+      },
     });
-    console.log(res);
+    if (res.data.message === "User updated") {
+      return { success: true };
+    } else {
+      return { success: false };
+    }
   };
 
   //removes dupulicates
-  uniq = a => {
+  uniq = (a) => {
     return Array.from(new Set(a));
   };
 
@@ -110,11 +117,11 @@ class App extends Component {
       .replace(/[.,/#!?$%^&*;:{}“”=_`~()]/g, "")
       .toLowerCase()
       .split(" ")
-      .map(word => word.trim())
-      .filter(word => word.length > 0);
+      .map((word) => word.trim())
+      .filter((word) => word.length > 0);
 
     if (lang === "fr") {
-      inputText = inputText.map(word =>
+      inputText = inputText.map((word) =>
         word.replace(/^l'|^l’|^m'|^m’|^t'|^t’|^s'|^s’/gi, "")
       );
       console.log(lang);
@@ -127,7 +134,6 @@ class App extends Component {
   getDefinitions = async (wordArray, filter) => {
     let token = JSON.parse(localStorage.getItem("vocabify")).token;
     let obj = {
-      token: token,
       lang: this.state.lang,
       // knownWords: this.state.knownWords, //to be removed
       // unknownWords: this.state.unknownWords, //to be removed
@@ -135,17 +141,18 @@ class App extends Component {
       unknownWords: this.state.words[this.state.lang].unknownWords,
       // vocabSize: this.state.vocabSize,
       words: wordArray,
-      filter: filter
+      filter: filter,
     };
     let headers = {
-      token
+      "Content-Type": "application/json",
+      Authorization: `bearer ${token}`,
     };
     // console.log(obj);
     //try catch
 
     let json = await axios
       .post("/words/definitions", obj, { headers })
-      .catch(err => {
+      .catch((err) => {
         console.log(("error", err));
       });
 
@@ -153,15 +160,15 @@ class App extends Component {
     console.log(json.data);
 
     // this.setState({ vocabSize: json.data.vocabSize });
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       ...prevState,
       words: {
         ...prevState.words,
         [this.state.lang]: {
           ...prevState.words[this.state.lang],
-          vocabSize: json.data.vocabSize
-        }
-      }
+          vocabSize: json.data.vocabSize,
+        },
+      },
     }));
 
     return json.data.definitions;
@@ -174,16 +181,16 @@ class App extends Component {
     }
     // this.setState({ knownWords, unknownWords }); //change
 
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       ...prevState,
       words: {
         ...prevState.words,
         [this.state.lang]: {
           ...prevState.words[this.state.lang],
           knownWords,
-          unknownWords
-        }
-      }
+          unknownWords,
+        },
+      },
     }));
 
     this.saveToLocal();
@@ -201,16 +208,16 @@ class App extends Component {
     }
     // this.setState({ knownWords, unknownWords }); //change
 
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       ...prevState,
       words: {
         ...prevState.words,
         [this.state.lang]: {
           ...prevState.words[this.state.lang],
           knownWords,
-          unknownWords
-        }
-      }
+          unknownWords,
+        },
+      },
     }));
 
     this.saveToLocal();
@@ -227,45 +234,34 @@ class App extends Component {
 
     // this.setState({ knownWords, unknownWords });
 
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       ...prevState,
       words: {
         ...prevState.words,
         [this.state.lang]: {
           ...prevState.words[this.state.lang],
           knownWords,
-          unknownWords
-        }
-      }
+          unknownWords,
+        },
+      },
     }));
 
     this.saveToLocal();
   }
 
-  handleSignout = async e => {
-    this.saveToLocal();
-
+  handleSignout = async (e) => {
+    // this.saveToLocal();
     e.preventDefault();
     console.log("...Signing out");
 
     //update user data on server
-    await this.sendAppStateToServer();
-
-    ///end session
-    let token = JSON.parse(localStorage.getItem("vocabify")).token;
-    //trycatch
-    let res = await axios.post("/users/signout?token=" + token, {
-      headers: {
-        token
-      }
-    });
-
-    if (res.data.success) {
+    let signout = await this.sendAppStateToServer();
+    if (signout.success) {
       auth.loggingOut();
       this.setState({ navigate: true });
     } else {
-      //send message to user here
-      console.log("could not log out");
+      //handle failure
+      console.log("update failed");
     }
   };
 
@@ -276,7 +272,7 @@ class App extends Component {
           <Route
             exact
             path="/login"
-            render={props => (
+            render={(props) => (
               <Signin
                 {...props}
                 addToAppState={this.addToAppState}
@@ -288,7 +284,7 @@ class App extends Component {
           <Route
             exact
             path="/read"
-            render={props => (
+            render={(props) => (
               <Read
                 {...props}
                 lang={this.state.lang}
