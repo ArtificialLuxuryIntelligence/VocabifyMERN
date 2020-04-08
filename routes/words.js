@@ -225,8 +225,12 @@ async function getRandomWord(wordRange, lang, attempts) {
 // ---------- ROUTES ----------
 
 //Get word definitions
+//protect all routes
+router.use("/", isAuthenticated, (req, res, next) => {
+  next();
+});
 
-router.post("/definitions", isAuthenticated, async (req, res, next) => {
+router.post("/definitions", async (req, res, next) => {
   console.log("getting definitions");
 
   let queryWords = req.body.words;
@@ -292,7 +296,7 @@ router.post("/definitions", isAuthenticated, async (req, res, next) => {
 
 // put in user route??
 
-router.post("/random", isAuthenticated, async (req, res, next) => {
+router.post("/random", async (req, res, next) => {
   //this route doesnt estimate vocab size (uses previous calculation)
   let vocabSize = req.body.vocabSize;
   let knownWords = req.body.knownWords;

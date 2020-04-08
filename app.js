@@ -6,11 +6,10 @@ var logger = require("morgan");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-var indexRouter = require("./routes/index");
+// var apiRouter = require("./routes/API");
+// var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var wordsRouter = require("./routes/words");
-
-var apiRouter = require("./routes/API");
 
 mongoose.connect(process.env.DB, { useNewUrlParser: true });
 var db = mongoose.connection;
@@ -27,7 +26,7 @@ app.use(cookieParser());
 // app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/words", wordsRouter);
-app.use("/api", apiRouter);
+// app.use("/api", apiRouter);
 
 //serve static assets in productions
 

@@ -15,16 +15,16 @@ class Account extends Component {
     super(props);
     this.state = {
       searchWord: null,
-      loadedWords: []
+      loadedWords: [],
     };
   }
 
-  handleSpanClick = e => {
+  handleSpanClick = (e) => {
     let word = this.props.sanitizeText(e.target.innerText)[0];
     this.setState({ searchWord: word });
   };
 
-  handleDropdownChange = e => {
+  handleDropdownChange = (e) => {
     e.preventDefault();
     // this.setState({ lang: e.target.value });
     this.props.addToAppState("lang", e.target.value);
@@ -73,7 +73,7 @@ class Account extends Component {
                   <li key={word}>
                     {/* hides 'remove' button from span (wordDef component has own button) [alternate/better 'React' version of this is to keep track of words with fetched definitions...] .reason: there is a remove button rendered by the worddef component when definition is fetched*/}
                     <span
-                      onClick={e =>
+                      onClick={(e) =>
                         e.target.tagName === "P"
                           ? (e.target.nextElementSibling.style.display = "none")
                           : null

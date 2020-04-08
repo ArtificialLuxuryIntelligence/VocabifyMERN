@@ -40,6 +40,7 @@ class App extends Component {
     this.saveToLocal = this.saveToLocal.bind(this);
   }
   componentDidMount() {
+    //app holds its own islogged in state
     let obj = JSON.parse(localStorage.getItem("vocabify"));
     if (obj && obj.isLoggedIn) {
       // let { knownWords, unknownWords, vocabSize, lang, words } = obj; //to be removed
@@ -149,29 +150,32 @@ class App extends Component {
     };
     // console.log(obj);
     //try catch
+    try {
+      let json = await axios.post("/words/definitions", obj, { headers });
+      console.log("vocabSize", json.data.vocabSize);
+      console.log(json.data);
 
-    let json = await axios
-      .post("/words/definitions", obj, { headers })
-      .catch((err) => {
-        console.log(("error", err));
-      });
-
-    console.log("vocabSize", json.data.vocabSize);
-    console.log(json.data);
-
-    // this.setState({ vocabSize: json.data.vocabSize });
-    this.setState((prevState) => ({
-      ...prevState,
-      words: {
-        ...prevState.words,
-        [this.state.lang]: {
-          ...prevState.words[this.state.lang],
-          vocabSize: json.data.vocabSize,
+      // this.setState({ vocabSize: json.data.vocabSize });
+      this.setState((prevState) => ({
+        ...prevState,
+        words: {
+          ...prevState.words,
+          [this.state.lang]: {
+            ...prevState.words[this.state.lang],
+            vocabSize: json.data.vocabSize,
+          },
         },
-      },
-    }));
-
-    return json.data.definitions;
+      }));
+      return json.data.definitions;
+    } catch (err) {
+      if (err.response.status === 401) {
+        console.log("unauthorized.. loggin out");
+        auth.loggingOut();
+        //force rerender (=> redirect to login page now there is no token  )
+        //this saves from having to check auth state in every component at every update (protected routes check when they mount)
+        this.forceUpdate();
+      }
+    }
   };
   addKnownWord(word) {
     let { knownWords, unknownWords } = this.state.words[this.state.lang];

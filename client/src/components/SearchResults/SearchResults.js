@@ -7,7 +7,7 @@ class SearchResults extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      lang: this.props.lang
+      lang: this.props.lang,
     };
   }
 

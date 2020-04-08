@@ -17,7 +17,7 @@ class Home extends Component {
     super(props);
     this.state = {
       searchWord: null,
-      searchTerm: ""
+      searchTerm: "",
     };
   }
 
@@ -25,7 +25,7 @@ class Home extends Component {
     console.log("HOME language is:", this.props.lang);
   }
 
-  handleDropdownChange = e => {
+  handleDropdownChange = (e) => {
     e.preventDefault();
     // this.setState({ lang: e.target.value });
     this.props.addToAppState("lang", e.target.value);
@@ -34,13 +34,13 @@ class Home extends Component {
     this.setState({ searchWord: null });
   };
 
-  handleChange = e => {
+  handleChange = (e) => {
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
     if (this.state.searchTerm.length === 0) {
       return;
@@ -49,7 +49,7 @@ class Home extends Component {
     document.getElementById("searchForm").reset();
   };
 
-  handleSpanClick = e => {
+  handleSpanClick = (e) => {
     let word = this.props.sanitizeText(e.target.innerText)[0];
     this.setState({ searchWord: word });
   };
@@ -82,6 +82,7 @@ class Home extends Component {
             removeWord={this.props.removeWord}
             unknownWords={this.props.unknownWords}
             addToAppState={this.props.addToAppState}
+            history={this.props.history}
           />
         </div>
 

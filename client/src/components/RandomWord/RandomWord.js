@@ -10,7 +10,7 @@ import WordDef from "../WordDef/WordDef";
 
 // import Spanner from "../../Spanner/Spanner";
 // import { Redirect } from "react-router-dom";
-// import auth from "../../utils/auth";
+import auth from "../../utils/auth";
 
 class RandomWord extends Component {
   constructor(props) {
@@ -43,6 +43,7 @@ class RandomWord extends Component {
 
   componentDidUpdate(prevProps) {
     //glitches if you refresh (calls didmount and didupdate?)
+    //on first load getNewWord is called twice - once here and once didMount?
     if (this.props.lang !== prevProps.lang) {
       this.getNewWord();
     }
@@ -72,17 +73,26 @@ class RandomWord extends Component {
     };
     // console.log(obj);
 
-    let response = await axios.post("/words/random", obj, { headers });
-    console.log(response.data); // this.setState({ definition });
-    // console.log(this.state);
-    if (response.data.success) {
-      this.setState({ newWord: response.data.definition[0][0].word });
-      this.setState({ definition: response.data.definition });
+    console.log("getting new word");
+    try {
+      let response = await axios.post("/words/random", obj, { headers });
+
+      console.log(response); // this.setState({ definition });
+      if (response.data.success) {
+        this.setState({ newWord: response.data.definition[0][0].word });
+        this.setState({ definition: response.data.definition });
+        this.setState({ isLoading: false });
+        this.setState({ wordKnown: false });
+      }
       this.setState({ isLoading: false });
-      this.setState({ wordKnown: false });
+      return;
+    } catch (err) {
+      if (err.response.status === 401) {
+        console.log("logging user out");
+        auth.loggingOut();
+        this.props.history.push("/login");
+      }
     }
-    this.setState({ isLoading: false });
-    return;
   };
 
   handleNewWord = () => {

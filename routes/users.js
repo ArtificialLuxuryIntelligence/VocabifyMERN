@@ -3,7 +3,7 @@ var router = express.Router();
 const jwt = require("jsonwebtoken");
 
 const User = require("../models/User");
-const UserSession = require("../models/UserSession");
+// const UserSession = require("../models/UserSession");
 
 var isAuthenticated = require("../middleware/isAuthenticated");
 
@@ -121,7 +121,7 @@ router.post("/signin", (req, res) => {
         { name: user.name, id: user._id },
         process.env.JWT_KEY,
         {
-          expiresIn: "1h",
+          expiresIn: "5s",
         }
       );
       res.send({
@@ -129,9 +129,9 @@ router.post("/signin", (req, res) => {
         message: "Sign in success",
         // token: user._id, //nothing fancy here, active session is checked with middleware when userdata requests are made.
         token: token,
-        knownWords: user.knownWords,
-        unknownWords: user.unknownWords,
-        vocabSize: user.vocabSize,
+        // knownWords: user.knownWords,
+        // unknownWords: user.unknownWords,
+        // vocabSize: user.vocabSize,
         lang: user.lang,
         words: user.words,
       });
@@ -140,35 +140,7 @@ router.post("/signin", (req, res) => {
   );
 });
 
-//Signout route
-
-// router.post("/signout", (req, res) => {
-// const { query } = req;
-// const { token } = query;
-// Check to see if the token is unique and acitive (isDeleted:false)
-
-// UserSession.findOneAndRemove(
-//   {
-//     userId: token,
-//     isDeleted: false,
-//   },
-//   (err) => {
-//     if (err) {
-//       console.log(err);
-//       return res.send({
-//         success: false,
-//         message: "Server error",
-//       });
-//     }
-//     return res.send({
-//       success: true,
-//       message: "session ended",
-//     });
-//   }
-// );
-// });
-
-//update user
+//Update user
 
 router.post("/updateuser", isAuthenticated, (req, res, next) => {
   // let token = req.body.token;
@@ -201,43 +173,12 @@ router.post("/updateuser", isAuthenticated, (req, res, next) => {
   );
 });
 
-//Verify token is valid
+router.post("/authcheck", isAuthenticated, (req, res) => {
+  console.log(req);
 
-router.get("/verify", (req, res, next) => {
-  // Get the token
-  const { query } = req;
-  const { token } = query;
-  // ?token=test
-
-  // Verify the token is one of a kind and it's not deleted.
-
-  UserSession.find(
-    {
-      _id: token,
-      isDeleted: false,
-    },
-    (err, sessions) => {
-      if (err) {
-        console.log(err);
-        return res.send({
-          success: false,
-          message: "Error: Server error",
-        });
-      }
-
-      if (sessions.length != 1) {
-        return res.send({
-          success: false,
-          message: "Error: Invalid",
-        });
-      } else {
-        return res.send({
-          success: true,
-          message: "Good",
-        });
-      }
-    }
-  );
+  if (req.userData) {
+    res.status(200).json({ message: "user is logged in" });
+  }
 });
 
 module.exports = router;

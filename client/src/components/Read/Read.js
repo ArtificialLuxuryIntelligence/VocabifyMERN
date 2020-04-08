@@ -12,6 +12,7 @@ import LanguageDropdown from "../LanguageDropdown/LanguageDropdown";
 import Textarea from "./Textarea/Textarea";
 import Textreader from "./Textreader/Textreader";
 import { Logger } from "mongodb";
+import auth from "../../utils/auth";
 // import axios from "axios";
 
 class Read extends Component {
@@ -90,23 +91,27 @@ class Read extends Component {
 
     let words = this.props.sanitizeText(this.removeCaps(currentPageText));
 
-    let definitions = await this.props.getDefinitions(words, "true"); //filter: true // only get words that are probably unknown to user
-    // console.log(definitions);
+    try {
+      let definitions = await this.props.getDefinitions(words, "true"); //filter: true // only get words that are probably unknown to user
 
-    let sidebarWordsArray = [];
-    definitions.forEach((a) => sidebarWordsArray.push(a[0].word));
+      let sidebarWordsArray = [];
+      definitions.forEach((a) => sidebarWordsArray.push(a[0].word));
 
-    //adds new defs to sidebar and removes duplicates
-    this.setState({
-      definitionJSON: this.removeWordArrayDupes([
-        ...this.state.definitionJSON,
-        ...definitions,
-      ]),
-      sidebarWords: [
-        ...new Set([...this.state.sidebarWords, ...sidebarWordsArray]),
-      ],
-      isLoading: false,
-    });
+      //adds new defs to sidebar and removes duplicates
+      this.setState({
+        definitionJSON: this.removeWordArrayDupes([
+          ...this.state.definitionJSON,
+          ...definitions,
+        ]),
+        sidebarWords: [
+          ...new Set([...this.state.sidebarWords, ...sidebarWordsArray]),
+        ],
+        isLoading: false,
+      });
+    } catch (err) {
+      console.log(err);
+      return;
+    }
   };
 
   handleSubmit = async () => {
@@ -172,55 +177,60 @@ class Read extends Component {
     }
     let queryWord = this.props.sanitizeText(word);
 
-    let def = await this.props.getDefinitions(queryWord, "false");
-    if (def.length === 0) {
+    try {
+      let def = await this.props.getDefinitions(queryWord, "false");
+
+      if (!def || def.length === 0) {
+        this.setState({ isNewWordLoading: false });
+        this.setState({
+          sidebarMessage: `Could not find definition of ${queryWord}`,
+        });
+
+        setTimeout(() => this.setState({ sidebarMessage: "" }), 1500);
+
+        // show unsuccessful message
+      }
+
+      let newWord = def[0][0].word;
+      console.log(newWord);
+
+      if (this.state.sidebarWords.indexOf(newWord) > 0) {
+        this.setState({
+          sidebarMessage: `Definition of ${newWord} already loaded!`,
+        });
+        setTimeout(() => this.setState({ sidebarMessage: "" }), 1500);
+
+        this.setState({ isNewWordLoading: false });
+
+        return;
+      }
+
+      let defs = [...this.state.definitionJSON]; //dont mutate state
+      let sidebarWordArray = [...this.state.sidebarWords];
+
+      if (sidebarWordArray.indexOf(parentWord) >= 0) {
+        // console.log("index of", parentWord, sidebarWordArray.indexOf(parentWord));
+        let index = sidebarWordArray.indexOf(parentWord);
+        defs.splice(index + 1, 0, def[0]);
+        sidebarWordArray.splice(index + 1, 0, newWord);
+      } else {
+        defs = def.concat(defs);
+        sidebarWordArray.unshift(newWord);
+      }
+      // console.log(defs, sidebarWordArray);
+
+      //remove dupes (shouldn't be any?)
+      defs = Array.from(new Set(defs.map(JSON.stringify)), JSON.parse);
+      sidebarWordArray = [...new Set(sidebarWordArray)];
+      //
+
+      this.setState({ definitionJSON: defs });
+      this.setState({ sidebarWords: sidebarWordArray });
       this.setState({ isNewWordLoading: false });
-      this.setState({
-        sidebarMessage: `Could not find definition of ${queryWord}`,
-      });
-
-      setTimeout(() => this.setState({ sidebarMessage: "" }), 1500);
-
-      // show unsuccessful message
-      return;
+      this.setState({ sidebarMessage: "" });
+    } catch (err) {
+      this.props.history.push("./login");
     }
-    let newWord = def[0][0].word;
-    console.log(newWord);
-
-    if (this.state.sidebarWords.indexOf(newWord) > 0) {
-      this.setState({
-        sidebarMessage: `Definition of ${newWord} already loaded!`,
-      });
-      setTimeout(() => this.setState({ sidebarMessage: "" }), 1500);
-
-      this.setState({ isNewWordLoading: false });
-
-      return;
-    }
-
-    let defs = [...this.state.definitionJSON]; //dont mutate state
-    let sidebarWordArray = [...this.state.sidebarWords];
-
-    if (sidebarWordArray.indexOf(parentWord) >= 0) {
-      // console.log("index of", parentWord, sidebarWordArray.indexOf(parentWord));
-      let index = sidebarWordArray.indexOf(parentWord);
-      defs.splice(index + 1, 0, def[0]);
-      sidebarWordArray.splice(index + 1, 0, newWord);
-    } else {
-      defs = def.concat(defs);
-      sidebarWordArray.unshift(newWord);
-    }
-    // console.log(defs, sidebarWordArray);
-
-    //remove dupes (shouldn't be any?)
-    defs = Array.from(new Set(defs.map(JSON.stringify)), JSON.parse);
-    sidebarWordArray = [...new Set(sidebarWordArray)];
-    //
-
-    this.setState({ definitionJSON: defs });
-    this.setState({ sidebarWords: sidebarWordArray });
-    this.setState({ isNewWordLoading: false });
-    this.setState({ sidebarMessage: "" });
   };
 
   handleNewText = () => {
@@ -343,6 +353,7 @@ class Read extends Component {
             />
             <Sidebar
               // className={"sidebar"}
+              history={this.props.history}
               lang={this.props.lang}
               definitionJSON={this.state.definitionJSON}
               unknownWords={this.props.unknownWords}

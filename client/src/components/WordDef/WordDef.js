@@ -29,7 +29,7 @@ class WordDef extends Component {
       // newWord: this.props.word,
       isLoading: true,
       defintionToggled: false,
-      definition: this.props.definition || []
+      definition: this.props.definition || [],
     };
 
     // this.getNewWord = this.getNewWord.bind(this);
@@ -58,29 +58,35 @@ class WordDef extends Component {
     this.setState({
       isLoading: true,
       defintionToggled: true,
-      fetchFail: false
+      fetchFail: false,
     });
-    let definition = await this.props.getDefinitions(
-      [this.props.word],
-      "false"
-    );
-    //handle cant get from server
-    if (definition.length === 0) {
-      this.setState({
-        isLoading: false,
-        defintionToggled: false,
-        fetchFail: true
-      });
-      return;
-    }
-    this.setState({
-      definition,
-      isLoading: false,
-      word: definition[0][0].word,
-      fetchFail: false
-    });
+    //error only thrown for 401 (user not logged in) in getDefinitions function
+    try {
+      let definition = await this.props.getDefinitions(
+        [this.props.word],
+        "false"
+      );
+      //handle cant get from server
 
-    // return;
+      if (!definition || definition.length === 0) {
+        this.setState({
+          isLoading: false,
+          defintionToggled: false,
+          fetchFail: true,
+        });
+        return;
+      }
+      this.setState({
+        definition,
+        isLoading: false,
+        word: definition[0][0].word,
+        fetchFail: false,
+      });
+
+      // return;
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   //from state if def was fetched internally/ from props if def was passed in from parent
@@ -133,7 +139,7 @@ class WordDef extends Component {
                     {this.props.unknownWords.indexOf(word[0].word) === -1 && (
                       <button
                         className={"add-button"}
-                        onClick={e => this.handleAddWord()}
+                        onClick={(e) => this.handleAddWord()}
                       >
                         Add word
                       </button>
@@ -141,7 +147,7 @@ class WordDef extends Component {
                     {this.props.unknownWords.indexOf(word[0].word) !== -1 && (
                       <button
                         className={"remove-button"}
-                        onClick={e => this.handleRemoveWord()}
+                        onClick={(e) => this.handleRemoveWord()}
                       >
                         Remove word
                       </button>
@@ -176,7 +182,7 @@ class WordDef extends Component {
                             -1 && (
                             <button
                               className={"add-button"}
-                              onClick={e => this.handleAddWord()}
+                              onClick={(e) => this.handleAddWord()}
                             >
                               Add word
                             </button>
@@ -185,7 +191,7 @@ class WordDef extends Component {
                             -1 && (
                             <button
                               className={"remove-button"}
-                              onClick={e => this.handleRemoveWord()}
+                              onClick={(e) => this.handleRemoveWord()}
                             >
                               Remove word
                             </button>

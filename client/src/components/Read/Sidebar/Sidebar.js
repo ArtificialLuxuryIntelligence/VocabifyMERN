@@ -104,6 +104,7 @@ class Sidebar extends Component {
               {this.state.searchWord !== null && (
                 <>
                   <SearchResults
+                    history={this.props.history}
                     autoload={true}
                     word={this.state.searchWord}
                     lang={this.props.lang}
