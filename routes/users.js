@@ -121,7 +121,7 @@ router.post("/signin", (req, res) => {
         { name: user.name, id: user._id },
         process.env.JWT_KEY,
         {
-          expiresIn: "5s",
+          expiresIn: "2h",
         }
       );
       res.send({
@@ -174,7 +174,7 @@ router.post("/updateuser", isAuthenticated, (req, res, next) => {
 });
 
 router.post("/authcheck", isAuthenticated, (req, res) => {
-  console.log(req);
+  // console.log(req);
 
   if (req.userData) {
     res.status(200).json({ message: "user is logged in" });

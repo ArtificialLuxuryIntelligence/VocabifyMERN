@@ -30,8 +30,6 @@ const encodeCharacters = (string) => {
   return encodeURI(string);
 };
 
-// API requests
-
 // generates array of fetch requests (one per word)
 const fetchArray = (wordArray, lang) => {
   let result = wordArray.map((word) =>
@@ -52,7 +50,7 @@ async function fetchDefinitions(wordArray, lang) {
     responses = await Promise.allSettled(fetchArray(wordArray, lang));
     // console.log(responses);
   } catch (err) {
-    (err) => console.log(err);
+    (err) => console.log("fetch error", err);
   }
   let obj = responses
     .map((res) => (res.status === "fulfilled" ? res.value.data : null))
@@ -220,7 +218,7 @@ async function getRandomWord(wordRange, lang, attempts) {
   }
 }
 
-// -------------------------------
+// ------------------------------- ----------------------------------------------------------------------------------------------------------------------------
 
 // ---------- ROUTES ----------
 
@@ -268,7 +266,7 @@ router.post("/definitions", async (req, res, next) => {
   console.log(queryWords, lang);
 
   let definitions = await fetchDefinitions(queryWords, lang).catch((err) =>
-    console.log(err)
+    console.log("fetch error", err)
   );
 
   // filter returned returned defintion words for known words (may be slightly different from requested words e.g. conjugations etc)

@@ -187,8 +187,7 @@ class Read extends Component {
         });
 
         setTimeout(() => this.setState({ sidebarMessage: "" }), 1500);
-
-        // show unsuccessful message
+        return;
       }
 
       let newWord = def[0][0].word;
@@ -209,7 +208,11 @@ class Read extends Component {
       let sidebarWordArray = [...this.state.sidebarWords];
 
       if (sidebarWordArray.indexOf(parentWord) >= 0) {
-        // console.log("index of", parentWord, sidebarWordArray.indexOf(parentWord));
+        console.log(
+          "index of",
+          parentWord,
+          sidebarWordArray.indexOf(parentWord)
+        );
         let index = sidebarWordArray.indexOf(parentWord);
         defs.splice(index + 1, 0, def[0]);
         sidebarWordArray.splice(index + 1, 0, newWord);
@@ -229,7 +232,13 @@ class Read extends Component {
       this.setState({ isNewWordLoading: false });
       this.setState({ sidebarMessage: "" });
     } catch (err) {
-      this.props.history.push("./login");
+      console.log("ERROR", err);
+      setTimeout(() => this.setState({ sidebarMessage: "" }), 1500);
+      this.setState({
+        sidebarMessage: `Network error, try again later`,
+      });
+
+      // this.props.history.push("./login");
     }
   };
 
