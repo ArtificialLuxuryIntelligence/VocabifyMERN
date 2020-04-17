@@ -107,7 +107,7 @@ class WordDef extends Component {
       word = this.props.word;
     }
     window.open(
-      `https://www.google.com/search?q=translate%20${word}%20${this.props.lang}%20to%20en`,
+      `https://www.google.com/search?q=translate%20${word}%20${this.props.lang}%20to%20english`,
       "",
       "top=0,left=400"
       // (),
@@ -170,6 +170,12 @@ class WordDef extends Component {
                         Remove word
                       </button>
                     )}
+                    <button
+                      className="translate"
+                      onClick={(e) => this.handleTranslateWord()}
+                    >
+                      Translate
+                    </button>
 
                     <Collapsible
                       open={true}
