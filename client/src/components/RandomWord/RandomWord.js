@@ -87,11 +87,12 @@ class RandomWord extends Component {
       this.setState({ isLoading: false });
       return;
     } catch (err) {
-      if (err.response.status === 401) {
-        console.log("logging user out");
+      if (err.response && err.response.status === 401) {
+        console.log("unauthorized.. loggin out");
         auth.loggingOut();
         this.props.history.push("/login");
       }
+      console.log(err);
     }
   };
 
@@ -126,8 +127,11 @@ class RandomWord extends Component {
             idea of your level.
           </p>
           <p>
-            Click <a onClick={() => this.props.redirectToRead()}>here</a> to
-            read some text and save some words you don't know
+            Take this{" "}
+            <a className="testLink" onClick={() => this.props.redirectToRead()}>
+              reading test
+            </a>{" "}
+            to get started.
           </p>
         </div>
       );

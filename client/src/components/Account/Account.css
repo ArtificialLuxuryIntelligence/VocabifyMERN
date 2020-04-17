@@ -9,6 +9,10 @@
 .account-content span {
   /* float: left; */
 }
-.account-content .saved-words {
+/* .account-content .saved-words {
+  width: 65%;
+} */
+
+.content .main {
   width: 65%;
 }

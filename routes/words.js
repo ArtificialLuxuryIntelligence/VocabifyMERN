@@ -228,6 +228,9 @@ router.use("/", isAuthenticated, (req, res, next) => {
   next();
 });
 
+//should be 'GET' with with query string
+// or from https://www.moesif.com/blog/technical/api-design/REST-API-Design-Best-Practices-for-Parameters-and-Query-String-Usage/
+//  quote: We would POST a new request to our /searches endpoint, that holds our search configuration/parameters in the body. A search ID is returned, which we can use later to GET the results of our search.
 router.post("/definitions", async (req, res, next) => {
   console.log("getting definitions");
 

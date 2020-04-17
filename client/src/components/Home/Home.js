@@ -58,7 +58,7 @@ class Home extends Component {
   };
   render() {
     return (
-      <div>
+      <div className="home">
         <Nav handleSignout={this.props.handleSignout} />
         <h1>Home</h1>
         <div>
@@ -69,51 +69,53 @@ class Home extends Component {
           ></LanguageDropdown>
         </div>
 
-        <div>
-          <h2>Here is a word you might not know:</h2>
-          <RandomWord
-            redirectToRead={this.redirectToRead}
-            vocabSize={this.props.vocabSize}
-            lang={this.props.lang}
-            handleSpanClick={this.handleSpanClick}
-            getDefinitions={this.props.getDefinitions}
-            addKnownWord={this.props.addKnownWord}
-            addUnknownWord={this.props.addUnknownWord}
-            removeWord={this.props.removeWord}
-            unknownWords={this.props.unknownWords}
-            addToAppState={this.props.addToAppState}
-            history={this.props.history}
-          />
-        </div>
-
-        <div className="sidebar sidebar-closed">
-          <div className="search-box">
-            <SearchForm
-              value={this.state.searchTerm}
-              handleChange={this.handleChange}
+        <div className="content">
+          <div className="main">
+            <h2>Here is a word you might not know:</h2>
+            <RandomWord
+              redirectToRead={this.redirectToRead}
+              vocabSize={this.props.vocabSize}
               lang={this.props.lang}
-              handleSubmit={this.handleSubmit}
+              handleSpanClick={this.handleSpanClick}
+              getDefinitions={this.props.getDefinitions}
+              addKnownWord={this.props.addKnownWord}
+              addUnknownWord={this.props.addUnknownWord}
+              removeWord={this.props.removeWord}
+              unknownWords={this.props.unknownWords}
+              addToAppState={this.props.addToAppState}
+              history={this.props.history}
             />
-            <div>
-              {this.state.searchWord !== null && (
-                //make separate component 'wrapper' with all the update methods from randoWord comp
+          </div>
 
-                <>
-                  <SearchResults
-                    autoload={true}
-                    word={this.state.searchWord}
-                    lang={this.props.lang}
-                    handleSpanClick={this.handleSpanClick}
-                    vocabSize={this.props.vocabSize}
-                    getDefinitions={this.props.getDefinitions}
-                    addKnownWord={this.props.addKnownWord}
-                    addUnknownWord={this.props.addUnknownWord}
-                    removeWord={this.props.removeWord}
-                    unknownWords={this.props.unknownWords}
-                    addToAppState={this.props.addToAppState}
-                  />
-                </>
-              )}
+          <div className="sidebar sidebar-closed">
+            <div className="search-box">
+              <SearchForm
+                value={this.state.searchTerm}
+                handleChange={this.handleChange}
+                lang={this.props.lang}
+                handleSubmit={this.handleSubmit}
+              />
+              <div>
+                {this.state.searchWord !== null && (
+                  //make separate component 'wrapper' with all the update methods from randoWord comp
+
+                  <>
+                    <SearchResults
+                      autoload={true}
+                      word={this.state.searchWord}
+                      lang={this.props.lang}
+                      handleSpanClick={this.handleSpanClick}
+                      vocabSize={this.props.vocabSize}
+                      getDefinitions={this.props.getDefinitions}
+                      addKnownWord={this.props.addKnownWord}
+                      addUnknownWord={this.props.addUnknownWord}
+                      removeWord={this.props.removeWord}
+                      unknownWords={this.props.unknownWords}
+                      addToAppState={this.props.addToAppState}
+                    />
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </div>

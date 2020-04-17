@@ -77,6 +77,8 @@ class App extends Component {
   //set global App state
   addToAppState(key, value) {
     this.setState({ [key]: value });
+    console.log("key", key, "value", value);
+
     // console.log(this.state);
     this.saveToLocal();
   }
@@ -168,13 +170,14 @@ class App extends Component {
       }));
       return json.data.definitions;
     } catch (err) {
-      if (err.response.status === 401) {
+      if (err.response && err.response.status === 401) {
         console.log("unauthorized.. loggin out");
         auth.loggingOut();
         //force rerender (=> redirect to login page now there is no token  )
         //this saves from having to check auth state in every component at every update (protected routes check when they mount)
         this.forceUpdate();
       }
+      console.log(err);
     }
   };
   addKnownWord(word) {

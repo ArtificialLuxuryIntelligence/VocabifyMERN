@@ -34,6 +34,7 @@ class Read extends Component {
       pageNumber: 0,
       largestLoadedPageNumber: -1,
       sidebarMessage: "",
+      textareaValue: "",
     };
 
     // this.getDefinitions = this.props.getDefinitions.bind(this);
@@ -54,7 +55,6 @@ class Read extends Component {
 
   splitText(string, cutoff) {
     let words = string.split(" ");
-
     let arr = [];
     let i = 0;
     while (i < words.length) {
@@ -115,7 +115,7 @@ class Read extends Component {
   };
 
   handleSubmit = async () => {
-    const length = 50; //SET ELSEWHERE (props based on available space in browser e.g. innerwidth )
+    const length = 50; //SET ELSEWHERE (props based on available space in browser e.g. innerwidth )// sets how many words per page
     const textarea = document.querySelector("#textarea");
 
     let fullText = textarea.value;
@@ -283,18 +283,6 @@ class Read extends Component {
     // e.target.nextElementSibling.style.display = "block";
     // e.target.parentElement.parentElement.remove();
   };
-  // handleDeleteWord = e => {
-  //   e.stopPropagation();
-  //   let word = e.target.parentElement.children[0].children[0].innerText;
-  //   this.props.addKnownWord(word);
-  //   //handlewithprops
-  //   // e.target.parentElement.parentElement.remove();
-
-  //   // sidebarWords.splice(sidebarWords.indexOf(word), 1);
-  //   let { sidebarWords } = this.state;
-  //   sidebarWords.splice(sidebarWords.indexOf(word), 1);
-  //   this.setState({ sidebarWords });
-  // };
 
   handleDeleteWord = (word) => {
     //removes from sidebar and sets as 'known'
@@ -350,18 +338,20 @@ class Read extends Component {
             lang={this.props.lang}
           ></LanguageDropdown>
 
-          <div className={""}>
-            <Textreader
-              fullText={this.state.fullText} //remove
-              fullTextSplit={this.state.fullTextSplit}
-              handleNewText={this.handleNewText}
-              handleSpanClick={this.handleSpanClick}
-              pageNumber={this.state.pageNumber}
-              handleNextPage={this.handleNextPage}
-              handlePrevPage={this.handlePrevPage}
-            />
+          <div className="content">
+            <div className="main">
+              <Textreader
+                fullText={this.state.fullText} //remove
+                fullTextSplit={this.state.fullTextSplit}
+                handleNewText={this.handleNewText}
+                handleSpanClick={this.handleSpanClick}
+                pageNumber={this.state.pageNumber}
+                handleNextPage={this.handleNextPage}
+                handlePrevPage={this.handlePrevPage}
+              />
+            </div>
+
             <Sidebar
-              // className={"sidebar"}
               history={this.props.history}
               lang={this.props.lang}
               definitionJSON={this.state.definitionJSON}

@@ -99,6 +99,24 @@ class WordDef extends Component {
     this.props.removeWord(this.state.word || this.props.word);
   };
 
+  handleTranslateWord = () => {
+    let word;
+    if (this.state.word) {
+      word = this.state.word;
+    } else {
+      word = this.props.word;
+    }
+    window.open(
+      `https://www.google.com/search?q=translate%20${word}%20${this.props.lang}%20to%20en`,
+      "",
+      "top=0,left=400"
+      // (),
+      // (status = "no"),
+      // (left = 0),
+      // (top = 0)
+    );
+  };
+
   render() {
     if (
       this.state.fetchFail ||
@@ -152,6 +170,7 @@ class WordDef extends Component {
                         Remove word
                       </button>
                     )}
+
                     <Collapsible
                       open={true}
                       triggerClassName="clickable word-heading"
@@ -196,6 +215,12 @@ class WordDef extends Component {
                               Remove word
                             </button>
                           )}
+                          <button
+                            className="translate"
+                            onClick={(e) => this.handleTranslateWord()}
+                          >
+                            Translate
+                          </button>
 
                           <Collapsible
                             open={true}

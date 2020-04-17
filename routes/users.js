@@ -142,6 +142,7 @@ router.post("/signin", (req, res) => {
 
 //Update user
 
+//UPDATE VERB?
 router.post("/updateuser", isAuthenticated, (req, res, next) => {
   // let token = req.body.token;
   // let id = req.body.id; //note token is (currently in this version) user id (separate here for clarity)

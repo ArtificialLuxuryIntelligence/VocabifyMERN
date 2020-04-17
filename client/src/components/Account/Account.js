@@ -43,7 +43,7 @@ class Account extends Component {
           lang={this.props.lang}
         ></LanguageDropdown>
 
-        <div className="account-content">
+        <div className="content">
           <div>
             {this.state.searchWord !== null && (
               <div className="sidebar sidebar-closed">
@@ -65,7 +65,7 @@ class Account extends Component {
             )}
           </div>
 
-          <div className="saved-words">
+          <div className="main">
             <h2>Your saved words: </h2>
             <ul>
               {this.props.unknownWords.map((word, i) => {
