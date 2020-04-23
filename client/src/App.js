@@ -157,6 +157,7 @@ class App extends Component {
       console.log("vocabSize", json.data.vocabSize);
       console.log(json.data);
 
+      // conditionally set vocabsize? (/words/definitions route doesn't need to return vocabSize every request (not if filter = false for example))
       // this.setState({ vocabSize: json.data.vocabSize });
       this.setState((prevState) => ({
         ...prevState,

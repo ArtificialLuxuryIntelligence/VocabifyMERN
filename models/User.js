@@ -3,37 +3,41 @@ const bcrypt = require("bcryptjs");
 const UserSchema = new mongoose.Schema({
   email: {
     type: String,
-    default: ""
+    default: "",
   },
   password: {
     type: String,
-    default: ""
+    default: "",
   },
   isDeleted: {
     type: Boolean,
-    default: false
+    default: false,
   },
   signUpDate: {
     type: Date,
-    default: Date.now()
+    default: Date.now(),
   },
   words: {
     type: Object,
     default: {
-      en: { knownWords: ["the", "and"], unknownWords: [], vocabSize: 200 },
-      es: { knownWords: ["el", "la", "y"], unknownWords: [], vocabSize: 200 },
-      fr: { knownWords: ["le", "la", "et"], unknownWords: [], vocabSize: 200 }
-    }
+      en: { knownWords: ["the", "and"], unknownWords: [], vocabSize: 95000 },
+      es: { knownWords: ["el", "la", "y"], unknownWords: [], vocabSize: 49000 },
+      fr: {
+        knownWords: ["le", "la", "et"],
+        unknownWords: [],
+        vocabSize: 49000,
+      },
+    },
   },
   lang: {
     type: String,
-    default: "en"
-  }
+    default: "en",
+  },
 });
-UserSchema.methods.generateHash = function(password) {
+UserSchema.methods.generateHash = function (password) {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
-UserSchema.methods.validPassword = function(password) {
+UserSchema.methods.validPassword = function (password) {
   return bcrypt.compareSync(password, this.password);
 };
 module.exports = mongoose.model("User", UserSchema);

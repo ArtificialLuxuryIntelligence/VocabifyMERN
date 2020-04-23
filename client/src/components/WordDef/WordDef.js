@@ -106,14 +106,17 @@ class WordDef extends Component {
     } else {
       word = this.props.word;
     }
+    //to do : response popup params
+    let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,width=600,height=300,left=100,top=100`;
+    // window.open(
+    //   `https://www.google.com/search?q=translate%20${word}%20${this.props.lang}%20to%20english`,
+    //   "translate",
+    //   params
+    // );
     window.open(
-      `https://www.google.com/search?q=translate%20${word}%20${this.props.lang}%20to%20english`,
-      "",
-      "top=0,left=400"
-      // (),
-      // (status = "no"),
-      // (left = 0),
-      // (top = 0)
+      `https://translate.google.com/?um=1&ie=UTF-8&hl=en&client=tw-ob#${this.props.lang}/en/${word}`,
+      "translate",
+      params
     );
   };
 
