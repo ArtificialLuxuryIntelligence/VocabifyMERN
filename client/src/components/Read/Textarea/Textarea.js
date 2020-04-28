@@ -9,26 +9,6 @@ class Textarea extends Component {
     this.state = { value: "" };
   }
 
-  //no twoway state binding here. (maybe a better way)
-  //need the value to change when dropdown changes lang. (could lift state up to read component i suppose)
-
-  handleChange = (e) => {
-    this.setState({ value: e.target.value });
-  };
-  renderText = (lang) => {
-    console.log("render text called");
-    console.log(lang);
-
-    switch (lang) {
-      case "en":
-        return "English Test";
-      case "fr":
-        return "French TEST";
-      case "es":
-        return "Sánchez completará la ronda entre el jueves y el viernes con todas las fuerzas políticas, a cuyos representantes irá de recibiendo en el orden de mayor a menor representación parlamentaria. Con estas reuniones, el presidente del Gobierno persigue “avanzar hacia este gran pacto que permita sentar las bases de la España del día después tras vencer esta pandemia global”. “Tenemos que empezar hoy a construir ya la prosperidad del mañana”, ha asegurado Montero.";
-    }
-  };
-
   render() {
     return (
       <div>
@@ -59,6 +39,26 @@ class Textarea extends Component {
       </div>
     );
   }
+
+  //no twoway state binding here. (maybe a better way)
+  //need the value to change when dropdown changes lang. (could lift state up to read component i suppose)
+
+  handleChange = (e) => {
+    this.setState({ value: e.target.value });
+  };
+  renderText = (lang) => {
+    console.log("render text called");
+    console.log(lang);
+
+    switch (lang) {
+      case "en":
+        return "English Test";
+      case "fr":
+        return "French TEST";
+      case "es":
+        return "Sánchez completará la ronda entre el jueves y el viernes con todas las fuerzas políticas, a cuyos representantes irá de recibiendo en el orden de mayor a menor representación parlamentaria. Con estas reuniones, el presidente del Gobierno persigue “avanzar hacia este gran pacto que permita sentar las bases de la España del día después tras vencer esta pandemia global”. “Tenemos que empezar hoy a construir ya la prosperidad del mañana”, ha asegurado Montero.";
+    }
+  };
 }
 
 export default Textarea;

@@ -3,7 +3,7 @@ import { Switch, Route } from "react-router-dom";
 import axios from "axios";
 import auth from "./utils/auth";
 
-// import "./App.css";
+import "./App.scss";
 
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
@@ -27,6 +27,7 @@ class App extends Component {
         //before language is set..:
         placeholder: { knownWords: [], unknownWords: [], vocabSize: "" },
       },
+      navOpen: true,
     };
 
     this.addToAppState = this.addToAppState.bind(this);
@@ -36,9 +37,92 @@ class App extends Component {
     this.handleSignout = this.handleSignout.bind(this);
     this.sendAppStateToServer = this.sendAppStateToServer.bind(this);
     this.getDefinitions = this.getDefinitions.bind(this);
+    this.toggleNav = this.toggleNav.bind(this);
 
     this.saveToLocal = this.saveToLocal.bind(this);
   }
+
+  render() {
+    return (
+      <div className="container">
+        <div className="app-routes">
+          <Switch>
+            <Route
+              exact
+              path="/login"
+              render={(props) => (
+                <Signin
+                  {...props}
+                  addToAppState={this.addToAppState}
+                  // handleSignout={this.handleSignout}
+                />
+              )}
+            />
+
+            <Route
+              exact
+              path="/read"
+              render={(props) => (
+                <Read
+                  {...props}
+                  lang={this.state.lang}
+                  token={this.state.token}
+                  knownWords={this.state.words[this.state.lang].knownWords}
+                  unknownWords={this.state.words[this.state.lang].unknownWords}
+                  vocabSize={this.state.words[this.state.lang].vocabSize}
+                  addKnownWord={this.addKnownWord}
+                  addUnknownWord={this.addUnknownWord}
+                  removeWord={this.removeWord}
+                  handleSignout={this.handleSignout}
+                  getDefinitions={this.getDefinitions}
+                  addToAppState={this.addToAppState}
+                  sanitizeText={this.sanitizeText}
+                  navOpen={this.state.navOpen}
+                  toggleNav={this.toggleNav}
+                />
+              )}
+            />
+
+            <ProtectedRoute
+              exact
+              path="/"
+              component={Home}
+              lang={this.state.lang}
+              handleSignout={this.handleSignout}
+              vocabSize={this.state.words[this.state.lang].vocabSize}
+              getDefinitions={this.getDefinitions}
+              addKnownWord={this.addKnownWord}
+              addUnknownWord={this.addUnknownWord}
+              removeWord={this.removeWord}
+              unknownWords={this.state.words[this.state.lang].unknownWords}
+              addToAppState={this.addToAppState}
+              sanitizeText={this.sanitizeText}
+              navOpen={this.state.navOpen}
+              toggleNav={this.toggleNav}
+            />
+            <ProtectedRoute
+              exact
+              path="/account"
+              component={Account}
+              lang={this.state.lang}
+              handleSignout={this.handleSignout}
+              vocabSize={this.state.words[this.state.lang].vocabSize}
+              getDefinitions={this.getDefinitions}
+              addKnownWord={this.addKnownWord}
+              addUnknownWord={this.addUnknownWord}
+              removeWord={this.removeWord}
+              unknownWords={this.state.words[this.state.lang].unknownWords}
+              addToAppState={this.addToAppState}
+              sanitizeText={this.sanitizeText}
+              navOpen={this.state.navOpen}
+              toggleNav={this.toggleNav}
+            />
+          </Switch>
+        </div>
+      </div>
+    );
+  }
+
   componentDidMount() {
     //app holds its own islogged in state
     let obj = JSON.parse(localStorage.getItem("vocabify"));
@@ -273,77 +357,10 @@ class App extends Component {
     }
   };
 
-  render() {
-    return (
-      <div className="app-routes">
-        <Switch>
-          <Route
-            exact
-            path="/login"
-            render={(props) => (
-              <Signin
-                {...props}
-                addToAppState={this.addToAppState}
-                // handleSignout={this.handleSignout}
-              />
-            )}
-          />
+  toggleNav() {
+    console.log("toggle nav");
 
-          <Route
-            exact
-            path="/read"
-            render={(props) => (
-              <Read
-                {...props}
-                lang={this.state.lang}
-                token={this.state.token}
-                knownWords={this.state.words[this.state.lang].knownWords}
-                unknownWords={this.state.words[this.state.lang].unknownWords}
-                vocabSize={this.state.words[this.state.lang].vocabSize}
-                addKnownWord={this.addKnownWord}
-                addUnknownWord={this.addUnknownWord}
-                removeWord={this.removeWord}
-                handleSignout={this.handleSignout}
-                getDefinitions={this.getDefinitions}
-                addToAppState={this.addToAppState}
-                sanitizeText={this.sanitizeText}
-              />
-            )}
-          />
-
-          <ProtectedRoute
-            exact
-            path="/"
-            component={Home}
-            lang={this.state.lang}
-            handleSignout={this.handleSignout}
-            vocabSize={this.state.words[this.state.lang].vocabSize}
-            getDefinitions={this.getDefinitions}
-            addKnownWord={this.addKnownWord}
-            addUnknownWord={this.addUnknownWord}
-            removeWord={this.removeWord}
-            unknownWords={this.state.words[this.state.lang].unknownWords}
-            addToAppState={this.addToAppState}
-            sanitizeText={this.sanitizeText}
-          />
-          <ProtectedRoute
-            exact
-            path="/account"
-            component={Account}
-            lang={this.state.lang}
-            handleSignout={this.handleSignout}
-            vocabSize={this.state.words[this.state.lang].vocabSize}
-            getDefinitions={this.getDefinitions}
-            addKnownWord={this.addKnownWord}
-            addUnknownWord={this.addUnknownWord}
-            removeWord={this.removeWord}
-            unknownWords={this.state.words[this.state.lang].unknownWords}
-            addToAppState={this.addToAppState}
-            sanitizeText={this.sanitizeText}
-          />
-        </Switch>
-      </div>
-    );
+    this.setState({ navOpen: !this.state.navOpen });
   }
 }
 

@@ -69,7 +69,7 @@ const estimateUserVocab = async (lang, knownWords, unknownWords) => {
   let freqList = await getFreqList(lang);
 
   if (unknownWords.length < 3) {
-    return 200;
+    return freqList.length;
   } else {
     let indexArray = [];
 

@@ -24,6 +24,10 @@ class Signin extends Component {
     this.addToAppState = this.props.addToAppState;
   }
 
+  render() {
+    return <section id="entry-page">{this.currentView()}</section>;
+  }
+
   async componentDidMount() {
     //check to see if already logged in (
     // [using (less supported) null propogation operator)
@@ -215,10 +219,6 @@ class Signin extends Component {
         break;
     }
   };
-
-  render() {
-    return <section id="entry-page">{this.currentView()}</section>;
-  }
 }
 
 export default Signin;

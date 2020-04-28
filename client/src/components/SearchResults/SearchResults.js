@@ -11,23 +11,6 @@ class SearchResults extends Component {
     };
   }
 
-  // static getDerivedStateFromProps(props, state) {
-  //   if (props.lang !== state.lang) {
-  //     return {
-  //       lang: props.lang
-  //     };
-  //   }
-  // }
-
-  // componentDidUpdate(prevProps) {
-  //   //glitches if you refresh (calls didmount and didupdate?)
-  //   if (this.props.lang != prevProps.lang) {
-  //     console.log("did update");
-  //     this.getNewWord();
-  //   }
-  //   console.log("updated-  no lang change");
-  // }
-
   render() {
     return (
       <div className="search-results">
@@ -49,6 +32,23 @@ class SearchResults extends Component {
       </div>
     );
   }
+
+  // static getDerivedStateFromProps(props, state) {
+  //   if (props.lang !== state.lang) {
+  //     return {
+  //       lang: props.lang
+  //     };
+  //   }
+  // }
+
+  // componentDidUpdate(prevProps) {
+  //   //glitches if you refresh (calls didmount and didupdate?)
+  //   if (this.props.lang != prevProps.lang) {
+  //     console.log("did update");
+  //     this.getNewWord();
+  //   }
+  //   console.log("updated-  no lang change");
+  // }
 }
 
 export default SearchResults;

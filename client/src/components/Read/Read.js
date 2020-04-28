@@ -3,10 +3,10 @@
 import React, { Component } from "react";
 // import { Redirect } from "react-router-dom";
 // import auth from "../../utils/auth";
-import "./Read.css";
+import "./Read.scss";
 
 import Nav from "../Nav/Nav";
-import Sidebar from "./Sidebar/Sidebar";
+import Sidebar from "../Sidebar/Sidebar";
 import LanguageDropdown from "../LanguageDropdown/LanguageDropdown";
 
 import Textarea from "./Textarea/Textarea";
@@ -41,6 +41,84 @@ class Read extends Component {
     this.handleSpanClick = this.handleSpanClick.bind(this);
   }
 
+  render() {
+    const currentView = this.state.currentView;
+    if (currentView === "submit") {
+      return (
+        <div className="read grid-container">
+          <Nav handleSignout={this.props.handleSignout} />
+
+          <div className="content">
+            <div className="main">
+              <h2>Read</h2>
+              <LanguageDropdown
+                handleDropdownChange={this.handleDropdownChange}
+                lang={this.props.lang}
+              ></LanguageDropdown>
+              <div className="text-submit">
+                <Textarea
+                  handleSubmit={this.handleSubmit}
+                  unknownWords={this.props.unknownWords}
+                  lang={this.props.lang}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div className="read grid-container">
+          <Nav handleSignout={this.props.handleSignout} />
+
+          <div className="content">
+            <div className="main">
+              <h2>Read</h2>
+              <LanguageDropdown
+                handleDropdownChange={this.handleDropdownChange}
+                lang={this.props.lang}
+              ></LanguageDropdown>
+
+              <div className="reader">
+                <Textreader
+                  fullText={this.state.fullText} //remove
+                  fullTextSplit={this.state.fullTextSplit}
+                  handleNewText={this.handleNewText}
+                  handleSpanClick={this.handleSpanClick}
+                  pageNumber={this.state.pageNumber}
+                  handleNextPage={this.handleNextPage}
+                  handlePrevPage={this.handlePrevPage}
+                />
+              </div>
+            </div>
+
+            {/* <div id="sidebar-nav-sm">
+              <button onClick={() => this.props.toggleNav()}>open</button>
+            </div> */}
+            <Sidebar
+              history={this.props.history}
+              lang={this.props.lang}
+              definitionJSON={this.state.definitionJSON}
+              unknownWords={this.props.unknownWords}
+              handleRemoveWord={this.handleRemoveWord}
+              handleDeleteWord={this.handleDeleteWord}
+              // handleAddWord={this.handleAddWord}
+              getDefinitions={this.props.getDefinitions}
+              addKnownWord={this.props.addKnownWord}
+              addUnknownWord={this.props.addUnknownWord}
+              removeWord={this.props.removeWord}
+              sidebarWords={this.state.sidebarWords}
+              handleSpanClick={this.handleSpanClick}
+              isLoading={this.state.isLoading}
+              isNewWordLoading={this.state.isNewWordLoading}
+              pageNumber={this.state.pageNumber}
+              sidebarMessage={this.state.sidebarMessage}
+            />
+          </div>
+        </div>
+      );
+    }
+  }
   //avoiding settings state from received props when page refreshed (as done in constructor)
   // maybe can do with component will receive props?
   componentDidMount() {
@@ -305,76 +383,6 @@ class Read extends Component {
     this.setState({ sidebarWords: [] }); // clears current sidebar (not the JSONdefinitions in the state but they get overwritten on next text submission)
     this.props.addToAppState("lang", e.target.value);
   };
-
-  render() {
-    const currentView = this.state.currentView;
-    if (currentView === "submit") {
-      return (
-        <div className="read">
-          <Nav handleSignout={this.props.handleSignout} />
-          <h1>Read</h1>
-          <h2>Submit</h2>
-
-          <LanguageDropdown
-            handleDropdownChange={this.handleDropdownChange}
-            lang={this.props.lang}
-          ></LanguageDropdown>
-
-          <Textarea
-            handleSubmit={this.handleSubmit}
-            unknownWords={this.props.unknownWords}
-            lang={this.props.lang}
-          />
-        </div>
-      );
-    } else {
-      return (
-        <div className="read">
-          <Nav handleSignout={this.props.handleSignout} />
-          <h1>Read</h1>
-
-          <LanguageDropdown
-            handleDropdownChange={this.handleDropdownChange}
-            lang={this.props.lang}
-          ></LanguageDropdown>
-
-          <div className="content">
-            <div className="main">
-              <Textreader
-                fullText={this.state.fullText} //remove
-                fullTextSplit={this.state.fullTextSplit}
-                handleNewText={this.handleNewText}
-                handleSpanClick={this.handleSpanClick}
-                pageNumber={this.state.pageNumber}
-                handleNextPage={this.handleNextPage}
-                handlePrevPage={this.handlePrevPage}
-              />
-            </div>
-
-            <Sidebar
-              history={this.props.history}
-              lang={this.props.lang}
-              definitionJSON={this.state.definitionJSON}
-              unknownWords={this.props.unknownWords}
-              handleRemoveWord={this.handleRemoveWord}
-              handleDeleteWord={this.handleDeleteWord}
-              // handleAddWord={this.handleAddWord}
-              getDefinitions={this.props.getDefinitions}
-              addKnownWord={this.props.addKnownWord}
-              addUnknownWord={this.props.addUnknownWord}
-              removeWord={this.props.removeWord}
-              sidebarWords={this.state.sidebarWords}
-              handleSpanClick={this.handleSpanClick}
-              isLoading={this.state.isLoading}
-              isNewWordLoading={this.state.isNewWordLoading}
-              pageNumber={this.state.pageNumber}
-              sidebarMessage={this.state.sidebarMessage}
-            />
-          </div>
-        </div>
-      );
-    }
-  }
 }
 
 export default Read;

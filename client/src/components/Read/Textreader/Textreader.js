@@ -23,8 +23,10 @@ class Textreader extends Component {
           ></Spanner>
         </div>
 
-        <button onClick={this.props.handlePrevPage}>previous page</button>
-        <button onClick={this.props.handleNextPage}>next page</button>
+        <div className="buttons">
+          <button onClick={this.props.handlePrevPage}>previous page</button>
+          <button onClick={this.props.handleNextPage}>next page</button>
+        </div>
       </div>
     );
   }
