@@ -15,7 +15,7 @@ var isAuthenticated = require("../middleware/isAuthenticated");
 
 //get correct language frequency list
 
-const getFreqList = async lang => {
+const getFreqList = async (lang) => {
   switch (lang) {
     case "en":
       return freqListEN;
@@ -26,15 +26,13 @@ const getFreqList = async lang => {
   }
 };
 
-const encodeCharacters = string => {
+const encodeCharacters = (string) => {
   return encodeURI(string);
 };
 
-// API requests
-
 // generates array of fetch requests (one per word)
 const fetchArray = (wordArray, lang) => {
-  let result = wordArray.map(word =>
+  let result = wordArray.map((word) =>
     axios.get(
       `https://mydictionaryapi.appspot.com/?define=${encodeCharacters(
         word.trim()
@@ -52,11 +50,11 @@ async function fetchDefinitions(wordArray, lang) {
     responses = await Promise.allSettled(fetchArray(wordArray, lang));
     // console.log(responses);
   } catch (err) {
-    err => console.log(err);
+    (err) => console.log("fetch error", err);
   }
   let obj = responses
-    .map(res => (res.status === "fulfilled" ? res.value.data : null))
-    .filter(def => def !== null);
+    .map((res) => (res.status === "fulfilled" ? res.value.data : null))
+    .filter((def) => def !== null);
   //obj can be empty
   return obj;
 }
@@ -71,15 +69,15 @@ const estimateUserVocab = async (lang, knownWords, unknownWords) => {
   let freqList = await getFreqList(lang);
 
   if (unknownWords.length < 3) {
-    return 200;
+    return freqList.length;
   } else {
     let indexArray = [];
 
-    unknownWords.forEach(word => {
+    unknownWords.forEach((word) => {
       indexArray.push(freqList.indexOf(word));
       console.log("saved word", word, freqList.indexOf(word));
 
-      indexArray = indexArray.filter(index => index > 0); // only uses words that are in the freqList
+      indexArray = indexArray.filter((index) => index > 0); // only uses words that are in the freqList
       vocabSize = indexArray.reduce((a, b) => a + b, 0) / indexArray.length;
 
       //CALLIBRATION - brings down estimate by 10% (catches more words)
@@ -108,13 +106,14 @@ const filterGivenVocabSize = async (
   let freqList = await getFreqList(lang);
   let userVocab = freqList.slice(0, vocabSize);
   let filteredWords = queryWords.filter(
-    word => userVocab.indexOf(word) === -1 || unknownWords.indexOf(word) !== -1
+    (word) =>
+      userVocab.indexOf(word) === -1 || unknownWords.indexOf(word) !== -1
   );
   console.log(
     " removed (reason: given calculated vocab size)",
     queryWords
-      .filter(x => !filteredWords.includes(x))
-      .concat(filteredWords.filter(x => !queryWords.includes(x)))
+      .filter((x) => !filteredWords.includes(x))
+      .concat(filteredWords.filter((x) => !queryWords.includes(x)))
   );
 
   return filteredWords;
@@ -122,14 +121,15 @@ const filterGivenVocabSize = async (
 
 const filterGivenUserWords = async (knownWords, unknownWords, queryWords) => {
   let filteredWords = queryWords.filter(
-    word => knownWords.indexOf(word) === -1 || unknownWords.indexOf(word) !== -1
+    (word) =>
+      knownWords.indexOf(word) === -1 || unknownWords.indexOf(word) !== -1
   );
   console.log(
     //fancy way of showing what was removed
     "removed (reason: given user words)",
     queryWords
-      .filter(x => !filteredWords.includes(x))
-      .concat(filteredWords.filter(x => !queryWords.includes(x)))
+      .filter((x) => !filteredWords.includes(x))
+      .concat(filteredWords.filter((x) => !queryWords.includes(x)))
   );
   return filteredWords;
 };
@@ -148,7 +148,7 @@ const filterDefinitions = async (
   function removeDupes(arr) {
     let noDupes = [];
     let words = [];
-    arr.map(function(x) {
+    arr.map(function (x) {
       if (!words.includes(x[0].word)) {
         words.push(x[0].word);
         noDupes.push(x);
@@ -159,10 +159,10 @@ const filterDefinitions = async (
   definitions = removeDupes(definitions);
   /// ----------------------------------------------------
 
-  let definitionWords = definitions.map(x => x[0].word);
+  let definitionWords = definitions.map((x) => x[0].word);
   console.log("definitions received: ", definitionWords.length);
 
-  definitionWords.forEach(word => {
+  definitionWords.forEach((word) => {
     console.log("checking:", word);
     let inUserVocab = userVocab.indexOf(word) >= 0 ? true : false;
     let inKnownWords = knownWords.indexOf(word) >= 0 ? true : false;
@@ -218,18 +218,28 @@ async function getRandomWord(wordRange, lang, attempts) {
   }
 }
 
-// -------------------------------
+// ------------------------------- ----------------------------------------------------------------------------------------------------------------------------
 
 // ---------- ROUTES ----------
 
 //Get word definitions
+//protect all routes
+router.use("/", isAuthenticated, (req, res, next) => {
+  next();
+});
 
-router.post("/definitions", isAuthenticated, async (req, res, next) => {
+//should be 'GET' with with query string
+// or from https://www.moesif.com/blog/technical/api-design/REST-API-Design-Best-Practices-for-Parameters-and-Query-String-Usage/
+//  quote: We would POST a new request to our /searches endpoint, that holds our search configuration/parameters in the body. A search ID is returned, which we can use later to GET the results of our search.
+router.post("/definitions", async (req, res, next) => {
   console.log("getting definitions");
 
   let queryWords = req.body.words;
   let lang = req.body.lang;
   let filter = req.body.filter;
+
+  //knowWords and unknownWords could be got from database (with only the new additions (this 'session') supplied in request - then combined)
+  // req.userData from isAuthenticated middleware
   let knownWords = req.body.knownWords;
   let unknownWords = req.body.unknownWords;
 
@@ -258,8 +268,8 @@ router.post("/definitions", isAuthenticated, async (req, res, next) => {
   console.log("fetching...");
   console.log(queryWords, lang);
 
-  let definitions = await fetchDefinitions(queryWords, lang).catch(err =>
-    console.log(err)
+  let definitions = await fetchDefinitions(queryWords, lang).catch((err) =>
+    console.log("fetch error", err)
   );
 
   // filter returned returned defintion words for known words (may be slightly different from requested words e.g. conjugations etc)
@@ -287,7 +297,7 @@ router.post("/definitions", isAuthenticated, async (req, res, next) => {
 
 // put in user route??
 
-router.post("/random", isAuthenticated, async (req, res, next) => {
+router.post("/random", async (req, res, next) => {
   //this route doesnt estimate vocab size (uses previous calculation)
   let vocabSize = req.body.vocabSize;
   let knownWords = req.body.knownWords;
@@ -310,7 +320,7 @@ router.post("/random", isAuthenticated, async (req, res, next) => {
   let wordRange = freqList.slice(min, max); // set min/max-length
   // console.log(wordRange);
 
-  let response = await getRandomWord(wordRange, lang, 2).catch(err =>
+  let response = await getRandomWord(wordRange, lang, 2).catch((err) =>
     console.log("can't get random word", err)
   );
   // console.log("response", response);

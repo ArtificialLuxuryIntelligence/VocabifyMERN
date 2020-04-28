@@ -3,7 +3,7 @@ import { Switch, Route } from "react-router-dom";
 import axios from "axios";
 import auth from "./utils/auth";
 
-// import "./App.css";
+import "./App.scss";
 
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
@@ -24,9 +24,10 @@ class App extends Component {
         en: { knownWords: [], unknownWords: [], vocabSize: "" },
         es: { knownWords: [], unknownWords: [], vocabSize: "" },
         fr: { knownWords: [], unknownWords: [], vocabSize: "" },
-
-        placeholder: { knownWords: [], unknownWords: [], vocabSize: "" }
-      }
+        //before language is set..:
+        placeholder: { knownWords: [], unknownWords: [], vocabSize: "" },
+      },
+      navOpen: true,
     };
 
     this.addToAppState = this.addToAppState.bind(this);
@@ -36,10 +37,94 @@ class App extends Component {
     this.handleSignout = this.handleSignout.bind(this);
     this.sendAppStateToServer = this.sendAppStateToServer.bind(this);
     this.getDefinitions = this.getDefinitions.bind(this);
+    this.toggleNav = this.toggleNav.bind(this);
 
     this.saveToLocal = this.saveToLocal.bind(this);
   }
+
+  render() {
+    return (
+      <div className="container">
+        <div className="app-routes">
+          <Switch>
+            <Route
+              exact
+              path="/login"
+              render={(props) => (
+                <Signin
+                  {...props}
+                  addToAppState={this.addToAppState}
+                  // handleSignout={this.handleSignout}
+                />
+              )}
+            />
+
+            <Route
+              exact
+              path="/read"
+              render={(props) => (
+                <Read
+                  {...props}
+                  lang={this.state.lang}
+                  token={this.state.token}
+                  knownWords={this.state.words[this.state.lang].knownWords}
+                  unknownWords={this.state.words[this.state.lang].unknownWords}
+                  vocabSize={this.state.words[this.state.lang].vocabSize}
+                  addKnownWord={this.addKnownWord}
+                  addUnknownWord={this.addUnknownWord}
+                  removeWord={this.removeWord}
+                  handleSignout={this.handleSignout}
+                  getDefinitions={this.getDefinitions}
+                  addToAppState={this.addToAppState}
+                  sanitizeText={this.sanitizeText}
+                  navOpen={this.state.navOpen}
+                  toggleNav={this.toggleNav}
+                />
+              )}
+            />
+
+            <ProtectedRoute
+              exact
+              path="/"
+              component={Home}
+              lang={this.state.lang}
+              handleSignout={this.handleSignout}
+              vocabSize={this.state.words[this.state.lang].vocabSize}
+              getDefinitions={this.getDefinitions}
+              addKnownWord={this.addKnownWord}
+              addUnknownWord={this.addUnknownWord}
+              removeWord={this.removeWord}
+              unknownWords={this.state.words[this.state.lang].unknownWords}
+              addToAppState={this.addToAppState}
+              sanitizeText={this.sanitizeText}
+              navOpen={this.state.navOpen}
+              toggleNav={this.toggleNav}
+            />
+            <ProtectedRoute
+              exact
+              path="/account"
+              component={Account}
+              lang={this.state.lang}
+              handleSignout={this.handleSignout}
+              vocabSize={this.state.words[this.state.lang].vocabSize}
+              getDefinitions={this.getDefinitions}
+              addKnownWord={this.addKnownWord}
+              addUnknownWord={this.addUnknownWord}
+              removeWord={this.removeWord}
+              unknownWords={this.state.words[this.state.lang].unknownWords}
+              addToAppState={this.addToAppState}
+              sanitizeText={this.sanitizeText}
+              navOpen={this.state.navOpen}
+              toggleNav={this.toggleNav}
+            />
+          </Switch>
+        </div>
+      </div>
+    );
+  }
+
   componentDidMount() {
+    //app holds its own islogged in state
     let obj = JSON.parse(localStorage.getItem("vocabify"));
     if (obj && obj.isLoggedIn) {
       // let { knownWords, unknownWords, vocabSize, lang, words } = obj; //to be removed
@@ -76,27 +161,36 @@ class App extends Component {
   //set global App state
   addToAppState(key, value) {
     this.setState({ [key]: value });
+    console.log("key", key, "value", value);
+
     // console.log(this.state);
     this.saveToLocal();
   }
 
   sendAppStateToServer = async () => {
     let obj = {
-      id: JSON.parse(localStorage.getItem("vocabify")).token,
+      // id: JSON.parse(localStorage.getItem("vocabify")).token,
       words: this.state.words,
-      lang: this.state.lang
+      lang: this.state.lang,
     };
     console.log(obj);
-
+    let token = JSON.parse(localStorage.getItem("vocabify")).token;
     //trycatch
     let res = await axios.post("/users/updateuser", obj, {
-      headers: { token: JSON.parse(localStorage.getItem("vocabify")).token }
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `bearer ${token}`,
+      },
     });
-    console.log(res);
+    if (res.data.message === "User updated") {
+      return { success: true };
+    } else {
+      return { success: false };
+    }
   };
 
   //removes dupulicates
-  uniq = a => {
+  uniq = (a) => {
     return Array.from(new Set(a));
   };
 
@@ -110,11 +204,11 @@ class App extends Component {
       .replace(/[.,/#!?$%^&*;:{}“”=_`~()]/g, "")
       .toLowerCase()
       .split(" ")
-      .map(word => word.trim())
-      .filter(word => word.length > 0);
+      .map((word) => word.trim())
+      .filter((word) => word.length > 0);
 
     if (lang === "fr") {
-      inputText = inputText.map(word =>
+      inputText = inputText.map((word) =>
         word.replace(/^l'|^l’|^m'|^m’|^t'|^t’|^s'|^s’/gi, "")
       );
       console.log(lang);
@@ -127,7 +221,6 @@ class App extends Component {
   getDefinitions = async (wordArray, filter) => {
     let token = JSON.parse(localStorage.getItem("vocabify")).token;
     let obj = {
-      token: token,
       lang: this.state.lang,
       // knownWords: this.state.knownWords, //to be removed
       // unknownWords: this.state.unknownWords, //to be removed
@@ -135,36 +228,42 @@ class App extends Component {
       unknownWords: this.state.words[this.state.lang].unknownWords,
       // vocabSize: this.state.vocabSize,
       words: wordArray,
-      filter: filter
+      filter: filter,
     };
     let headers = {
-      token
+      "Content-Type": "application/json",
+      Authorization: `bearer ${token}`,
     };
     // console.log(obj);
     //try catch
+    try {
+      let json = await axios.post("/words/definitions", obj, { headers });
+      console.log("vocabSize", json.data.vocabSize);
+      console.log(json.data);
 
-    let json = await axios
-      .post("/words/definitions", obj, { headers })
-      .catch(err => {
-        console.log(("error", err));
-      });
-
-    console.log("vocabSize", json.data.vocabSize);
-    console.log(json.data);
-
-    // this.setState({ vocabSize: json.data.vocabSize });
-    this.setState(prevState => ({
-      ...prevState,
-      words: {
-        ...prevState.words,
-        [this.state.lang]: {
-          ...prevState.words[this.state.lang],
-          vocabSize: json.data.vocabSize
-        }
+      // conditionally set vocabsize? (/words/definitions route doesn't need to return vocabSize every request (not if filter = false for example))
+      // this.setState({ vocabSize: json.data.vocabSize });
+      this.setState((prevState) => ({
+        ...prevState,
+        words: {
+          ...prevState.words,
+          [this.state.lang]: {
+            ...prevState.words[this.state.lang],
+            vocabSize: json.data.vocabSize,
+          },
+        },
+      }));
+      return json.data.definitions;
+    } catch (err) {
+      if (err.response && err.response.status === 401) {
+        console.log("unauthorized.. loggin out");
+        auth.loggingOut();
+        //force rerender (=> redirect to login page now there is no token  )
+        //this saves from having to check auth state in every component at every update (protected routes check when they mount)
+        this.forceUpdate();
       }
-    }));
-
-    return json.data.definitions;
+      console.log(err);
+    }
   };
   addKnownWord(word) {
     let { knownWords, unknownWords } = this.state.words[this.state.lang];
@@ -174,16 +273,16 @@ class App extends Component {
     }
     // this.setState({ knownWords, unknownWords }); //change
 
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       ...prevState,
       words: {
         ...prevState.words,
         [this.state.lang]: {
           ...prevState.words[this.state.lang],
           knownWords,
-          unknownWords
-        }
-      }
+          unknownWords,
+        },
+      },
     }));
 
     this.saveToLocal();
@@ -201,16 +300,16 @@ class App extends Component {
     }
     // this.setState({ knownWords, unknownWords }); //change
 
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       ...prevState,
       words: {
         ...prevState.words,
         [this.state.lang]: {
           ...prevState.words[this.state.lang],
           knownWords,
-          unknownWords
-        }
-      }
+          unknownWords,
+        },
+      },
     }));
 
     this.saveToLocal();
@@ -227,119 +326,41 @@ class App extends Component {
 
     // this.setState({ knownWords, unknownWords });
 
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       ...prevState,
       words: {
         ...prevState.words,
         [this.state.lang]: {
           ...prevState.words[this.state.lang],
           knownWords,
-          unknownWords
-        }
-      }
+          unknownWords,
+        },
+      },
     }));
 
     this.saveToLocal();
   }
 
-  handleSignout = async e => {
-    this.saveToLocal();
-
+  handleSignout = async (e) => {
+    // this.saveToLocal();
     e.preventDefault();
     console.log("...Signing out");
 
     //update user data on server
-    await this.sendAppStateToServer();
-
-    ///end session
-    let token = JSON.parse(localStorage.getItem("vocabify")).token;
-    //trycatch
-    let res = await axios.post("/users/signout?token=" + token, {
-      headers: {
-        token
-      }
-    });
-
-    if (res.data.success) {
+    let signout = await this.sendAppStateToServer();
+    if (signout.success) {
       auth.loggingOut();
       this.setState({ navigate: true });
     } else {
-      //send message to user here
-      console.log("could not log out");
+      //handle failure
+      console.log("update failed");
     }
   };
 
-  render() {
-    return (
-      <div className="app-routes">
-        <Switch>
-          <Route
-            exact
-            path="/login"
-            render={props => (
-              <Signin
-                {...props}
-                addToAppState={this.addToAppState}
-                // handleSignout={this.handleSignout}
-              />
-            )}
-          />
+  toggleNav() {
+    console.log("toggle nav");
 
-          <Route
-            exact
-            path="/read"
-            render={props => (
-              <Read
-                {...props}
-                lang={this.state.lang}
-                token={this.state.token}
-                knownWords={this.state.words[this.state.lang].knownWords}
-                unknownWords={this.state.words[this.state.lang].unknownWords}
-                vocabSize={this.state.words[this.state.lang].vocabSize}
-                addKnownWord={this.addKnownWord}
-                addUnknownWord={this.addUnknownWord}
-                removeWord={this.removeWord}
-                handleSignout={this.handleSignout}
-                getDefinitions={this.getDefinitions}
-                addToAppState={this.addToAppState}
-                sanitizeText={this.sanitizeText}
-              />
-            )}
-          />
-
-          <ProtectedRoute
-            exact
-            path="/"
-            component={Home}
-            lang={this.state.lang}
-            handleSignout={this.handleSignout}
-            vocabSize={this.state.words[this.state.lang].vocabSize}
-            getDefinitions={this.getDefinitions}
-            addKnownWord={this.addKnownWord}
-            addUnknownWord={this.addUnknownWord}
-            removeWord={this.removeWord}
-            unknownWords={this.state.words[this.state.lang].unknownWords}
-            addToAppState={this.addToAppState}
-            sanitizeText={this.sanitizeText}
-          />
-          <ProtectedRoute
-            exact
-            path="/account"
-            component={Account}
-            lang={this.state.lang}
-            handleSignout={this.handleSignout}
-            vocabSize={this.state.words[this.state.lang].vocabSize}
-            getDefinitions={this.getDefinitions}
-            addKnownWord={this.addKnownWord}
-            addUnknownWord={this.addUnknownWord}
-            removeWord={this.removeWord}
-            unknownWords={this.state.words[this.state.lang].unknownWords}
-            addToAppState={this.addToAppState}
-            sanitizeText={this.sanitizeText}
-          />
-        </Switch>
-      </div>
-    );
+    this.setState({ navOpen: !this.state.navOpen });
   }
 }
 

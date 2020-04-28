@@ -1,0 +1,65 @@
+// * {
+//   box-sizing: border-box;
+// }
+
+// .title {
+//   color: blue;
+// }
+// /*
+// .sidebar {
+//   width: 20vw;
+//   position: absolute;
+//   right: 0;
+//   top: 10%;
+// } */
+
+// .reading-cont {
+//   position: relative;
+// }
+
+// .read .sidebar-sticky {
+//   border-bottom: 1px solid rgba(0, 0, 0, 0.589);
+// }
+
+@import "../../styles/mixinresponsive.scss";
+
+$sidebar-nav-height: 3rem;
+
+.content {
+  // display: flex;
+
+  .main {
+    // padding-right: 25%;
+    padding-bottom: $sidebar-nav-height;
+
+    h2 {
+      margin-top: 0rem;
+      // padding-top: 3rem;
+      // padding:
+    }
+    .text-submit {
+      textarea {
+        min-height: 4rem;
+        width: 80%;
+        max-width: 120%;
+      }
+      button {
+        // text-align: right;
+        display: block;
+      }
+    }
+    .reader {
+      .text {
+        margin-bottom: 3rem;
+      }
+      .buttons {
+        text-align: center;
+      }
+    }
+  }
+  @include breakpoint(md) {
+    .main {
+      padding: 2rem 25% 3rem 4rem;
+    }
+  }
+}

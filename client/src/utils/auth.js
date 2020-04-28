@@ -4,19 +4,13 @@ const auth = {
   },
   loggingOut() {
     //currently removes all
-    localStorage.setItem(
-      "vocabify",
-      JSON.stringify({
-        isLoggedIn: false,
-        token: null,
-        vocabSize: null,
-        savedDefinitions: null,
-        words: null,
-        lang: null
-      })
-    );
+    //send app data back to server here?
+    localStorage.setItem("vocabify", JSON.stringify({}));
   },
+  //doesnt work if token has expired (probably redundant)- see router for redirect if passport cannot authenticate
+  //server lookup here
 
+  // "/users/authcheck" returns 401 or 200
   isLoggedIn() {
     let obj = JSON.parse(localStorage.getItem("vocabify"));
     if (obj && obj.isLoggedIn) {
@@ -24,7 +18,7 @@ const auth = {
     } else {
       return false;
     }
-  }
+  },
 };
 
 export default auth;

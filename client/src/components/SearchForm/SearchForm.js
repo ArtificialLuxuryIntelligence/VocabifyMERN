@@ -8,6 +8,24 @@ class SearchForm extends Component {
     super(props);
   }
 
+  render() {
+    return (
+      <div className="search-form">
+        <h3 id="search-heading">search</h3>
+        <form id="searchForm">
+          <input
+            name="searchTerm"
+            ref="searchTerm"
+            value={this.props.value}
+            onChange={this.props.handleChange}
+            lang={this.props.lang}
+          />
+          <button onClick={this.props.handleSubmit}>submit</button>
+        </form>
+      </div>
+    );
+  }
+
   // static getDerivedStateFromProps(props, state) {
   //   if (props.lang !== state.lang) {
   //     return {
@@ -24,24 +42,6 @@ class SearchForm extends Component {
   //   }
   //   console.log("updated-  no lang change");
   // }
-
-  render() {
-    return (
-      <div className="search-form">
-        <h3>Search for a word:</h3>
-        <form id="searchForm">
-          <input
-            name="searchTerm"
-            ref="searchTerm"
-            value={this.props.value}
-            onChange={this.props.handleChange}
-            lang={this.props.lang}
-          />
-          <button onClick={this.props.handleSubmit}>submit</button>
-        </form>
-      </div>
-    );
-  }
 }
 
 export default SearchForm;

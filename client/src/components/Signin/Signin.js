@@ -15,7 +15,7 @@ class Signin extends Component {
       signInPassword: "",
       signUpEmail: "",
       signUpPassword: "",
-      currentView: "signIn"
+      currentView: "signIn",
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -24,10 +24,37 @@ class Signin extends Component {
     this.addToAppState = this.props.addToAppState;
   }
 
-  changeView = view => {
+  render() {
+    return <section id="entry-page">{this.currentView()}</section>;
+  }
+
+  async componentDidMount() {
+    //check to see if already logged in (
+    // [using (less supported) null propogation operator)
+    // if (localStorage.getItem("vocabify")?.token) {
+    // }]
+
+    if (
+      localStorage.getItem("vocabify") &&
+      JSON.parse(localStorage.getItem("vocabify")).token
+    ) {
+      let token = JSON.parse(localStorage.getItem("vocabify")).token;
+      let headers = {
+        "Content-Type": "application/json",
+        Authorization: `bearer ${token}`,
+      };
+
+      let res = await axios.post("/users/authcheck", null, { headers });
+      if (res.status === 200) {
+        this.props.history.push("/");
+      }
+    }
+  }
+
+  changeView = (view) => {
     this.setState({
       currentView: view,
-      message: ""
+      message: "",
     });
   };
 
@@ -44,24 +71,17 @@ class Signin extends Component {
 
     axios
       .post("/users/signin", obj)
-      .then(res => {
+      .then((res) => {
         if (res.data.success) {
           auth.loggingIn();
           console.log(res.data);
 
-          let {
-            token,
-            knownWords,
-            unknownWords,
-            vocabSize,
-            lang,
-            words
-          } = res.data;
+          let { token, vocabSize, lang, words } = res.data;
 
           //setting App state
           // this.addToAppState("token", token);
-          this.addToAppState("knownWords", knownWords); // to be removed
-          this.addToAppState("unknownWords", unknownWords); // to be removed
+          // this.addToAppState("knownWords", knownWords); // to be removed
+          // this.addToAppState("unknownWords", unknownWords); // to be removed
           this.addToAppState("vocabSize", vocabSize);
           this.addToAppState("lang", lang);
           this.addToAppState("words", words);
@@ -70,8 +90,8 @@ class Signin extends Component {
           //setting local storage ----
           const local = JSON.parse(localStorage.getItem("vocabify")) || {};
           local.token = token;
-          local.knownWords = knownWords;
-          local.unknownWords = unknownWords;
+          // local.knownWords = knownWords;
+          // local.unknownWords = unknownWords;
           local.vocabSize = vocabSize;
           local.lang = lang;
           local.words = words;
@@ -87,7 +107,7 @@ class Signin extends Component {
           console.log(res.data.message);
         }
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   }
 
   handleSignUp(e) {
@@ -99,7 +119,7 @@ class Signin extends Component {
 
     axios
       .post("/users/signup", obj)
-      .then(res => {
+      .then((res) => {
         console.log(res.data);
 
         if (res.data.success === true) {
@@ -111,7 +131,7 @@ class Signin extends Component {
           console.log(res.data.message);
         }
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   }
   currentView = () => {
     switch (this.state.currentView) {
@@ -146,7 +166,7 @@ class Signin extends Component {
                 </li>
               </ul>
             </fieldset>
-            <button onClick={e => this.handleSignUp(e)}>Sign up</button>
+            <button onClick={(e) => this.handleSignUp(e)}>Sign up</button>
             <button type="button" onClick={() => this.changeView("signIn")}>
               Have an account?
             </button>
@@ -183,7 +203,7 @@ class Signin extends Component {
                 </li>
               </ul>
             </fieldset>
-            <button onClick={e => this.handleSignIn(e)}>Login</button>
+            <button onClick={(e) => this.handleSignIn(e)}>Login</button>
             <button
               type="button"
               onClick={() => {
@@ -199,10 +219,6 @@ class Signin extends Component {
         break;
     }
   };
-
-  render() {
-    return <section id="entry-page">{this.currentView()}</section>;
-  }
 }
 
 export default Signin;

@@ -8,3 +8,9 @@
   display: inline-block;
   float: none;
 }
+
+.testLink {
+  cursor: pointer;
+  font-weight: bold;
+  color: blue;
+}

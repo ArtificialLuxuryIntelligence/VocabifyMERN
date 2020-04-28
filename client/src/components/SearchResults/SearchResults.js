@@ -7,26 +7,9 @@ class SearchResults extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      lang: this.props.lang
+      lang: this.props.lang,
     };
   }
-
-  // static getDerivedStateFromProps(props, state) {
-  //   if (props.lang !== state.lang) {
-  //     return {
-  //       lang: props.lang
-  //     };
-  //   }
-  // }
-
-  // componentDidUpdate(prevProps) {
-  //   //glitches if you refresh (calls didmount and didupdate?)
-  //   if (this.props.lang != prevProps.lang) {
-  //     console.log("did update");
-  //     this.getNewWord();
-  //   }
-  //   console.log("updated-  no lang change");
-  // }
 
   render() {
     return (
@@ -49,6 +32,23 @@ class SearchResults extends Component {
       </div>
     );
   }
+
+  // static getDerivedStateFromProps(props, state) {
+  //   if (props.lang !== state.lang) {
+  //     return {
+  //       lang: props.lang
+  //     };
+  //   }
+  // }
+
+  // componentDidUpdate(prevProps) {
+  //   //glitches if you refresh (calls didmount and didupdate?)
+  //   if (this.props.lang != prevProps.lang) {
+  //     console.log("did update");
+  //     this.getNewWord();
+  //   }
+  //   console.log("updated-  no lang change");
+  // }
 }
 
 export default SearchResults;
