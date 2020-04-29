@@ -145,6 +145,7 @@ class Sidebar extends Component {
                           handleDeleteWord={this.props.handleDeleteWord}
                           unknownWords={this.props.unknownWords}
                           addToAppState={this.props.addToAppState}
+                          deleteButton={true}
                         ></WordDef>
                         <hr />
                       </div>

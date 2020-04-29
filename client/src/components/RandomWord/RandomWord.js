@@ -79,6 +79,7 @@ class RandomWord extends Component {
           removeWord={this.props.removeWord}
           unknownWords={this.props.unknownWords}
           addToAppState={this.props.addToAppState}
+          deleteButton={false}
         />
       </div>
     );
