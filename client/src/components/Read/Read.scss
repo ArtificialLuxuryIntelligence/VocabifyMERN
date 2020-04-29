@@ -39,8 +39,9 @@ $sidebar-nav-height: 3rem;
     }
     .text-submit {
       textarea {
-        min-height: 4rem;
+        min-height: 40vh;
         width: 100%;
+        max-width: 100%;
         // max-width: 120%;
       }
       button {
