@@ -106,6 +106,16 @@ class Sidebar extends Component {
             {this.props.sidebarMessage.length > 0 ? (
               <p className="sidebar-message">{this.props.sidebarMessage}</p>
             ) : null}
+            {this.props.sidebarMessageButton.length > 0 ? (
+              <button
+                className="translate"
+                onClick={(e) =>
+                  this.handleTranslateWord(this.props.sidebarMessageButton)
+                }
+              >
+                Try translate
+              </button>
+            ) : null}
           </div>
 
           <div className="scroll-wrapper">
@@ -165,10 +175,9 @@ class Sidebar extends Component {
   }
   componentDidUpdate(prevProps) {
     if (
-      this.props.isLoading !== prevProps.isLoading ||
+      this.props.definitionJSON !== prevProps.definitionJSON ||
       this.props.isNewWordLoading !== prevProps.isNewWordLoading
     ) {
-      this.setState({ sidebarOpen: true });
       //opens sidebar on smaller screens
       if (window.innerWidth < 768 && this.state.sidebarOpen == false) {
         this.setState({ sidebarOpen: true });
@@ -196,6 +205,21 @@ class Sidebar extends Component {
     }
     this.setState({ searchWord: this.state.searchTerm, searchTerm: "" });
     document.getElementById("searchForm").reset();
+  };
+
+  handleTranslateWord = (word) => {
+    //to do : response popup params
+    let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,width=600,height=300,left=100,top=100`;
+    // window.open(
+    //   `https://www.google.com/search?q=translate%20${word}%20${this.props.lang}%20to%20english`,
+    //   "translate",
+    //   params
+    // );
+    window.open(
+      `https://translate.google.com/?um=1&ie=UTF-8&hl=en&client=tw-ob#${this.props.lang}/en/${word}`,
+      "translate",
+      params
+    );
   };
 }
 

@@ -42,6 +42,9 @@ span {
   display: block;
   float: right;
 }
+.def-buttons button {
+  margin-left: 0.2rem;
+}
 /* .add-button,
 .remove-button,
 .translate {

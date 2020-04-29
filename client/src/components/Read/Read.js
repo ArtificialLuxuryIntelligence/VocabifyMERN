@@ -34,6 +34,7 @@ class Read extends Component {
       pageNumber: 0,
       largestLoadedPageNumber: -1,
       sidebarMessage: "",
+      sidebarMessageButton: "",
       textareaValue: "",
     };
 
@@ -113,6 +114,7 @@ class Read extends Component {
               isNewWordLoading={this.state.isNewWordLoading}
               pageNumber={this.state.pageNumber}
               sidebarMessage={this.state.sidebarMessage}
+              sidebarMessageButton={this.state.sidebarMessageButton}
             />
           </div>
         </div>
@@ -243,17 +245,18 @@ class Read extends Component {
 
     let parentWord = e.target.classList[1];
 
-    let word = e.target.innerText;
+    let word = this.props.sanitizeText(e.target.innerText);
 
-    if (this.state.sidebarWords.indexOf(word) > 0) {
+    if (this.state.sidebarWords.indexOf(word[0]) >= 0) {
       this.setState({
-        sidebarMessage: `Definition of ${word} is already loaded!`,
+        sidebarMessage:
+          `Definition of ${word} is already loaded!` + <p>test</p>,
       });
       setTimeout(() => this.setState({ sidebarMessage: "" }), 1500);
       this.setState({ isNewWordLoading: false });
       return;
     }
-    let queryWord = this.props.sanitizeText(word);
+    let queryWord = word;
 
     try {
       let def = await this.props.getDefinitions(queryWord, "false");
@@ -263,17 +266,20 @@ class Read extends Component {
         this.setState({
           sidebarMessage: `Could not find definition of ${queryWord}`,
         });
-
-        setTimeout(() => this.setState({ sidebarMessage: "" }), 1500);
+        setTimeout(() => this.setState({ sidebarMessage: "" }), 5000);
+        this.setState({
+          sidebarMessageButton: queryWord,
+        });
+        setTimeout(() => this.setState({ sidebarMessageButton: "" }), 5000);
         return;
       }
 
       let newWord = def[0][0].word;
       console.log(newWord);
 
-      if (this.state.sidebarWords.indexOf(newWord) > 0) {
+      if (this.state.sidebarWords.indexOf(newWord) >= 0) {
         this.setState({
-          sidebarMessage: `Definition of ${newWord} already loaded!`,
+          sidebarMessage: `Definition of ${newWord} already loaded!!`,
         });
         setTimeout(() => this.setState({ sidebarMessage: "" }), 1500);
 

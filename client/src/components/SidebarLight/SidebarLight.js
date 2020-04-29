@@ -67,7 +67,7 @@ class SidebarLight extends Component {
                 />
 
                 <div>
-                  {this.state.searchWord !== null && (
+                  {this.props.searchWord !== null && (
                     <>
                       <SearchResults
                         history={this.props.history}
@@ -95,12 +95,8 @@ class SidebarLight extends Component {
             ) : null} */}
           </div>
 
-          <div className="scroll-wrapper">
+          {/* <div className="scroll-wrapper">
             <div className="defs">
-              {/* {this.props.sidebarWords.length === 0 ? (
-                <p>No words to show </p>
-              ) : null} */}
-
               <div>
                 {this.props.definitionJSON.map((word, i) => {
                   if (this.props.sidebarWords.includes(word[0].word)) {
@@ -138,7 +134,7 @@ class SidebarLight extends Component {
                 })}
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     );
@@ -153,6 +149,10 @@ class SidebarLight extends Component {
       if (window.innerWidth < 768 && this.state.sidebarOpen == false) {
         this.setState({ sidebarOpen: true });
       }
+    }
+
+    if (this.props.lang !== prevProps.lang) {
+      this.setState({ searchWord: null });
     }
   }
   toggleSidebar = () => {

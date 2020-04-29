@@ -82,10 +82,10 @@ class Home extends Component {
   handleDropdownChange = (e) => {
     e.preventDefault();
     // this.setState({ lang: e.target.value });
-    this.props.addToAppState("lang", e.target.value);
     // console.log(e.target.value);
 
     this.setState({ searchWord: null });
+    this.props.addToAppState("lang", e.target.value);
   };
 
   handleChange = (e) => {

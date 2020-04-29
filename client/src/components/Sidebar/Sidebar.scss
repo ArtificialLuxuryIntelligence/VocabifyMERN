@@ -85,7 +85,8 @@ $sidebar-nav-height: 3rem;
     }
     .search-box-closed {
       overflow: hidden;
-      height: 0;
+      height: 1rem;
+      padding-top: 1.3rem;
     }
     #hide-search,
     #search-heading {

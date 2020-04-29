@@ -29,10 +29,6 @@ class Account extends Component {
       <div className="account grid-container">
         <Nav handleSignout={this.props.handleSignout} />
         {/* <h1>Account</h1> */}
-        <LanguageDropdown
-          handleDropdownChange={this.handleDropdownChange}
-          lang={this.props.lang}
-        ></LanguageDropdown>
 
         <div className="content">
           <div className="main">
@@ -66,6 +62,10 @@ class Account extends Component {
               </div> */}
             </div>
             <div>
+              <LanguageDropdown
+                handleDropdownChange={this.handleDropdownChange}
+                lang={this.props.lang}
+              ></LanguageDropdown>
               <h2>Your saved words: </h2>
               <ul className="word-list">
                 {this.props.unknownWords.map((word, i) => {
