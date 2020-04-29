@@ -353,7 +353,7 @@ class App extends Component {
       this.setState({ navigate: true });
     } else {
       //handle failure
-      console.log("update failed");
+      console.log("signout/server update failed");
     }
   };
 

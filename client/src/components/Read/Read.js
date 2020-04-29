@@ -1,6 +1,8 @@
 //NOTE handle submit function currently sets the length of page text. to be moved
 
 import React, { Component } from "react";
+import { Prompt } from "react-router";
+
 // import { Redirect } from "react-router-dom";
 // import auth from "../../utils/auth";
 import "./Read.scss";
@@ -70,6 +72,10 @@ class Read extends Component {
     } else {
       return (
         <div className="read grid-container">
+          <Prompt
+            when={this.state.fullText.length > 0}
+            message="Are you sure you want to leave your text?"
+          />
           <Nav handleSignout={this.props.handleSignout} />
 
           <div className="content">
