@@ -67,7 +67,7 @@ class SidebarLight extends Component {
                 />
 
                 <div>
-                  {this.props.searchWord !== null && (
+                  {this.state.searchWord !== null && (
                     <>
                       <SearchResults
                         history={this.props.history}
@@ -170,9 +170,9 @@ class SidebarLight extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    if (this.state.searchTerm.length === 0) {
-      return;
-    }
+    // if (this.state.searchTerm.length === 0) {
+    //   return;
+    // }
     this.setState({ searchWord: this.state.searchTerm, searchTerm: "" });
     document.getElementById("searchForm").reset();
   };
