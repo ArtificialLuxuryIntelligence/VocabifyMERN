@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 // import { Link } from "react-router-dom";
 
+import "./Signin.scss";
+
 import axios from "axios";
 import auth from "../../utils/auth";
 // import auth from "../../utils/auth";
@@ -25,7 +27,7 @@ class Signin extends Component {
   }
 
   render() {
-    return <section id="entry-page">{this.currentView()}</section>;
+    return <div className="signin">{this.currentView()}</div>;
   }
 
   async componentDidMount() {
@@ -138,7 +140,7 @@ class Signin extends Component {
       case "signUp":
         return (
           <form>
-            <h2>Welcome!</h2>
+            <h2>Welcome to Vocabify!</h2>
             <fieldset>
               <legend>Sign up</legend>
               <p>{this.state.message}</p>
@@ -176,7 +178,7 @@ class Signin extends Component {
       case "signIn":
         return (
           <form>
-            <h2>Welcome!</h2>
+            <h2>Welcome to Vocabify!</h2>
             <fieldset>
               <legend>Log In</legend>
               <p>{this.state.message}</p>

@@ -169,7 +169,7 @@ $sidebar-nav-height: 3rem;
 }
 
 .sidebar-open {
-  height: 90vh;
+  height: 75vh;
   padding-bottom: $sidebar-nav-height; //to clear bottom nav
 }
 @include breakpoint(md) {
