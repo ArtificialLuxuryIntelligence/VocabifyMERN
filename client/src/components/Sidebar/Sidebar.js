@@ -121,14 +121,6 @@ class Sidebar extends Component {
                       <div key={word[0].word}>
                         <hr />
 
-                        {/* <button
-                          className={"delete-button"}
-                          onClick={() =>
-                            this.props.handleDeleteWord(word[0].word)
-                          }
-                        >
-                          x
-                        </button> */}
                         <WordDef
                           autoload={true}
                           definition={[word]}
@@ -140,6 +132,7 @@ class Sidebar extends Component {
                           addKnownWord={this.props.addKnownWord}
                           addUnknownWord={this.props.addUnknownWord}
                           removeWord={this.props.removeWord}
+                          handleDeleteWord={this.props.handleDeleteWord}
                           unknownWords={this.props.unknownWords}
                           addToAppState={this.props.addToAppState}
                         ></WordDef>

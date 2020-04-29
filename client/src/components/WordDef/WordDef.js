@@ -105,6 +105,14 @@ class WordDef extends Component {
                           Remove
                         </button>
                       )}
+                      <button
+                        className={"delete-button"}
+                        onClick={() =>
+                          this.props.handleDeleteWord(word[0].word)
+                        }
+                      >
+                        x
+                      </button>
                     </div>
 
                     <Collapsible
@@ -163,6 +171,14 @@ class WordDef extends Component {
                                 Remove
                               </button>
                             )}
+                            <button
+                              className={"delete-button"}
+                              onClick={() =>
+                                this.props.handleDeleteWord(word.word)
+                              }
+                            >
+                              x
+                            </button>
                           </div>
 
                           <Collapsible
