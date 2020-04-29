@@ -63,7 +63,7 @@ class Sidebar extends Component {
             </div>
             <div className="search">
               <button id="hide-search" onClick={() => this.toggleSearchBox()}>
-                {this.state.searchBoxOpen ? "close search" : "open search"}
+                {this.state.searchBoxOpen ? "hide search" : "open search"}
               </button>
               <div
                 className={
@@ -121,14 +121,14 @@ class Sidebar extends Component {
                       <div key={word[0].word}>
                         <hr />
 
-                        <button
+                        {/* <button
                           className={"delete-button"}
                           onClick={() =>
                             this.props.handleDeleteWord(word[0].word)
                           }
                         >
                           x
-                        </button>
+                        </button> */}
                         <WordDef
                           autoload={true}
                           definition={[word]}

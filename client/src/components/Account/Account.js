@@ -11,7 +11,7 @@ import WordDef from "../WordDef/WordDef";
 import LanguageDropdown from "../LanguageDropdown/LanguageDropdown";
 import SidebarLight from "../SidebarLight/SidebarLight";
 
-import "./Account.css";
+import "./Account.scss";
 
 class Account extends Component {
   constructor(props) {
@@ -67,20 +67,25 @@ class Account extends Component {
             </div>
             <div>
               <h2>Your saved words: </h2>
-              <ul>
+              <ul className="word-list">
                 {this.props.unknownWords.map((word, i) => {
                   return (
                     <li key={word}>
                       {/* hides 'remove' button from span (wordDef component has own button) [alternate/better 'React' version of this is to keep track of words with fetched definitions...] .reason: there is a remove button rendered by the worddef component when definition is fetched*/}
                       <span
-                        onClick={(e) =>
-                          e.target.tagName === "P"
-                            ? (e.target.nextElementSibling.style.display =
-                                "none")
-                            : null
-                        }
+                        className="display-flex"
+                        onClick={(e) => {
+                          if (e.target.className === "word-unloaded") {
+                            e.target.nextElementSibling.style.display = "none";
+
+                            e.target.parentNode.classList.toggle(
+                              "display-flex"
+                            );
+                          }
+                        }}
                       >
                         <WordDef
+                          autoload={false}
                           lang={this.props.lang}
                           word={word}
                           handleSpanClick={this.handleSpanClick}
@@ -92,12 +97,20 @@ class Account extends Component {
                           unknownWords={this.props.unknownWords}
                           addToAppState={this.props.addToAppState}
                         />
-                        <button
-                          className="remove-button-unloaded"
-                          onClick={() => this.props.removeWord(word)}
-                        >
-                          Remove
-                        </button>
+                        <div className="account-buttons">
+                          <button
+                            className="translate"
+                            onClick={(e) => this.handleTranslateWord(word)}
+                          >
+                            Translate
+                          </button>
+                          <button
+                            className="remove-button-unloaded"
+                            onClick={() => this.props.removeWord(word)}
+                          >
+                            Remove
+                          </button>
+                        </div>
                       </span>
                     </li>
                   );
@@ -157,6 +170,21 @@ class Account extends Component {
   };
   toggleSidebar = () => {
     this.setState({ sidebarOpen: !this.state.sidebarOpen });
+  };
+
+  handleTranslateWord = (word) => {
+    //to do : response popup params
+    let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,width=600,height=300,left=100,top=100`;
+    // window.open(
+    //   `https://www.google.com/search?q=translate%20${word}%20${this.props.lang}%20to%20english`,
+    //   "translate",
+    //   params
+    // );
+    window.open(
+      `https://translate.google.com/?um=1&ie=UTF-8&hl=en&client=tw-ob#${this.props.lang}/en/${word}`,
+      "translate",
+      params
+    );
   };
 }
 

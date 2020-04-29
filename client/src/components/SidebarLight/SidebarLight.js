@@ -49,9 +49,9 @@ class SidebarLight extends Component {
               </button>
             </div>
             <div className="search">
-              <button id="hide-search" onClick={() => this.toggleSearchBox()}>
-                {this.state.searchBoxOpen ? "close search" : "open search"}
-              </button>
+              {/* <button id="hide-search" onClick={() => this.toggleSearchBox()}>
+                {this.state.searchBoxOpen ? "hide search" : "open search"}
+              </button> */}
               <div
                 className={
                   this.state.searchBoxOpen
@@ -173,7 +173,10 @@ class SidebarLight extends Component {
   };
 
   handleSpanClick = (e) => {
-    this.setState({ searchWord: this.props.sanitizeText(e.target.innerText) });
+    this.setState({
+      searchWord: this.props.sanitizeText(e.target.innerText)[0],
+    });
+    console.log(this.props.sanitizeText(e.target.innerText)[0]);
   };
 }
 

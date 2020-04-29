@@ -41,29 +41,34 @@ class WordDef extends Component {
       (this.state.defintionToggled === false && this.props.autoload)
     ) {
       return (
-        <p onClick={() => this.getWordDef()}>
-          Cannot find definiton of <em>{this.props.word}</em>. Click here to try
-          again
-        </p>
+        <div>
+          <p onClick={() => this.getWordDef()}>
+            Cannot find definiton of <em>{this.props.word}</em>. Click here to
+            try again
+          </p>
+          <button
+            className="translate"
+            onClick={(e) => this.handleTranslateWord(this.props.word)}
+          >
+            Try translate
+          </button>
+        </div>
       );
     }
-    // if (this.state.defintionToggled === false && this.props.autoload) {
-    //   return (
-    //     <p onClick={() => this.getWordDef()}>
-    //       Cannot find definiton of <em>{this.props.word}</em>. Click here to try
-    //       again
-    //     </p>
-    //   );
-    // }
+
     if (this.state.defintionToggled === false) {
-      return <p onClick={() => this.getWordDef()}>{this.props.word}</p>;
+      return (
+        <span className="word-unloaded" onClick={() => this.getWordDef()}>
+          {this.props.word}
+        </span>
+      );
     }
     if (this.state.isLoading) {
-      return <p> Loading word...</p>;
+      return <span> Loading word...</span>;
     }
 
     return (
-      <div>
+      <div className="definition">
         {/* {this.props.isNewWordLoading ? <p>adding word ... </p> : null} */}
         <div>
           {this.state.definition.map(
@@ -72,28 +77,34 @@ class WordDef extends Component {
               if (word.length > 1) {
                 return (
                   <div key={i}>
-                    {this.props.unknownWords.indexOf(word[0].word) === -1 && (
+                    <div className="def-buttons">
+                      {this.props.unknownWords.indexOf(word[0].word) === -1 && (
+                        <button
+                          className={"add-button"}
+                          onClick={(e) => this.handleAddWord()}
+                        >
+                          Add
+                        </button>
+                      )}
+                      {this.props.unknownWords.indexOf(word[0].word) !== -1 && (
+                        <button
+                          className={"remove-button"}
+                          onClick={(e) => this.handleRemoveWord()}
+                        >
+                          Remove
+                        </button>
+                      )}
                       <button
-                        className={"add-button"}
-                        onClick={(e) => this.handleAddWord()}
+                        className="translate"
+                        onClick={(e) =>
+                          this.handleTranslateWord(
+                            this.state.word || this.props.word
+                          )
+                        }
                       >
-                        Add word
+                        Translate
                       </button>
-                    )}
-                    {this.props.unknownWords.indexOf(word[0].word) !== -1 && (
-                      <button
-                        className={"remove-button"}
-                        onClick={(e) => this.handleRemoveWord()}
-                      >
-                        Remove word
-                      </button>
-                    )}
-                    <button
-                      className="translate"
-                      onClick={(e) => this.handleTranslateWord()}
-                    >
-                      Translate
-                    </button>
+                    </div>
 
                     <Collapsible
                       open={true}
@@ -121,30 +132,36 @@ class WordDef extends Component {
                     {word.map((word, i) => {
                       return (
                         <div key={i}>
-                          {this.props.unknownWords.indexOf(word.word) ===
-                            -1 && (
+                          <div className="def-buttons">
+                            {this.props.unknownWords.indexOf(word.word) ===
+                              -1 && (
+                              <button
+                                className={"add-button"}
+                                onClick={(e) => this.handleAddWord()}
+                              >
+                                Add
+                              </button>
+                            )}
+                            {this.props.unknownWords.indexOf(word.word) !==
+                              -1 && (
+                              <button
+                                className={"remove-button"}
+                                onClick={(e) => this.handleRemoveWord()}
+                              >
+                                Remove
+                              </button>
+                            )}
                             <button
-                              className={"add-button"}
-                              onClick={(e) => this.handleAddWord()}
+                              className="translate"
+                              onClick={(e) =>
+                                this.handleTranslateWord(
+                                  this.state.word || this.props.word
+                                )
+                              }
                             >
-                              Add word
+                              Translate
                             </button>
-                          )}
-                          {this.props.unknownWords.indexOf(word.word) !==
-                            -1 && (
-                            <button
-                              className={"remove-button"}
-                              onClick={(e) => this.handleRemoveWord()}
-                            >
-                              Remove word
-                            </button>
-                          )}
-                          <button
-                            className="translate"
-                            onClick={(e) => this.handleTranslateWord()}
-                          >
-                            Translate
-                          </button>
+                          </div>
 
                           <Collapsible
                             open={true}
@@ -240,13 +257,7 @@ class WordDef extends Component {
     this.props.removeWord(this.state.word || this.props.word);
   };
 
-  handleTranslateWord = () => {
-    let word;
-    if (this.state.word) {
-      word = this.state.word;
-    } else {
-      word = this.props.word;
-    }
+  handleTranslateWord = (word) => {
     //to do : response popup params
     let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,width=600,height=300,left=100,top=100`;
     // window.open(

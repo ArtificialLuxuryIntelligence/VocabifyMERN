@@ -7,6 +7,12 @@
   background-color: white;
 }
 
+.definition {
+  width: 100%;
+  display: block;
+  flex: 1;
+}
+
 .word-heading {
   font-size: 1.6rem;
   /* color: green; */
@@ -26,13 +32,16 @@ span {
   /* display: flex;
   justify-content: space-between; */
 }
-.add-button {
-  float: right;
-}
 
-.remove-button {
+.def-buttons {
+  display: block;
   float: right;
 }
+/* .add-button,
+.remove-button,
+.translate {
+  float: right;
+} */
 
 @keyframes fade-in {
   0% {
