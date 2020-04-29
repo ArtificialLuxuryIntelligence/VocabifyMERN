@@ -73,30 +73,13 @@ class Account extends Component {
                     <li key={word}>
                       {/* hides 'remove' button from span (wordDef component has own button) [alternate/better 'React' version of this is to keep track of words with fetched definitions...] .reason: there is a remove button rendered by the worddef component when definition is fetched*/}
                       <span
-                        className="display-flex"
                         onClick={(e) => {
                           if (e.target.className === "word-unloaded") {
-                            e.target.nextElementSibling.style.display = "none";
-
-                            e.target.parentNode.classList.toggle(
-                              "display-flex"
-                            );
+                            e.target.previousElementSibling.style.display =
+                              "none";
                           }
                         }}
                       >
-                        <WordDef
-                          autoload={false}
-                          lang={this.props.lang}
-                          word={word}
-                          handleSpanClick={this.handleSpanClick}
-                          vocabSize={this.props.vocabSize}
-                          getDefinitions={this.props.getDefinitions}
-                          addKnownWord={this.props.addKnownWord}
-                          addUnknownWord={this.props.addUnknownWord}
-                          removeWord={this.props.removeWord}
-                          unknownWords={this.props.unknownWords}
-                          addToAppState={this.props.addToAppState}
-                        />
                         <div className="account-buttons">
                           <button
                             className="translate"
@@ -111,6 +94,19 @@ class Account extends Component {
                             Remove
                           </button>
                         </div>
+                        <WordDef
+                          autoload={false}
+                          lang={this.props.lang}
+                          word={word}
+                          handleSpanClick={this.handleSpanClick}
+                          vocabSize={this.props.vocabSize}
+                          getDefinitions={this.props.getDefinitions}
+                          addKnownWord={this.props.addKnownWord}
+                          addUnknownWord={this.props.addUnknownWord}
+                          removeWord={this.props.removeWord}
+                          unknownWords={this.props.unknownWords}
+                          addToAppState={this.props.addToAppState}
+                        />
                       </span>
                     </li>
                   );

@@ -20,7 +20,7 @@ class SearchForm extends Component {
             onChange={this.props.handleChange}
             lang={this.props.lang}
           />
-          <button onClick={this.props.handleSubmit}>submit</button>
+          <button onClick={this.props.handleSubmit}>search</button>
         </form>
       </div>
     );

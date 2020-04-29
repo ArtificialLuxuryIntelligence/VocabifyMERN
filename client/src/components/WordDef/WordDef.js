@@ -78,22 +78,6 @@ class WordDef extends Component {
                 return (
                   <div key={i}>
                     <div className="def-buttons">
-                      {this.props.unknownWords.indexOf(word[0].word) === -1 && (
-                        <button
-                          className={"add-button"}
-                          onClick={(e) => this.handleAddWord()}
-                        >
-                          Add
-                        </button>
-                      )}
-                      {this.props.unknownWords.indexOf(word[0].word) !== -1 && (
-                        <button
-                          className={"remove-button"}
-                          onClick={(e) => this.handleRemoveWord()}
-                        >
-                          Remove
-                        </button>
-                      )}
                       <button
                         className="translate"
                         onClick={(e) =>
@@ -104,6 +88,23 @@ class WordDef extends Component {
                       >
                         Translate
                       </button>
+                      {this.props.unknownWords.indexOf(word[0].word) === -1 && (
+                        <button
+                          className={"add-button"}
+                          onClick={(e) => this.handleAddWord()}
+                        >
+                          Add
+                        </button>
+                      )}
+
+                      {this.props.unknownWords.indexOf(word[0].word) !== -1 && (
+                        <button
+                          className={"remove-button"}
+                          onClick={(e) => this.handleRemoveWord()}
+                        >
+                          Remove
+                        </button>
+                      )}
                     </div>
 
                     <Collapsible
@@ -133,24 +134,6 @@ class WordDef extends Component {
                       return (
                         <div key={i}>
                           <div className="def-buttons">
-                            {this.props.unknownWords.indexOf(word.word) ===
-                              -1 && (
-                              <button
-                                className={"add-button"}
-                                onClick={(e) => this.handleAddWord()}
-                              >
-                                Add
-                              </button>
-                            )}
-                            {this.props.unknownWords.indexOf(word.word) !==
-                              -1 && (
-                              <button
-                                className={"remove-button"}
-                                onClick={(e) => this.handleRemoveWord()}
-                              >
-                                Remove
-                              </button>
-                            )}
                             <button
                               className="translate"
                               onClick={(e) =>
@@ -161,6 +144,25 @@ class WordDef extends Component {
                             >
                               Translate
                             </button>
+                            {this.props.unknownWords.indexOf(word.word) ===
+                              -1 && (
+                              <button
+                                className={"add-button"}
+                                onClick={(e) => this.handleAddWord()}
+                              >
+                                Add
+                              </button>
+                            )}
+
+                            {this.props.unknownWords.indexOf(word.word) !==
+                              -1 && (
+                              <button
+                                className={"remove-button"}
+                                onClick={(e) => this.handleRemoveWord()}
+                              >
+                                Remove
+                              </button>
+                            )}
                           </div>
 
                           <Collapsible

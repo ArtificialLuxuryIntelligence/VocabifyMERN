@@ -176,6 +176,10 @@ class Sidebar extends Component {
       this.props.isNewWordLoading !== prevProps.isNewWordLoading
     ) {
       this.setState({ sidebarOpen: true });
+      //opens sidebar on smaller screens
+      if (window.innerWidth < 768 && this.state.sidebarOpen == false) {
+        this.setState({ sidebarOpen: true });
+      }
     }
   }
 

@@ -4,30 +4,23 @@
   list-style: none;
   padding-left: 0;
 
-  .display-flex {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
+  // .display-flex {
+  //   width: 100%;
+  //   // display: flex;
+  //   justify-content: space-between;
+  // }
+
+  button {
+    margin-right: 0.3rem;
   }
 
-  li {
-    span {
-      // width: 100%;
-
-      .word-unloaded {
-        // justify-self: flex-start;
-        // display: flex;
-        // margin-right: auto;
-        // justify-content: space-between;
-        // align-items: center;
-        // width: 100%;
-      }
-      .remove-button-unloaded {
-        // display: flex;
-        // margin-left: auto;
-        // justify-self: flex-end;
-        // display: none;
-      }
+  > li {
+    margin: 0.9rem 0;
+    padding: 0.5rem 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+    .account-buttons {
+      float: right;
     }
   }
 }

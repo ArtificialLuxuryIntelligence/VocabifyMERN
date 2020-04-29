@@ -147,7 +147,12 @@ class SidebarLight extends Component {
   componentDidMount() {}
   componentDidUpdate(prevProps) {
     if (this.props.searchWord !== prevProps.searchWord) {
-      this.setState({ searchWord: this.props.searchWord, sidebarOpen: true });
+      this.setState({ searchWord: this.props.searchWord });
+      //opens sidebar on smaller screens
+
+      if (window.innerWidth < 768 && this.state.sidebarOpen == false) {
+        this.setState({ sidebarOpen: true });
+      }
     }
   }
   toggleSidebar = () => {
