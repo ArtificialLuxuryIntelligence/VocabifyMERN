@@ -190,18 +190,50 @@ class Read extends Component {
 
       let sidebarWordsArray = [];
       definitions.forEach((a) => sidebarWordsArray.push(a[0].word));
+      // console.log(sidebarWordsArray);
 
+      let oldN = this.state.sidebarWords.length;
       //adds new defs to sidebar and removes duplicates
-      this.setState({
-        definitionJSON: this.removeWordArrayDupes([
-          ...this.state.definitionJSON,
-          ...definitions,
-        ]),
-        sidebarWords: [
-          ...new Set([...this.state.sidebarWords, ...sidebarWordsArray]),
-        ],
-        isLoading: false,
-      });
+      this.setState(
+        {
+          definitionJSON: this.removeWordArrayDupes([
+            ...this.state.definitionJSON,
+            ...definitions,
+          ]),
+          sidebarWords: [
+            ...new Set([...this.state.sidebarWords, ...sidebarWordsArray]),
+          ],
+          isLoading: false,
+        }
+        // () => {
+        // if (oldN !== 0 && this.state.sidebarWords.length > oldN) {
+        //   console.log(oldN);
+        //   console.log(this.state.sidebarWords);
+        //   console.log(this.state.sidebarWords[oldN]);
+        //   //give time for sidebar to render
+        //   setTimeout(
+        //     this.scrollToDef(String(this.state.sidebarWords[oldN])),
+        //     10000
+        //   );
+        // }
+        // }
+      );
+      if (oldN !== 0 && this.state.sidebarWords.length > oldN) {
+        console.log(oldN);
+        console.log(this.state.sidebarWords);
+        console.log(this.state.sidebarWords[oldN]);
+        //give time for sidebar to render
+        setTimeout(
+          this.scrollToDef(String(this.state.sidebarWords[oldN])),
+          100
+        );
+      }
+
+      //scroll to def of first new word (bug: this uses the sidebarWordsArray which has not had dupes removed yet. This means that
+      //it may scroll UP to the def (as fetched for an earlier page))
+      //basically, need to replace sidebarWordsArray[0] with a no dupes list
+
+      //find first new def.
     } catch (err) {
       console.log(err);
       return;
@@ -263,6 +295,7 @@ class Read extends Component {
 
     let word = this.props.sanitizeText(e.target.innerText);
 
+    //definition is already loaded
     if (this.state.sidebarWords.indexOf(word[0]) >= 0) {
       this.setState({
         sidebarMessage: `Definition of ${word} is already loaded!`,
@@ -279,6 +312,7 @@ class Read extends Component {
     try {
       let def = await this.props.getDefinitions(queryWord, "false");
 
+      //no definition returned
       if (!def || def.length === 0) {
         this.setState({ isNewWordLoading: false });
         this.setState({
@@ -295,6 +329,7 @@ class Read extends Component {
       let newWord = def[0][0].word;
       console.log(newWord);
 
+      //def already in sidebar
       if (this.state.sidebarWords.indexOf(newWord) >= 0) {
         this.setState({
           sidebarMessage: `Definition of ${newWord} already loaded!!`,
@@ -310,7 +345,7 @@ class Read extends Component {
       let defs = [...this.state.definitionJSON]; //dont mutate state
       let sidebarWordArray = [...this.state.sidebarWords];
 
-      //if word is from a definition then put word under that def
+      //if word is from a definition then put new word under that def in DOM
       if (sidebarWordArray.indexOf(parentWord) >= 0) {
         console.log(
           "index of",
