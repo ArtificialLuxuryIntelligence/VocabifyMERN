@@ -177,7 +177,9 @@ class Sidebar extends Component {
   componentDidUpdate(prevProps) {
     if (
       this.props.definitionJSON !== prevProps.definitionJSON ||
-      this.props.isNewWordLoading !== prevProps.isNewWordLoading
+      this.props.isNewWordLoading !== prevProps.isNewWordLoading ||
+      this.props.isLoading !== prevProps.isLoading ||
+      this.props.sidebarMessage !== prevProps.sidebarMessage
     ) {
       //opens sidebar on smaller screens
       if (window.innerWidth < 768 && this.state.sidebarOpen == false) {

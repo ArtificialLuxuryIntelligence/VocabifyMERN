@@ -255,6 +255,8 @@ class Read extends Component {
     //currently doesnt check if word is already in list BEFORE requesting...
 
     this.setState({ isNewWordLoading: true });
+    console.log("is loading");
+
     // console.log(e.target.classList[1]);
 
     let parentWord = e.target.classList[1];
@@ -262,12 +264,14 @@ class Read extends Component {
     let word = this.props.sanitizeText(e.target.innerText);
 
     if (this.state.sidebarWords.indexOf(word[0]) >= 0) {
-      // this.setState({
-      //   sidebarMessage: `Definition of ${word} is already loaded!`,
-      // });
-      // setTimeout(() => this.setState({ sidebarMessage: "" }), 1500);
-      this.setState({ isNewWordLoading: false });
+      this.setState({
+        sidebarMessage: `Definition of ${word} is already loaded!`,
+      });
+      setTimeout(() => this.setState({ sidebarMessage: "" }), 1500);
       this.scrollToDef(word);
+
+      this.setState({ isNewWordLoading: false });
+      //force refresh of sidebar to open it and then scrollToDef
       return;
     }
     let queryWord = word;
@@ -292,13 +296,13 @@ class Read extends Component {
       console.log(newWord);
 
       if (this.state.sidebarWords.indexOf(newWord) >= 0) {
-        // this.setState({
-        //   sidebarMessage: `Definition of ${newWord} already loaded!!`,
-        // });
-        // setTimeout(() => this.setState({ sidebarMessage: "" }), 1500);
+        this.setState({
+          sidebarMessage: `Definition of ${newWord} already loaded!!`,
+        });
+        setTimeout(() => this.setState({ sidebarMessage: "" }), 1500);
+        this.scrollToDef(newWord);
 
         this.setState({ isNewWordLoading: false });
-        this.scrollToDef(newWord);
 
         return;
       }
@@ -332,7 +336,7 @@ class Read extends Component {
       this.setState({ definitionJSON: defs });
       this.setState({ sidebarWords: sidebarWordArray });
       this.setState({ isNewWordLoading: false });
-      this.setState({ sidebarMessage: "" });
+      setTimeout(this.setState({ sidebarMessage: "" }), 1000);
       this.scrollToDef(newWord);
     } catch (err) {
       console.log("ERROR", err);

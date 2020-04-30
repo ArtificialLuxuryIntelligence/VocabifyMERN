@@ -62,15 +62,18 @@
 $sidebar-nav-height: 3rem;
 
 .sidebar {
-  padding: 0 1.5rem 0 1.5rem;
   z-index: 2;
-  position: fixed;
-  overflow-y: scroll;
+  overflow: hidden;
   bottom: 0;
   left: 0;
   height: 0;
   width: 100%;
   transition: all 0.2s ease-in;
+
+  padding: 0;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
 
   button {
     // margin: 0.2rem 0;
@@ -107,13 +110,20 @@ $sidebar-nav-height: 3rem;
       max-width: 350px;
     }
   }
-  .defs {
-    // padding: 0 1.5rem 0 1.5rem;
-    ul {
-      list-style: none;
-      padding-left: 0rem;
+  .sidebar-sticky {
+    padding: 0 1rem 0 1rem;
+  }
+  .scroll-wrapper {
+    overflow-y: scroll;
 
-      .def {
+    .defs {
+      padding: 0 1rem 0 1rem;
+      ul {
+        list-style: none;
+        padding-left: 0rem;
+
+        .def {
+        }
       }
     }
   }
@@ -146,7 +156,6 @@ $sidebar-nav-height: 3rem;
     }
 
     .scroll-wrapper {
-      overflow-y: scroll;
       .defs {
         padding: 0 1.5rem 0 1.5rem;
       }
