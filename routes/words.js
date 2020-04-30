@@ -75,7 +75,7 @@ const estimateUserVocab = async (lang, knownWords, unknownWords) => {
 
     unknownWords.forEach((word) => {
       indexArray.push(freqList.indexOf(word));
-      console.log("saved word", word, freqList.indexOf(word));
+      // console.log("saved word", word, freqList.indexOf(word));
 
       indexArray = indexArray.filter((index) => index > 0); // only uses words that are in the freqList
       vocabSize = indexArray.reduce((a, b) => a + b, 0) / indexArray.length;
@@ -190,7 +190,7 @@ const filterDefinitions = async (
   });
 
   console.log("returning definitions of", definitionWords);
-  console.log(definitions);
+  // console.log(definitions);
 
   return definitions;
 };
@@ -283,7 +283,7 @@ router.post("/definitions", async (req, res, next) => {
     );
   }
 
-  console.log("defs", definitions);
+  // console.log("defs", definitions);
 
   let response = { definitions, vocabSize };
   // console.log(response);

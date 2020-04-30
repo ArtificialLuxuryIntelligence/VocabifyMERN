@@ -199,7 +199,7 @@ class App extends Component {
     let inputText = string
       .toLowerCase()
       .replace(/\s/g, " ")
-      .replace(/^\d+$/g, " ")
+      .replace(/\b[^\s]*\d[^\s]*\b/g, " ")
       //removed hyphen from list (need to add more?)
       .replace(/[.,/#!?$%^&*;:{}“”=_`~()]/g, "")
       .toLowerCase()

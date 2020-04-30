@@ -23,9 +23,9 @@ class Read extends Component {
 
     this.state = {
       currentView: "submit",
-      knownWords: this.props.knownWords,
-      unknownWords: this.props.unknownWords,
-      vocabSize: this.props.vocabSize,
+      // knownWords: this.props.knownWords,
+      // unknownWords: this.props.unknownWords,
+      // vocabSize: this.props.vocabSize,
       words: [],
       fullText: "",
       fullTextSplit: [],
@@ -150,6 +150,14 @@ class Read extends Component {
     return arr;
   }
 
+  scrollToDef(word) {
+    let cont = document.querySelector(".scroll-wrapper");
+    let y =
+      document.querySelector(`.${word}`).closest(".definition").offsetTop -
+      cont.offsetTop;
+    cont.scrollTop = y;
+  }
+
   removeWordArrayDupes = (arr) => {
     let noDupes = [];
     let words = [];
@@ -201,7 +209,7 @@ class Read extends Component {
   };
 
   handleSubmit = async () => {
-    const length = 50; //SET ELSEWHERE (props based on available space in browser e.g. innerwidth )// sets how many words per page
+    const length = 100; //SET ELSEWHERE (props based on available space in browser e.g. innerwidth )// sets how many words per page
     const textarea = document.querySelector("#textarea");
 
     let fullText = textarea.value;
@@ -254,12 +262,12 @@ class Read extends Component {
     let word = this.props.sanitizeText(e.target.innerText);
 
     if (this.state.sidebarWords.indexOf(word[0]) >= 0) {
-      this.setState({
-        sidebarMessage:
-          `Definition of ${word} is already loaded!` + <p>test</p>,
-      });
-      setTimeout(() => this.setState({ sidebarMessage: "" }), 1500);
+      // this.setState({
+      //   sidebarMessage: `Definition of ${word} is already loaded!`,
+      // });
+      // setTimeout(() => this.setState({ sidebarMessage: "" }), 1500);
       this.setState({ isNewWordLoading: false });
+      this.scrollToDef(word);
       return;
     }
     let queryWord = word;
@@ -284,12 +292,13 @@ class Read extends Component {
       console.log(newWord);
 
       if (this.state.sidebarWords.indexOf(newWord) >= 0) {
-        this.setState({
-          sidebarMessage: `Definition of ${newWord} already loaded!!`,
-        });
-        setTimeout(() => this.setState({ sidebarMessage: "" }), 1500);
+        // this.setState({
+        //   sidebarMessage: `Definition of ${newWord} already loaded!!`,
+        // });
+        // setTimeout(() => this.setState({ sidebarMessage: "" }), 1500);
 
         this.setState({ isNewWordLoading: false });
+        this.scrollToDef(newWord);
 
         return;
       }
@@ -297,6 +306,7 @@ class Read extends Component {
       let defs = [...this.state.definitionJSON]; //dont mutate state
       let sidebarWordArray = [...this.state.sidebarWords];
 
+      //if word is from a definition then put word under that def
       if (sidebarWordArray.indexOf(parentWord) >= 0) {
         console.log(
           "index of",
@@ -306,9 +316,11 @@ class Read extends Component {
         let index = sidebarWordArray.indexOf(parentWord);
         defs.splice(index + 1, 0, def[0]);
         sidebarWordArray.splice(index + 1, 0, newWord);
-      } else {
-        defs = def.concat(defs);
-        sidebarWordArray.unshift(newWord);
+      }
+      //add new def to bottom of definition list
+      else {
+        defs = defs.concat(def);
+        sidebarWordArray.push(newWord);
       }
       // console.log(defs, sidebarWordArray);
 
@@ -321,6 +333,7 @@ class Read extends Component {
       this.setState({ sidebarWords: sidebarWordArray });
       this.setState({ isNewWordLoading: false });
       this.setState({ sidebarMessage: "" });
+      this.scrollToDef(newWord);
     } catch (err) {
       console.log("ERROR", err);
       setTimeout(() => this.setState({ sidebarMessage: "" }), 1500);
@@ -385,9 +398,11 @@ class Read extends Component {
     // e.target.parentElement.parentElement.remove();
 
     // sidebarWords.splice(sidebarWords.indexOf(word), 1);
-    let { sidebarWords } = this.state;
-    sidebarWords.splice(sidebarWords.indexOf(word), 1);
-    this.setState({ sidebarWords });
+    let { sidebarWords, definitionJSON } = this.state;
+    let i = sidebarWords.indexOf(word);
+    sidebarWords.splice(i, 1);
+    definitionJSON.splice(i, 1);
+    this.setState({ sidebarWords, definitionJSON });
   };
 
   handleDropdownChange = (e) => {
