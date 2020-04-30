@@ -320,7 +320,7 @@ router.post("/random", async (req, res, next) => {
   let wordRange = freqList.slice(min, max); // set min/max-length
   // console.log(wordRange);
 
-  let response = await getRandomWord(wordRange, lang, 2).catch((err) =>
+  let response = await getRandomWord(wordRange, lang, 5).catch((err) =>
     console.log("can't get random word", err)
   );
   // console.log("response", response);

@@ -71,7 +71,7 @@ $sidebar-nav-height: 3rem;
   transition: all 0.2s ease-in;
 
   padding: 0;
-  position: absolute;
+  position: fixed;
   display: flex;
   flex-direction: column;
 
@@ -114,6 +114,7 @@ $sidebar-nav-height: 3rem;
     padding: 0 1rem 0 1rem;
   }
   .scroll-wrapper {
+    scroll-behavior: smooth;
     overflow-y: scroll;
 
     .defs {

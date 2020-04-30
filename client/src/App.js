@@ -28,6 +28,7 @@ class App extends Component {
         placeholder: { knownWords: [], unknownWords: [], vocabSize: "" },
       },
       navOpen: true,
+      serverTextId: null,
     };
 
     this.addToAppState = this.addToAppState.bind(this);
@@ -79,6 +80,7 @@ class App extends Component {
                   sanitizeText={this.sanitizeText}
                   navOpen={this.state.navOpen}
                   toggleNav={this.toggleNav}
+                  serverTextId={this.state.serverTextId}
                 />
               )}
             />
