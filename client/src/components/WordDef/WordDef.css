@@ -53,12 +53,12 @@ span {
 
 @keyframes fade-in {
   0% {
+    color: #439775;
     opacity: 0;
     /* transform: translateY(20px); */
   }
   50% {
     opacity: 1;
-    color: rgb(0, 60, 255);
     /* transform: translateY(0); */
   }
   100% {

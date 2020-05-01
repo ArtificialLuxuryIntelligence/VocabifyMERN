@@ -169,20 +169,17 @@ const filterDefinitions = async (
 
     if (inUserVocab || inKnownWords) {
       console.log(
-        `in user vocab: ${inUserVocab} ; in know words ${inKnownWords} `
+        `in user vocab: ${inUserVocab} ; in knownWords ${inKnownWords} `
       );
 
       if (unknownWords.indexOf(word) !== -1) {
+        `in unknowWords - not filtering`;
+        console.log(`in unknowWords: true - not filtering`);
         return; // don't filter out unknown words
       }
       let i = definitionWords.indexOf(word);
 
-      console.log(
-        "***definition removed from results",
-
-        // definitions[i],
-        definitionWords[i]
-      );
+      console.log("***definition removed from results", definitionWords[i]);
 
       definitionWords = definitionWords.filter((def, index) => index != i);
       definitions = definitions.filter((def, index) => index != i);

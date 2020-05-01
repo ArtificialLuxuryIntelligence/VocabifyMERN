@@ -1,8 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
 @import "./styles/mixinresponsive.scss";
 
+@import url("https://fonts.googleapis.com/css2?family=Roboto&family=Work+Sans&display=swap");
+
 html {
-  font-family: "Open Sans", sans-serif;
+  font-family: "Work Sans", sans-serif;
+  // font-family: 'Roboto', sans-serif;
 }
 
 * {
@@ -74,6 +76,13 @@ nav {
   }
   a {
     color: black;
+  }
+  #hamburger {
+    span,
+    span:before,
+    span:after {
+      background-color: white;
+    }
   }
 }
 .container {

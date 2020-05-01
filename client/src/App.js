@@ -60,29 +60,24 @@ class App extends Component {
               )}
             />
 
-            <Route
+            <ProtectedRoute
               exact
               path="/read"
-              render={(props) => (
-                <Read
-                  {...props}
-                  lang={this.state.lang}
-                  token={this.state.token}
-                  knownWords={this.state.words[this.state.lang].knownWords}
-                  unknownWords={this.state.words[this.state.lang].unknownWords}
-                  vocabSize={this.state.words[this.state.lang].vocabSize}
-                  addKnownWord={this.addKnownWord}
-                  addUnknownWord={this.addUnknownWord}
-                  removeWord={this.removeWord}
-                  handleSignout={this.handleSignout}
-                  getDefinitions={this.getDefinitions}
-                  addToAppState={this.addToAppState}
-                  sanitizeText={this.sanitizeText}
-                  navOpen={this.state.navOpen}
-                  toggleNav={this.toggleNav}
-                  // serverTextId={this.state.serverTextId}
-                />
-              )}
+              component={Read}
+              lang={this.state.lang}
+              token={this.state.token}
+              knownWords={this.state.words[this.state.lang].knownWords}
+              unknownWords={this.state.words[this.state.lang].unknownWords}
+              vocabSize={this.state.words[this.state.lang].vocabSize}
+              addKnownWord={this.addKnownWord}
+              addUnknownWord={this.addUnknownWord}
+              removeWord={this.removeWord}
+              handleSignout={this.handleSignout}
+              getDefinitions={this.getDefinitions}
+              addToAppState={this.addToAppState}
+              sanitizeText={this.sanitizeText}
+              navOpen={this.state.navOpen}
+              toggleNav={this.toggleNav}
             />
 
             <ProtectedRoute

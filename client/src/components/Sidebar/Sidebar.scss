@@ -182,7 +182,7 @@ $sidebar-nav-height: 3rem;
       }
       .search-results {
         max-height: 100%;
-        overflow-y: auto;
+        overflow-y: visible;
       }
 
       .sidebar-toggle-md {
