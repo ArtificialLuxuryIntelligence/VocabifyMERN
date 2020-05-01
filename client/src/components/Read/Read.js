@@ -70,9 +70,10 @@ class Read extends Component {
               {/* add conditional here (dont show texts if not enough unknown words
                *see text area component ) */}
               <div>
-                <h3>Selected reading materials</h3>
+                <h3>Selected reading material</h3>
                 <p>Here are some texts that might suit your level:</p>
                 <h4>easy</h4>
+                <p> some text</p>
                 <h4>medium</h4>
                 <h4>hard</h4>
               </div>
