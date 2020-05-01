@@ -134,7 +134,7 @@ class Read extends Component {
   //avoiding settings state from received props when page refreshed (as done in constructor)
   // maybe can do with component will receive props?
   componentDidMount() {
-    console.log("SERVER TEXT ID", this.props.serverTextId);
+    // console.log("SERVER TEXT ID", this.props.serverTextId);
 
     // hydrate state from local
     let obj = JSON.parse(localStorage.getItem("vocabify"));
