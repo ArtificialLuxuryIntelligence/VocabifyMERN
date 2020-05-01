@@ -111,7 +111,7 @@ nav {
       a {
         // height: 100%;
         margin: 0.3rem;
-        padding: 1rem;
+        padding: 1rem 6rem;
         font-size: 1.3rem;
         text-decoration: none;
       }
@@ -155,7 +155,7 @@ nav {
       font-size: 1.2rem;
       justify-content: space-evenly;
       background-color: rgba(0, 0, 0, 0);
-      li {
+      .nav-item {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -164,9 +164,7 @@ nav {
         // background-color: red;
         flex: 1;
         a {
-          margin: 0.3rem;
-          padding: 0.2rem;
-          font-size: 1.3rem;
+          padding: 0.2rem 1rem;
         }
       }
     }

@@ -18,7 +18,7 @@ class Sidebar extends Component {
       sidebarOpen: false,
       searchWord: null,
       searchTerm: "",
-      searchBoxOpen: true,
+      searchBoxOpen: false,
     };
   }
 
