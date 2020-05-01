@@ -100,6 +100,12 @@ class Read extends Component {
                   handlePrevPage={this.handlePrevPage}
                 />
               </div>
+              <div>
+                <h2>Here are some texts that might suit your level:</h2>
+                <h4>easy</h4>
+                <h4>medium</h4>
+                <h4>hard</h4>
+              </div>
             </div>
 
             {/* <div id="sidebar-nav-sm">
