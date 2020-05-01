@@ -20,7 +20,9 @@ class Nav extends Component {
     return (
       <nav className={this.state.navOpen ? "nav-open" : ""}>
         <span>
-          <h1>Vocabify</h1>
+          <h1>
+            Vocabify <sup>v1.0</sup>
+          </h1>
         </span>
         <div onClick={() => this.toggleNav()} className="mobile-menu-toggle">
           <div id="hamburger">

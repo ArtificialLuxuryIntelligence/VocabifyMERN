@@ -4,6 +4,7 @@ import React, { Component } from "react";
 // import auth from "../../utils/auth";
 
 import Nav from "../Nav/Nav";
+import Footer from "../Footer/Footer";
 import RandomWord from "../RandomWord/RandomWord";
 // import WordDef from "../WordDef/WordDef";
 import LanguageDropdown from "../LanguageDropdown/LanguageDropdown";
@@ -31,7 +32,7 @@ class Home extends Component {
 
         <div className="content">
           <div className="main">
-            <h1>Home</h1>
+            {/* <h1>Home</h1> */}
             <div>
               <p>Set language</p>
               <LanguageDropdown
@@ -71,6 +72,7 @@ class Home extends Component {
             sanitizeText={this.props.sanitizeText}
           />
         </div>
+        <Footer></Footer>
       </div>
     );
   }

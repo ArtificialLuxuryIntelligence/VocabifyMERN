@@ -8,6 +8,8 @@ import { Prompt } from "react-router";
 import "./Read.scss";
 
 import Nav from "../Nav/Nav";
+import Footer from "../Footer/Footer";
+
 import Sidebar from "../Sidebar/Sidebar";
 import LanguageDropdown from "../LanguageDropdown/LanguageDropdown";
 
@@ -53,7 +55,7 @@ class Read extends Component {
 
           <div className="content">
             <div className="main">
-              <h2>Read</h2>
+              {/* <h2>Read</h2> */}
               <LanguageDropdown
                 handleDropdownChange={this.handleDropdownChange}
                 lang={this.props.lang}
@@ -67,6 +69,7 @@ class Read extends Component {
               </div>
             </div>
           </div>
+          <Footer></Footer>
         </div>
       );
     } else {
@@ -80,7 +83,7 @@ class Read extends Component {
 
           <div className="content">
             <div className="main">
-              <h2>Read</h2>
+              {/* <h2>Read</h2> */}
               <LanguageDropdown
                 handleDropdownChange={this.handleDropdownChange}
                 lang={this.props.lang}
@@ -123,6 +126,7 @@ class Read extends Component {
               sidebarMessageButton={this.state.sidebarMessageButton}
             />
           </div>
+          <Footer></Footer>
         </div>
       );
     }

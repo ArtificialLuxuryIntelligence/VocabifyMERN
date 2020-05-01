@@ -10,10 +10,6 @@
 /* margin: 1rem; */
 /* } */
 
-.searchable-word:hover {
-  background-color: aqua;
-}
-
 .text-reader {
   white-space: pre-wrap;
   line-height: 2;

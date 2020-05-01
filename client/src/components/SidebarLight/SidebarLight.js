@@ -35,7 +35,9 @@ class SidebarLight extends Component {
         </div>
         <div
           className={
-            this.state.sidebarOpen ? "sidebar sidebar-open" : "sidebar"
+            this.state.sidebarOpen
+              ? "sidebar-light sidebar sidebar-open"
+              : "sidebar-light sidebar"
           }
         >
           <div className="sidebar-sticky">

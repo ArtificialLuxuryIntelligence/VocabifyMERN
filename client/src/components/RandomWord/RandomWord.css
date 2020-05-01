@@ -3,10 +3,11 @@
   flex-direction: column;
 }
 
-.random-word button {
+.random-word > button {
   align-self: flex-start;
   display: inline-block;
   float: none;
+  margin-bottom: 1rem;
 }
 
 .testLink {
