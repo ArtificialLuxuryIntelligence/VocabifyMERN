@@ -71,7 +71,7 @@ $sidebar-nav-height: 3rem;
   transition: all 0.2s ease-in;
 
   padding: 0;
-  position: absolute;
+  position: fixed;
   display: flex;
   flex-direction: column;
 
@@ -83,9 +83,6 @@ $sidebar-nav-height: 3rem;
   }
   .search {
     // border-bottom: 1px solid black;
-
-    .search-box-open {
-    }
     .search-box-closed {
       overflow: hidden;
       height: 1rem;
@@ -102,18 +99,23 @@ $sidebar-nav-height: 3rem;
       padding: 0.4rem 0;
       margin: 0;
     }
-    button {
-      font-size: 0.8em;
-    }
-    input {
-      width: 100%;
-      max-width: 350px;
+    .search-form {
+      button {
+        font-size: 0.8em;
+      }
+      input {
+        width: 100%;
+        max-width: 350px;
+        margin-bottom: 0.2rem;
+        margin-right: 0.3rem;
+      }
     }
   }
   .sidebar-sticky {
     padding: 0 1rem 0 1rem;
   }
   .scroll-wrapper {
+    scroll-behavior: smooth;
     overflow-y: scroll;
 
     .defs {

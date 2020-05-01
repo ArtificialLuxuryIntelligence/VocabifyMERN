@@ -8,6 +8,8 @@ import { Prompt } from "react-router";
 import "./Read.scss";
 
 import Nav from "../Nav/Nav";
+import Footer from "../Footer/Footer";
+
 import Sidebar from "../Sidebar/Sidebar";
 import LanguageDropdown from "../LanguageDropdown/LanguageDropdown";
 
@@ -53,7 +55,7 @@ class Read extends Component {
 
           <div className="content">
             <div className="main">
-              <h2>Read</h2>
+              {/* <h2>Read</h2> */}
               <LanguageDropdown
                 handleDropdownChange={this.handleDropdownChange}
                 lang={this.props.lang}
@@ -67,6 +69,7 @@ class Read extends Component {
               </div>
             </div>
           </div>
+          <Footer></Footer>
         </div>
       );
     } else {
@@ -80,7 +83,7 @@ class Read extends Component {
 
           <div className="content">
             <div className="main">
-              <h2>Read</h2>
+              {/* <h2>Read</h2> */}
               <LanguageDropdown
                 handleDropdownChange={this.handleDropdownChange}
                 lang={this.props.lang}
@@ -123,6 +126,7 @@ class Read extends Component {
               sidebarMessageButton={this.state.sidebarMessageButton}
             />
           </div>
+          <Footer></Footer>
         </div>
       );
     }
@@ -130,6 +134,8 @@ class Read extends Component {
   //avoiding settings state from received props when page refreshed (as done in constructor)
   // maybe can do with component will receive props?
   componentDidMount() {
+    // console.log("SERVER TEXT ID", this.props.serverTextId);
+
     // hydrate state from local
     let obj = JSON.parse(localStorage.getItem("vocabify"));
     if (obj) {
@@ -137,6 +143,9 @@ class Read extends Component {
       this.setState({ knownWords, unknownWords, vocabSize });
     }
     return null;
+
+    //if textId supplied then fetch text, switch views and load text to reader.
+    //TODO
   }
 
   splitText(string, cutoff) {
@@ -194,39 +203,23 @@ class Read extends Component {
 
       let oldN = this.state.sidebarWords.length;
       //adds new defs to sidebar and removes duplicates
-      this.setState(
-        {
-          definitionJSON: this.removeWordArrayDupes([
-            ...this.state.definitionJSON,
-            ...definitions,
-          ]),
-          sidebarWords: [
-            ...new Set([...this.state.sidebarWords, ...sidebarWordsArray]),
-          ],
-          isLoading: false,
-        }
-        // () => {
-        // if (oldN !== 0 && this.state.sidebarWords.length > oldN) {
-        //   console.log(oldN);
-        //   console.log(this.state.sidebarWords);
-        //   console.log(this.state.sidebarWords[oldN]);
-        //   //give time for sidebar to render
-        //   setTimeout(
-        //     this.scrollToDef(String(this.state.sidebarWords[oldN])),
-        //     10000
-        //   );
-        // }
-        // }
-      );
+      this.setState({
+        definitionJSON: this.removeWordArrayDupes([
+          ...this.state.definitionJSON,
+          ...definitions,
+        ]),
+        sidebarWords: [
+          ...new Set([...this.state.sidebarWords, ...sidebarWordsArray]),
+        ],
+        isLoading: false,
+      });
       if (oldN !== 0 && this.state.sidebarWords.length > oldN) {
-        console.log(oldN);
-        console.log(this.state.sidebarWords);
-        console.log(this.state.sidebarWords[oldN]);
+        // console.log(oldN);
+        // console.log(this.state.sidebarWords);
+        // console.log(this.state.sidebarWords[oldN]);
         //give time for sidebar to render
-        setTimeout(
-          this.scrollToDef(String(this.state.sidebarWords[oldN])),
-          100
-        );
+
+        this.scrollToDef(String(this.state.sidebarWords[oldN]));
       }
 
       //scroll to def of first new word (bug: this uses the sidebarWordsArray which has not had dupes removed yet. This means that

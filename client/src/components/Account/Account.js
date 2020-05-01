@@ -6,6 +6,8 @@ import React, { Component } from "react";
 import SearchForm from "../SearchForm/SearchForm";
 
 import Nav from "../Nav/Nav";
+import Footer from "../Footer/Footer";
+
 // import RandomWord from "../RandomWord/RandomWord";
 import WordDef from "../WordDef/WordDef";
 import LanguageDropdown from "../LanguageDropdown/LanguageDropdown";
@@ -131,6 +133,7 @@ class Account extends Component {
             sanitizeText={this.props.sanitizeText}
           />
         </div>
+        <Footer></Footer>
       </div>
     );
   }
