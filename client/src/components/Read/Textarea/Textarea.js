@@ -12,7 +12,7 @@ class Textarea extends Component {
   render() {
     return (
       <div>
-        <h2>Textarea</h2>
+        {/* <h2>Textarea</h2> */}
         {this.props.unknownWords.length < 5 && (
           <>
             <p> Language Test:</p>
