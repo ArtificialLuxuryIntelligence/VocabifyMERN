@@ -67,6 +67,15 @@ class Read extends Component {
                   lang={this.props.lang}
                 />
               </div>
+              {/* add conditional here (dont show texts if not enough unknown words
+               *see text area component ) */}
+              <div>
+                <h3>Selected reading</h3>
+                <p>Here are some texts that might suit your level:</p>
+                <h4>easy</h4>
+                <h4>medium</h4>
+                <h4>hard</h4>
+              </div>
             </div>
           </div>
           <Footer></Footer>
@@ -99,12 +108,6 @@ class Read extends Component {
                   handleNextPage={this.handleNextPage}
                   handlePrevPage={this.handlePrevPage}
                 />
-              </div>
-              <div>
-                <h2>Here are some texts that might suit your level:</h2>
-                <h4>easy</h4>
-                <h4>medium</h4>
-                <h4>hard</h4>
               </div>
             </div>
 
