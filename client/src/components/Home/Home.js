@@ -53,6 +53,10 @@ class Home extends Component {
               addToAppState={this.props.addToAppState}
               history={this.props.history}
             />
+            <h2>Here are some texts that might suit your level:</h2>
+            <h4>easy</h4>
+            <h4>medium</h4>
+            <h4>hard</h4>
           </div>
 
           <SidebarLight
@@ -75,10 +79,19 @@ class Home extends Component {
     );
   }
 
-  componentDidMount() {
-    console.log("HOME language is:", this.props.lang);
-  }
+  componentDidMount() {}
+  componentDidUpdate(prevProps) {
+    if (this.props.lang !== prevProps.lang) {
+      console.log("updated: HOME language is:", this.props.lang);
+      console.log(this.props.vocabSize);
 
+      // FETCH some texts from server with their titles/ids;
+      // render to dom
+
+      //onclick=>
+      // this.props.addToAppState("serverTextId", 254634);
+    }
+  }
   handleDropdownChange = (e) => {
     e.preventDefault();
     // this.setState({ lang: e.target.value });

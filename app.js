@@ -6,7 +6,7 @@ var logger = require("morgan");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-// var apiRouter = require("./routes/API");
+var apiRouter = require("./routes/API");
 // var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var wordsRouter = require("./routes/words");
@@ -26,7 +26,7 @@ app.use(cookieParser());
 // app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/words", wordsRouter);
-// app.use("/api", apiRouter);
+app.use("/api", apiRouter);
 
 //serve static assets in productions
 
