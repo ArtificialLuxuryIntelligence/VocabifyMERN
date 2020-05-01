@@ -1,3 +1,8 @@
 .sidebar-light {
   overflow-y: scroll;
+  .search {
+    .search-box-open {
+      border-bottom: none;
+    }
+  }
 }

@@ -83,6 +83,11 @@ $sidebar-nav-height: 3rem;
   }
   .search {
     // border-bottom: 1px solid black;
+
+    .search-box-open {
+      padding-bottom: 1rem;
+      border-bottom: 1px solid black;
+    }
     .search-box-closed {
       overflow: hidden;
       height: 1rem;
@@ -93,26 +98,42 @@ $sidebar-nav-height: 3rem;
       display: inline-block;
     }
     #hide-search {
+      margin-right: 2rem;
       float: right;
     }
     #search-heading {
       padding: 0.4rem 0;
       margin: 0;
     }
-    .search-form {
-      button {
-        font-size: 0.8em;
-      }
-      input {
-        width: 100%;
-        max-width: 350px;
-        margin-bottom: 0.2rem;
-        margin-right: 0.3rem;
-      }
+    button {
+      font-size: 0.8em;
+    }
+    input {
+      width: 100%;
+      max-width: 350px;
     }
   }
   .sidebar-sticky {
-    padding: 0 1rem 0 1rem;
+    // padding: 0 2rem 0 2rem;
+    .heading {
+      padding: 0 0 0 1rem;
+    }
+    .search-form,
+    .search-results,
+    .message {
+      padding: 0 1rem 0 1rem;
+    }
+
+    .search-form {
+      input {
+        margin: 0 0.2rem 0.3rem 0;
+      }
+    }
+
+    .search-results {
+      max-height: 30vh;
+      overflow-y: scroll;
+    }
   }
   .scroll-wrapper {
     scroll-behavior: smooth;
@@ -143,13 +164,25 @@ $sidebar-nav-height: 3rem;
     height: 100%;
     overflow: hidden;
     .sidebar-sticky {
-      padding: 0 1.5rem 0 1.5rem;
+      // padding: 0 1.5rem 0 1.5rem;
       .heading {
         display: flex;
         justify-content: space-between;
         align-items: center;
         button {
         }
+      }
+      .heading {
+        padding: 0 0 0 1.5rem;
+      }
+      .search-form,
+      .search-results,
+      .message {
+        padding: 0 1.5rem 0 1.5rem;
+      }
+      .search-results {
+        max-height: 100%;
+        overflow-y: auto;
       }
 
       .sidebar-toggle-md {
@@ -162,6 +195,18 @@ $sidebar-nav-height: 3rem;
         padding: 0 1.5rem 0 1.5rem;
       }
     }
+  }
+}
+
+.sidebar-open {
+  height: 75vh;
+  padding-bottom: $sidebar-nav-height; //to clear bottom nav
+}
+@include breakpoint(md) {
+  .sidebar-open {
+    height: auto;
+
+    width: 80%;
   }
 }
 #sidebar-nav-sm {
@@ -177,17 +222,5 @@ $sidebar-nav-height: 3rem;
 @include breakpoint(md) {
   #sidebar-nav-sm {
     display: none;
-  }
-}
-
-.sidebar-open {
-  height: 75vh;
-  padding-bottom: $sidebar-nav-height; //to clear bottom nav
-}
-@include breakpoint(md) {
-  .sidebar-open {
-    height: auto;
-
-    width: 80%;
   }
 }

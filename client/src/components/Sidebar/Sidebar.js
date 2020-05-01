@@ -23,19 +23,6 @@ class Sidebar extends Component {
   }
 
   render() {
-    // if (this.props.isLoading) {
-    //   return (
-    //     <div
-    //       className={
-    //         this.state.sidebarOpen
-    //           ? "sidebar sidebar-open"
-    //           : "sidebar sidebar-closed"
-    //       }
-    //     >
-    //       <p> Loading words...</p>
-    //     </div>
-    //   );
-    // }
     return (
       <div>
         <div id="sidebar-nav-sm">
@@ -101,10 +88,16 @@ class Sidebar extends Component {
                 </div>
               </div>
             </div>
-            {this.props.isNewWordLoading ? <p>adding word ... </p> : null}
-            {this.props.isLoading ? <p> Loading words...</p> : null}
+            {this.props.isNewWordLoading ? (
+              <p className="message">adding word ... </p>
+            ) : null}
+            {this.props.isLoading ? (
+              <p className="message"> Loading words...</p>
+            ) : null}
             {this.props.sidebarMessage.length > 0 ? (
-              <p className="sidebar-message">{this.props.sidebarMessage}</p>
+              <p className="sidebar-message message">
+                {this.props.sidebarMessage}
+              </p>
             ) : null}
             {this.props.sidebarMessageButton.length > 0 ? (
               <button

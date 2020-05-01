@@ -14,6 +14,7 @@ html {
   width: 100%;
   height: 100%;
   display: flex;
+  position: relative;
   justify-content: center;
 }
 
@@ -47,10 +48,10 @@ html {
 @include breakpoint(md) {
   .grid-container {
     grid-template-columns: repeat(12, 1fr);
-    grid-template-rows: 4rem minmax(100vh, auto) 1.5rem;
+    grid-template-rows: 4rem minmax(100vh, 100vh) 1.5rem;
     .content {
       .main {
-        // padding: 2rem 2rem 3rem 4rem;
+        overflow-y: scroll;
       }
     }
   }
@@ -62,7 +63,7 @@ select {
 // COLOURS //
 nav,
 .footer {
-  background-color: #389a44;
+  background-color: #2a4747;
 
   border: 1px solid rgba(0, 0, 0, 0.233);
 }
@@ -75,21 +76,21 @@ nav {
     color: black;
   }
 }
-.main {
-  background-color: #d3ead6;
-}
-.sidebar {
-  background-color: #b9ddbe;
-}
-#sidebar-nav-sm {
-  background-color: #389a43a4;
-}
 .container {
   background-color: #1965221a;
 }
+.main {
+  background-color: #dee9de;
+}
+.sidebar {
+  background-color: #c8d6c8;
+}
+#sidebar-nav-sm {
+  background-color: #2a4747;
+}
 
 .searchable-word:hover {
-  background-color: #ff78a0;
+  background-color: #ffb2e6;
 }
 
 @include breakpoint(md) {
