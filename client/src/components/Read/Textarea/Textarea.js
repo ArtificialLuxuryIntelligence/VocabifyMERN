@@ -15,11 +15,26 @@ class Textarea extends Component {
         <h2>Textarea</h2>
         {this.props.unknownWords.length < 5 && (
           <>
-            <p> Language Test:</p>
-            <p>Click submit below the following text.</p>
-            <p>Click on words you don't know to look up their definition.</p>
-            <p>Click "add word" to add this word to your vocabulary list.</p>
-            <p> Please add at least 5 words to get started.</p>
+            <p> We don't have enough words to guess your level. </p>
+            <h3> Level finder:</h3>
+            <p>Click on any word on the page to look up its definition.</p>
+
+            <p>Click "add" to add a word to your vocabulary list.</p>
+            <p>
+              Add the first words that you see and aren't confident of the
+              definition
+            </p>
+            <p> Please add 5 words to get started.</p>
+            <p>
+              As you continue to use Vocabify, it will get better at guessing
+              the words you don't know.
+            </p>
+            <p>
+              {" "}
+              If you know all the words, then feel free to use the search bar to
+              add words you have learned recently.
+            </p>
+            <p>Now hit submit below the following text.</p>
             <textarea
               id="textarea"
               value={this.renderText(this.props.lang)}
@@ -52,11 +67,11 @@ class Textarea extends Component {
 
     switch (lang) {
       case "en":
-        return "English Test";
+        return "English Test . . . . . . . . .\nball \nfall \nmall ";
       case "fr":
         return "French TEST";
       case "es":
-        return "Sánchez completará la ronda entre el jueves y el viernes con todas las fuerzas políticas, a cuyos representantes irá de recibiendo en el orden de mayor a menor representación parlamentaria. Con estas reuniones, el presidente del Gobierno persigue “avanzar hacia este gran pacto que permita sentar las bases de la España del día después tras vencer esta pandemia global”. “Tenemos que empezar hoy a construir ya la prosperidad del mañana”, ha asegurado Montero.";
+        return "Sánchez completará la ronda entre el jueves y el viernes con todas las fuerzas políticas,Sánchez completará la ronda entre el jueves y el viernes con todas las fuerzas políticas,Sánchez completará la ronda entre el jueves y el viernes con todas las fuerzas políticas,Sánchez completará la ronda entre el jueves y el viernes con todas las fuerzas políticas,Sánchez completará la ronda entre el jueves y el viernes con todas las fuerzas políticas,Sánchez completará la ronda entre el jueves y el viernes con todas las fuerzas políticas,Sánchez completará la ronda entre el jueves y el viernes con todas las fuerzas políticas,Sánchez completará la ronda entre el jueves y el viernes con todas las fuerzas políticas,Sánchez completará la ronda entre el jueves y el viernes con todas las fuerzas políticas,Sánchez completará la ronda entre el jueves y el viernes con todas las fuerzas políticas, a cuyos representantes irá de recibiendo en el orden de mayor a menor representación parlamentaria. Con estas reuniones, el presidente del Gobierno persigue “avanzar hacia este gran pacto que permita sentar las bases de la España del día después tras vencer esta pandemia global”. “Tenemos que empezar hoy a construir ya la prosperidad del mañana”, ha asegurado Montero.";
     }
   };
 }

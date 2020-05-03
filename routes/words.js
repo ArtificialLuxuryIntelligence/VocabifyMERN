@@ -126,7 +126,7 @@ const filterGivenUserWords = async (knownWords, unknownWords, queryWords) => {
   );
   console.log(
     //fancy way of showing what was removed
-    "removed (reason: given user words)",
+    "removed (reason: given user known words)",
     queryWords
       .filter((x) => !filteredWords.includes(x))
       .concat(filteredWords.filter((x) => !queryWords.includes(x)))
@@ -169,7 +169,7 @@ const filterDefinitions = async (
 
     if (inUserVocab || inKnownWords) {
       console.log(
-        `in user vocab: ${inUserVocab} ; in knownWords ${inKnownWords} `
+        `in calculated user vocab: ${inUserVocab} ; in knownWords ${inKnownWords} `
       );
 
       if (unknownWords.indexOf(word) !== -1) {

@@ -36,10 +36,11 @@ class Read extends Component {
       isLoading: false,
       isNewWordLoading: false,
       pageNumber: 0,
-      largestLoadedPageNumber: -1,
+      largestLoadedPageNumber: 0,
       sidebarMessage: "",
       sidebarMessageButton: "",
       textareaValue: "",
+      testing: false,
     };
 
     // this.getDefinitions = this.props.getDefinitions.bind(this);
@@ -76,7 +77,7 @@ class Read extends Component {
       return (
         <div className="read grid-container">
           <Prompt
-            when={this.state.fullText.length > 0}
+            when={this.state.fullText.length > 0 && !this.state.testing}
             message="Are you sure you want to leave your text?"
           />
           <Nav handleSignout={this.props.handleSignout} />
@@ -98,6 +99,7 @@ class Read extends Component {
                   pageNumber={this.state.pageNumber}
                   handleNextPage={this.handleNextPage}
                   handlePrevPage={this.handlePrevPage}
+                  unknownWords={this.props.unknownWords}
                 />
               </div>
             </div>
@@ -110,12 +112,12 @@ class Read extends Component {
               lang={this.props.lang}
               definitionJSON={this.state.definitionJSON}
               unknownWords={this.props.unknownWords}
-              handleRemoveWord={this.handleRemoveWord}
               handleDeleteWord={this.handleDeleteWord}
+              // handleRemoveWord={this.handleRemoveWord}
               // handleAddWord={this.handleAddWord}
               getDefinitions={this.props.getDefinitions}
               addKnownWord={this.props.addKnownWord}
-              addUnknownWord={this.props.addUnknownWord}
+              addUnknownWord={this.addUnknownWord}
               removeWord={this.props.removeWord}
               sidebarWords={this.state.sidebarWords}
               handleSpanClick={this.handleSpanClick}
@@ -136,6 +138,13 @@ class Read extends Component {
   componentDidMount() {
     // console.log("SERVER TEXT ID", this.props.serverTextId);
 
+    //if user vocab test is required.
+    if (this.props.unknownWords.length < 5) {
+      console.log(this.props.unknownWords);
+
+      this.setState({ testing: true });
+    }
+
     // hydrate state from local
     let obj = JSON.parse(localStorage.getItem("vocabify"));
     if (obj) {
@@ -147,6 +156,35 @@ class Read extends Component {
     //if textId supplied then fetch text, switch views and load text to reader.
     //TODO
   }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.unknownWords !== prevProps.unknownWords) {
+      console.log("changed");
+    }
+  }
+
+  // shouldComponentUpdate(nextProps) {
+  //   if (nextProps.unknownWords.length === 5 && this.state.testing == true) {
+  //     console.log("should");
+  //     console.log(nextProps.unknownWords.length);
+
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
+  // static getDerivedStateFromProps(nextProps, prevState) {
+  //   // do things with nextProps.someProp and prevState.cachedSomeProp
+  //   if (nextProps.unknownWords.length < 5) {
+  //     console.log("lessss");
+
+  //     return {
+  //       redirect: true,
+  //     };
+  //   } else return null;
+
+  //   // ... other derived state properties
+  // }
 
   splitText(string, cutoff) {
     let words = string.split(" ");
@@ -340,11 +378,11 @@ class Read extends Component {
 
       //if word is from a definition then put new word under that def in DOM
       if (sidebarWordArray.indexOf(parentWord) >= 0) {
-        console.log(
-          "index of",
-          parentWord,
-          sidebarWordArray.indexOf(parentWord)
-        );
+        // console.log(
+        //   "index of",
+        //   parentWord,
+        //   sidebarWordArray.indexOf(parentWord)
+        // );
         let index = sidebarWordArray.indexOf(parentWord);
         defs.splice(index + 1, 0, def[0]);
         sidebarWordArray.splice(index + 1, 0, newWord);
@@ -390,7 +428,11 @@ class Read extends Component {
     });
   };
 
+  //NO LONGER NEEDED?
+
   handleAddWord = (e) => {
+    console.log("adding");
+
     //remove
     e.stopPropagation();
     let word = e.target.parentElement.children[0].children[0].innerText;
@@ -400,7 +442,20 @@ class Read extends Component {
     //handle with props
     // e.target.style.display = "none";
     // e.target.previousElementSibling.style.display = "block";
+    console.log(this.props.unknownWords);
+    console.log("adding");
   };
+
+  addUnknownWord = (word) => {
+    this.props.addUnknownWord(word);
+    if (this.state.testing && this.props.unknownWords.length === 5) {
+      alert("All done");
+      this.props.history.push("./");
+    }
+  };
+
+  //NO LONGER NEEDED?
+
   handleRemoveWord = (e) => {
     //AKA i know this word
     //remove
@@ -418,6 +473,8 @@ class Read extends Component {
     // e.target.nextElementSibling.style.display = "block";
     // e.target.parentElement.parentElement.remove();
   };
+
+  //STILL NEEDED I THINK?
 
   handleDeleteWord = (word) => {
     //removes from sidebar and sets as 'known'

@@ -7,9 +7,12 @@ import Spanner from "../../Spanner/Spanner";
 // import auth from "../../utils/auth";
 
 class Textreader extends Component {
-  // constructor(props) {
-  //   super(props);
-  // }
+  constructor(props) {
+    super(props);
+    this.state = {
+      redirect: false,
+    };
+  }
 
   render() {
     return (
@@ -27,6 +30,15 @@ class Textreader extends Component {
           <button onClick={this.props.handlePrevPage}>prev</button>
           <button onClick={this.props.handleNextPage}>next </button>
         </div>
+
+        {this.props.unknownWords.length < 5 && (
+          <p className="alert-message" key={this.props.unknownWords}>
+            Words left to add: {5 - this.props.unknownWords.length}
+          </p>
+        )}
+        <p>
+          Page {this.props.pageNumber + 1} of {this.props.fullTextSplit.length}
+        </p>
       </div>
     );
   }
