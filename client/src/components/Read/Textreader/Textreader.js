@@ -17,7 +17,7 @@ class Textreader extends Component {
   render() {
     return (
       <div className="textreader">
-        <h2>Reader</h2>
+        {/* <h2>Reader</h2> */}
         <button onClick={() => this.props.handleNewText()}>New text</button>
         <div className="text-reader">
           {this.props.unknownWords.length < 5 && (
@@ -29,9 +29,9 @@ class Textreader extends Component {
               <p className="alert-message" key={this.props.unknownWords}>
                 Words left to add: {5 - this.props.unknownWords.length}
               </p>
+              <hr></hr>
             </>
           )}
-          <hr></hr>
           <Spanner
             handleSpanClick={this.props.handleSpanClick}
             randomString={this.props.fullTextSplit[this.props.pageNumber]}

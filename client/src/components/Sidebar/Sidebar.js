@@ -181,13 +181,15 @@ class Sidebar extends Component {
   }
 
   placeSidebar() {
-    console.log("placing");
-
     let s = document.querySelector(".sidebar");
-    let cont = document.querySelector(".container");
-    let r = (window.innerWidth - 1440) / 2;
-    s.style.right = r + "px";
-    s.style.width = "10px";
+    if (window.innerWidth > 1440) {
+      let r = (window.innerWidth - 1440) / 2;
+      s.style.right = r + "px";
+      s.style.width = 1440 * 0.2 + "px";
+    } else {
+      s.style.right = 0;
+      s.style.width = "auto";
+    }
   }
 
   toggleSidebar = () => {

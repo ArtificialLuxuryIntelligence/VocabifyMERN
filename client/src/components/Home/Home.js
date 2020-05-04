@@ -34,7 +34,7 @@ class Home extends Component {
           <div className="main">
             {/* <h1>Home</h1> */}
             <div>
-              <p>Set language</p>
+              {/* <p>Set language</p>  */}
               <LanguageDropdown
                 handleDropdownChange={this.handleDropdownChange}
                 lang={this.props.lang}

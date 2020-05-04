@@ -162,15 +162,14 @@ class SidebarLight extends Component {
   }
 
   placeSidebar() {
+    let s = document.querySelector(".sidebar");
     if (window.innerWidth > 1440) {
-      console.log("placing");
-
-      let s = document.querySelector(".sidebar");
-      let cont = document.querySelector(".content");
-      console.log(cont.width);
       let r = (window.innerWidth - 1440) / 2;
       s.style.right = r + "px";
       s.style.width = 1440 * 0.2 + "px";
+    } else {
+      s.style.right = 0;
+      s.style.width = "auto";
     }
   }
 
