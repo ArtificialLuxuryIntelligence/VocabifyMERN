@@ -26,5 +26,17 @@
   "devDependencies": {
     "node-sass": "^4.14.0",
     "nodemon": "^2.0.2"
-  }
+  },
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ArtificialLuxuryIntelligence/VocabifyMERN.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ArtificialLuxuryIntelligence/VocabifyMERN/issues"
+  },
+  "homepage": "https://github.com/ArtificialLuxuryIntelligence/VocabifyMERN#readme",
+  "description": ""
 }

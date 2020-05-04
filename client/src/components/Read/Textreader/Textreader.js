@@ -20,6 +20,18 @@ class Textreader extends Component {
         <h2>Reader</h2>
         <button onClick={() => this.props.handleNewText()}>New text</button>
         <div className="text-reader">
+          {this.props.unknownWords.length < 5 && (
+            <>
+              <p>
+                Tip: In the words sidebar, you can click on words and parts of
+                speech to expand and collapse definitions.
+              </p>
+              <p className="alert-message" key={this.props.unknownWords}>
+                Words left to add: {5 - this.props.unknownWords.length}
+              </p>
+            </>
+          )}
+          <hr></hr>
           <Spanner
             handleSpanClick={this.props.handleSpanClick}
             randomString={this.props.fullTextSplit[this.props.pageNumber]}
@@ -31,18 +43,6 @@ class Textreader extends Component {
           <button onClick={this.props.handleNextPage}>next </button>
         </div>
 
-        {this.props.unknownWords.length < 5 && (
-          <>
-            <p>
-              {" "}
-              Tip: In the words sidebar, you can click on words and parts of
-              speech to expand and collapse definitions.
-            </p>
-            <p className="alert-message" key={this.props.unknownWords}>
-              Words left to add: {5 - this.props.unknownWords.length}
-            </p>
-          </>
-        )}
         <p>
           Page {this.props.pageNumber + 1} of {this.props.fullTextSplit.length}
         </p>

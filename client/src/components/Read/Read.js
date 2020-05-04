@@ -278,9 +278,16 @@ class Read extends Component {
     let fullText = textarea.value;
     let fullTextSplit = this.splitText(fullText, length);
 
-    this.setState({ currentView: "read", fullText, fullTextSplit }, () =>
-      this.loadPageDefinitions()
-    );
+    if (this.state.testing) {
+      console.log("testing, no lookups");
+
+      this.setState({ currentView: "read", fullText, fullTextSplit });
+    } else {
+      this.setState({ currentView: "read", fullText, fullTextSplit }, () =>
+        this.loadPageDefinitions()
+      );
+    }
+
     // this.loadDefinitions();
     // let pageText = this.state.fullTextSplit[this.state.pageNumber];
   };
