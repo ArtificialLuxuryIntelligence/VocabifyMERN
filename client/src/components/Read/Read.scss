@@ -72,6 +72,7 @@ $sidebar-nav-height: 3rem;
   }
   @include breakpoint(md) {
     .main {
+      margin-right: 25%;
       padding: 2rem 25% 3rem 4rem;
     }
   }

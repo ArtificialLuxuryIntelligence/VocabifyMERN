@@ -139,7 +139,8 @@ nav {
 
 @include breakpoint(md) {
   nav {
-    position: relative;
+    position: fixed;
+    max-width: 1440px;
 
     .mobile-menu-toggle {
       display: none;

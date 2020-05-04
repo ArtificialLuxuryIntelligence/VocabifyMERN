@@ -163,10 +163,9 @@ class Sidebar extends Component {
   // pass in json as props..
 
   componentDidMount() {
-    // add event listeners here???
-    // console.log(this.state);
-    // this.populateDefinitionList(this.state.definitionJSON);
+    this.placeSidebar();
   }
+
   componentDidUpdate(prevProps) {
     if (
       this.props.definitionJSON !== prevProps.definitionJSON ||
@@ -179,6 +178,16 @@ class Sidebar extends Component {
         this.setState({ sidebarOpen: true });
       }
     }
+  }
+
+  placeSidebar() {
+    console.log("placing");
+
+    let s = document.querySelector(".sidebar");
+    let cont = document.querySelector(".container");
+    let r = (window.innerWidth - 1440) / 2;
+    s.style.right = r + "px";
+    s.style.width = "10px";
   }
 
   toggleSidebar = () => {

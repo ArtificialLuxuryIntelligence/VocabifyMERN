@@ -50,7 +50,9 @@ html {
 @include breakpoint(md) {
   .grid-container {
     grid-template-columns: repeat(12, 1fr);
-    grid-template-rows: 4rem minmax(100vh, 100vh) 1.5rem;
+    grid-template-rows: 4rem minmax(100vh, auto) 1.5rem;
+    position: relative;
+
     .content {
       .main {
         overflow-y: scroll;

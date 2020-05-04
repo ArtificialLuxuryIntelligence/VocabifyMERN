@@ -142,7 +142,10 @@ class SidebarLight extends Component {
     );
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.placeSidebar();
+    window.addEventListener("resize", this.placeSidebar);
+  }
   componentDidUpdate(prevProps) {
     if (this.props.searchWord !== prevProps.searchWord) {
       this.setState({ searchWord: this.props.searchWord });
@@ -158,19 +161,18 @@ class SidebarLight extends Component {
     }
   }
 
-  // componentDidUpdate(prevProps) {
-  //   if (
-  //     this.props.definitionJSON !== prevProps.definitionJSON ||
-  //     this.props.isNewWordLoading !== prevProps.isNewWordLoading ||
-  //     this.props.isLoading !== prevProps.isLoading ||
-  //     this.props.sidebarMessage !== prevProps.sidebarMessage
-  //   ) {
-  //     //opens sidebar on smaller screens
-  //     if (window.innerWidth < 768 && this.state.sidebarOpen == false) {
-  //       this.setState({ sidebarOpen: true });
-  //     }
-  //   }
-  // }
+  placeSidebar() {
+    if (window.innerWidth > 1440) {
+      console.log("placing");
+
+      let s = document.querySelector(".sidebar");
+      let cont = document.querySelector(".content");
+      console.log(cont.width);
+      let r = (window.innerWidth - 1440) / 2;
+      s.style.right = r + "px";
+      s.style.width = 1440 * 0.2 + "px";
+    }
+  }
 
   toggleSidebar = () => {
     this.setState({ sidebarOpen: !this.state.sidebarOpen });

@@ -26,4 +26,12 @@
 }
 
 @include breakpoint(md) {
+  position: relative;
+
+  // .account-main {
+  //   direction: rtl;
+  //   .ltr-wrapper {
+  //     direction: ltr;
+  //   }
+  // }
 }
