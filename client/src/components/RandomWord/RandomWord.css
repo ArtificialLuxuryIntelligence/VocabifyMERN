@@ -10,8 +10,7 @@
   margin-bottom: 1rem;
 }
 
-.testLink {
+.test-link {
   cursor: pointer;
   font-weight: bold;
-  color: blue;
 }

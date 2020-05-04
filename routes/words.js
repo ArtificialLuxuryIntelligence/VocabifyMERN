@@ -67,7 +67,7 @@ const estimateUserVocab = async (lang, knownWords, unknownWords) => {
   console.log("estimating vocab size ...");
 
   let freqList = await getFreqList(lang);
-
+  //clientside currently limits access to api (need test first) if unknownWords.length<=5
   if (unknownWords.length < 3) {
     return freqList.length;
   } else {
@@ -75,12 +75,13 @@ const estimateUserVocab = async (lang, knownWords, unknownWords) => {
 
     unknownWords.forEach((word) => {
       indexArray.push(freqList.indexOf(word));
-      // console.log("saved word", word, freqList.indexOf(word));
+      console.log("saved word", word, freqList.indexOf(word));
 
       indexArray = indexArray.filter((index) => index > 0); // only uses words that are in the freqList
       vocabSize = indexArray.reduce((a, b) => a + b, 0) / indexArray.length;
 
       //CALLIBRATION - brings down estimate by 10% (catches more words)
+      //TO DO: remove upper outliers (they can artificially bring average up)
       callibratedVocabSize = Math.floor(vocabSize - vocabSize / 10);
 
       // userVocab = freqList.slice(0, user.myVocabSize);

@@ -32,9 +32,16 @@ class Textreader extends Component {
         </div>
 
         {this.props.unknownWords.length < 5 && (
-          <p className="alert-message" key={this.props.unknownWords}>
-            Words left to add: {5 - this.props.unknownWords.length}
-          </p>
+          <>
+            <p>
+              {" "}
+              Tip: In the words sidebar, you can click on words and parts of
+              speech to expand and collapse definitions.
+            </p>
+            <p className="alert-message" key={this.props.unknownWords}>
+              Words left to add: {5 - this.props.unknownWords.length}
+            </p>
+          </>
         )}
         <p>
           Page {this.props.pageNumber + 1} of {this.props.fullTextSplit.length}

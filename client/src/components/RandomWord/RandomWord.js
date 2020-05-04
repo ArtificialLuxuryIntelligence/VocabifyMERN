@@ -37,7 +37,10 @@ class RandomWord extends Component {
           </p>
           <p>
             Take this{" "}
-            <a className="testLink" onClick={() => this.props.redirectToRead()}>
+            <a
+              className="test-link"
+              onClick={() => this.props.redirectToRead()}
+            >
               reading test
             </a>{" "}
             to get started.
