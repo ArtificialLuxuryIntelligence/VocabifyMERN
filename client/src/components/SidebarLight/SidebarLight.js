@@ -162,19 +162,28 @@ class SidebarLight extends Component {
   }
 
   placeSidebar() {
+    console.log("placing");
+
     let s = document.querySelector(".sidebar");
-    if (window.innerWidth > 1440) {
-      let r = (window.innerWidth - 1440) / 2;
-      s.style.right = r + "px";
-      s.style.width = 1440 * 0.2 + "px";
-    } else {
-      s.style.right = 0;
-      s.style.width = "auto";
+    if (s) {
+      if (window.innerWidth >= 1440) {
+        let r = (window.innerWidth - 1440) / 2;
+        s.style.right = r + "px";
+
+        if (s.classList.contains("sidebar-open")) {
+          s.style.width = 1440 * 0.8 + "px";
+        } else {
+          s.style.width = 1440 * 0.2 + "px";
+        }
+      } else {
+        s.style.right = 0;
+        s.style.width = "auto";
+      }
     }
   }
 
   toggleSidebar = () => {
-    this.setState({ sidebarOpen: !this.state.sidebarOpen });
+    this.setState({ sidebarOpen: !this.state.sidebarOpen }, this.placeSidebar);
   };
   toggleSearchBox = (e) => {
     this.setState({ searchBoxOpen: !this.state.searchBoxOpen });
