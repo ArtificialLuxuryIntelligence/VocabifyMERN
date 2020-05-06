@@ -141,7 +141,6 @@ $sidebar-nav-height: 3rem;
   .scroll-wrapper {
     scroll-behavior: smooth;
     overflow-y: scroll;
-
     .defs {
       padding: 0 1rem 0 1rem;
       ul {
@@ -163,9 +162,10 @@ $sidebar-nav-height: 3rem;
     flex-direction: column;
     left: 80%;
     top: 4rem;
+    bottom: 0;
+    height: auto;
     // left: auto;
     width: 20%;
-    height: 100vh;
     overflow: hidden;
     .sidebar-sticky {
       // padding: 0 1.5rem 0 1.5rem;
@@ -198,8 +198,10 @@ $sidebar-nav-height: 3rem;
     }
 
     .scroll-wrapper {
+      margin-bottom: 1.5rem;
+
       .defs {
-        padding: 0 1.5rem 2rem 1.5rem;
+        padding: 0 1.5rem 0rem 1.5rem;
       }
     }
   }
