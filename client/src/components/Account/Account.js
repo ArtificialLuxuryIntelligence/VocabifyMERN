@@ -142,7 +142,8 @@ class Account extends Component {
     this.setState({ searchWord: null });
   };
   toggleSidebar = () => {
-    this.setState({ sidebarOpen: !this.state.sidebarOpen });
+    // this.setState({ sidebarOpen: !this.state.sidebarOpen });
+    this.setState((prevState) => ({ sidebarOpen: !prevState.sidebarOpen }));
   };
 
   handleTranslateWord = (word) => {
