@@ -48,9 +48,9 @@ class Read extends Component {
   }
 
   render() {
-    const currentView = this.state.currentView;
-    if (currentView === "submit") {
-      return (
+    let view;
+    if (this.state.currentView === "submit") {
+      view = (
         <div className="read grid-container">
           <Nav handleSignout={this.props.handleSignout} />
 
@@ -74,7 +74,7 @@ class Read extends Component {
         </div>
       );
     } else {
-      return (
+      view = (
         <div className="read grid-container">
           <Prompt
             when={this.state.fullText.length > 0 && !this.state.testing}
@@ -132,6 +132,7 @@ class Read extends Component {
         </div>
       );
     }
+    return <>{view} </>;
   }
   //avoiding settings state from received props when page refreshed (as done in constructor)
   // maybe can do with component will receive props?

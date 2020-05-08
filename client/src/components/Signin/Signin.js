@@ -30,6 +30,93 @@ class Signin extends Component {
     return <div className="signin">{this.currentView()}</div>;
   }
 
+  currentView = () => {
+    switch (this.state.currentView) {
+      case "signUp":
+        return (
+          <form>
+            <h2>Welcome to Vocabify!</h2>
+            <fieldset>
+              <legend>Sign up</legend>
+              <p>{this.state.message}</p>
+
+              <ul>
+                <li>
+                  <label>Username:</label>
+                  <input
+                    value={this.state.signUpEmail}
+                    onChange={this.handleChange}
+                    name="signUpEmail"
+                    type="text"
+                    required
+                  />
+                </li>
+                <li>
+                  <label>Password:</label>
+                  <input
+                    value={this.state.signUpPassword}
+                    onChange={this.handleChange}
+                    name="signUpPassword"
+                    type="password"
+                    required
+                  />
+                </li>
+              </ul>
+            </fieldset>
+            <button onClick={(e) => this.handleSignUp(e)}>Sign up</button>
+            <button type="button" onClick={() => this.changeView("signIn")}>
+              Have an account?
+            </button>
+          </form>
+        );
+      // break;
+      case "signIn":
+        return (
+          <form>
+            <h2>Welcome to Vocabify!</h2>
+            <fieldset>
+              <legend>Log In</legend>
+              <p>{this.state.message}</p>
+              <ul>
+                <li>
+                  <label>Username:</label>
+                  <input
+                    value={this.state.signInEmail}
+                    onChange={this.handleChange}
+                    name="signInEmail"
+                    type="text"
+                    required
+                  />
+                </li>
+                <li>
+                  <label>Password:</label>
+                  <input
+                    value={this.state.signInPassword}
+                    onChange={this.handleChange}
+                    name="signInPassword"
+                    type="password"
+                    required
+                  />
+                </li>
+              </ul>
+            </fieldset>
+            <button onClick={(e) => this.handleSignIn(e)}>Login</button>
+            <button
+              type="button"
+              onClick={() => {
+                this.changeView("signUp");
+              }}
+            >
+              Create an Account
+            </button>
+          </form>
+        );
+      // break;
+      default:
+        break;
+    }
+  };
+
   async componentDidMount() {
     //check to see if already logged in (
     // [using (less supported) null propogation operator)
@@ -135,92 +222,6 @@ class Signin extends Component {
       })
       .catch((err) => console.log(err));
   }
-  currentView = () => {
-    switch (this.state.currentView) {
-      case "signUp":
-        return (
-          <form>
-            <h2>Welcome to Vocabify!</h2>
-            <fieldset>
-              <legend>Sign up</legend>
-              <p>{this.state.message}</p>
-
-              <ul>
-                <li>
-                  <label>Username:</label>
-                  <input
-                    value={this.state.signUpEmail}
-                    onChange={this.handleChange}
-                    name="signUpEmail"
-                    type="text"
-                    required
-                  />
-                </li>
-                <li>
-                  <label>Password:</label>
-                  <input
-                    value={this.state.signUpPassword}
-                    onChange={this.handleChange}
-                    name="signUpPassword"
-                    type="password"
-                    required
-                  />
-                </li>
-              </ul>
-            </fieldset>
-            <button onClick={(e) => this.handleSignUp(e)}>Sign up</button>
-            <button type="button" onClick={() => this.changeView("signIn")}>
-              Have an account?
-            </button>
-          </form>
-        );
-      // break;
-      case "signIn":
-        return (
-          <form>
-            <h2>Welcome to Vocabify!</h2>
-            <fieldset>
-              <legend>Log In</legend>
-              <p>{this.state.message}</p>
-              <ul>
-                <li>
-                  <label>Username:</label>
-                  <input
-                    value={this.state.signInEmail}
-                    onChange={this.handleChange}
-                    name="signInEmail"
-                    type="text"
-                    required
-                  />
-                </li>
-                <li>
-                  <label>Password:</label>
-                  <input
-                    value={this.state.signInPassword}
-                    onChange={this.handleChange}
-                    name="signInPassword"
-                    type="password"
-                    required
-                  />
-                </li>
-              </ul>
-            </fieldset>
-            <button onClick={(e) => this.handleSignIn(e)}>Login</button>
-            <button
-              type="button"
-              onClick={() => {
-                this.changeView("signUp");
-              }}
-            >
-              Create an Account
-            </button>
-          </form>
-        );
-      // break;
-      default:
-        break;
-    }
-  };
 }
 
 export default Signin;
