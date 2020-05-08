@@ -227,10 +227,17 @@ class WordDef extends Component {
     return;
   };
 
+  //?? shouldComponentUpdate method here too stop too many unneccessary rerenders.
+  // or pureComponent
+  //[note: must work in all contexts (i.e.on home page/read pages etc) ]
+
+  // shouldComponentUpdate(nextProps, nextState) {
+  // }
+
   componentDidUpdate(prevProps) {
+    console.log("did update");
     if (this.props.autoload && this.props.word !== prevProps.word) {
       this.getWordDef();
-      console.log("did update");
     }
   }
 

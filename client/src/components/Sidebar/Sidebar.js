@@ -153,14 +153,9 @@ class Sidebar extends Component {
       </div>
     );
   }
-
-  // componentDidUpdate() {
-  //   this.forceUpdate();
-  // }
-
-  // create collapsbile and populate list with json
-
   // pass in json as props..
+
+  //static getDerivedStateFromProps might be useful in this component?
 
   componentDidMount() {
     this.placeSidebar();
