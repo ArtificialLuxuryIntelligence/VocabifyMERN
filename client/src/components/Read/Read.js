@@ -48,91 +48,85 @@ class Read extends Component {
   }
 
   render() {
-    let view;
-    if (this.state.currentView === "submit") {
-      view = (
-        <div className="read grid-container">
-          <Nav handleSignout={this.props.handleSignout} />
+    return this.state.currentView === "submit" ? (
+      <div className="read grid-container">
+        <Nav handleSignout={this.props.handleSignout} />
 
-          <div className="content">
-            <div className="main">
-              {/* <h2>Read</h2> */}
-              <LanguageDropdown
-                handleDropdownChange={this.handleDropdownChange}
+        <div className="content">
+          <div className="main">
+            {/* <h2>Read</h2> */}
+            <LanguageDropdown
+              handleDropdownChange={this.handleDropdownChange}
+              lang={this.props.lang}
+            ></LanguageDropdown>
+            <div className="text-submit">
+              <Textarea
+                handleSubmit={this.handleSubmit}
+                unknownWords={this.props.unknownWords}
                 lang={this.props.lang}
-              ></LanguageDropdown>
-              <div className="text-submit">
-                <Textarea
-                  handleSubmit={this.handleSubmit}
-                  unknownWords={this.props.unknownWords}
-                  lang={this.props.lang}
-                />
-              </div>
+              />
             </div>
           </div>
-          <Footer></Footer>
         </div>
-      );
-    } else {
-      view = (
-        <div className="read grid-container">
-          <Prompt
-            when={this.state.fullText.length > 0 && !this.state.testing}
-            message="Are you sure you want to leave your text?"
-          />
-          <Nav handleSignout={this.props.handleSignout} />
+        <Footer></Footer>
+      </div>
+    ) : (
+      <div className="read grid-container">
+        <Prompt
+          when={this.state.fullText.length > 0 && !this.state.testing}
+          message="Are you sure you want to leave your text?"
+        />
+        <Nav handleSignout={this.props.handleSignout} />
 
-          <div className="content">
-            <div className="main">
-              {/* <h2>Read</h2> */}
-              <LanguageDropdown
-                handleDropdownChange={this.handleDropdownChange}
-                lang={this.props.lang}
-              ></LanguageDropdown>
+        <div className="content">
+          <div className="main">
+            {/* <h2>Read</h2> */}
+            <LanguageDropdown
+              handleDropdownChange={this.handleDropdownChange}
+              lang={this.props.lang}
+            ></LanguageDropdown>
 
-              <div className="reader">
-                <Textreader
-                  fullText={this.state.fullText} //remove
-                  fullTextSplit={this.state.fullTextSplit}
-                  handleNewText={this.handleNewText}
-                  handleSpanClick={this.handleSpanClick}
-                  pageNumber={this.state.pageNumber}
-                  handleNextPage={this.handleNextPage}
-                  handlePrevPage={this.handlePrevPage}
-                  unknownWords={this.props.unknownWords}
-                />
-              </div>
+            <div className="reader">
+              <Textreader
+                fullText={this.state.fullText} //remove
+                fullTextSplit={this.state.fullTextSplit}
+                handleNewText={this.handleNewText}
+                handleSpanClick={this.handleSpanClick}
+                pageNumber={this.state.pageNumber}
+                handleNextPage={this.handleNextPage}
+                handlePrevPage={this.handlePrevPage}
+                unknownWords={this.props.unknownWords}
+              />
             </div>
+          </div>
 
-            {/* <div id="sidebar-nav-sm">
+          {/* <div id="sidebar-nav-sm">
               <button onClick={() => this.props.toggleNav()}>open</button>
             </div> */}
-            <Sidebar
-              history={this.props.history}
-              lang={this.props.lang}
-              definitionJSON={this.state.definitionJSON}
-              unknownWords={this.props.unknownWords}
-              handleDeleteWord={this.handleDeleteWord}
-              // handleRemoveWord={this.handleRemoveWord}
-              // handleAddWord={this.handleAddWord}
-              getDefinitions={this.props.getDefinitions}
-              addKnownWord={this.props.addKnownWord}
-              addUnknownWord={this.addUnknownWord}
-              removeWord={this.props.removeWord}
-              sidebarWords={this.state.sidebarWords}
-              handleSpanClick={this.handleSpanClick}
-              isLoading={this.state.isLoading}
-              isNewWordLoading={this.state.isNewWordLoading}
-              pageNumber={this.state.pageNumber}
-              sidebarMessage={this.state.sidebarMessage}
-              sidebarMessageButton={this.state.sidebarMessageButton}
-            />
-          </div>
-          <Footer></Footer>
+          <Sidebar
+            history={this.props.history}
+            lang={this.props.lang}
+            definitionJSON={this.state.definitionJSON}
+            unknownWords={this.props.unknownWords}
+            handleDeleteWord={this.handleDeleteWord}
+            // handleRemoveWord={this.handleRemoveWord}
+            // handleAddWord={this.handleAddWord}
+            getDefinitions={this.props.getDefinitions}
+            addKnownWord={this.props.addKnownWord}
+            addUnknownWord={this.addUnknownWord}
+            removeWord={this.props.removeWord}
+            sidebarWords={this.state.sidebarWords}
+            handleSpanClick={this.handleSpanClick}
+            isLoading={this.state.isLoading}
+            isNewWordLoading={this.state.isNewWordLoading}
+            pageNumber={this.state.pageNumber}
+            sidebarMessage={this.state.sidebarMessage}
+            sidebarMessageButton={this.state.sidebarMessageButton}
+          />
         </div>
-      );
-    }
-    return <>{view} </>;
+        <Footer></Footer>
+      </div>
+    );
   }
   //avoiding settings state from received props when page refreshed (as done in constructor)
   // maybe can do with component will receive props?
