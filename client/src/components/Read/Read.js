@@ -80,7 +80,6 @@ class Read extends Component {
 
         <div className="content">
           <div className="main">
-            {/* <h2>Read</h2> */}
             <LanguageDropdown
               handleDropdownChange={this.handleDropdownChange}
               lang={this.props.lang}
@@ -100,9 +99,6 @@ class Read extends Component {
             </div>
           </div>
 
-          {/* <div id="sidebar-nav-sm">
-              <button onClick={() => this.props.toggleNav()}>open</button>
-            </div> */}
           <Sidebar
             history={this.props.history}
             lang={this.props.lang}
