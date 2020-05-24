@@ -3,8 +3,6 @@
 import React, { Component } from "react";
 import { Prompt } from "react-router";
 
-// import { Redirect } from "react-router-dom";
-// import auth from "../../utils/auth";
 import "./Read.scss";
 
 import Nav from "../Nav/Nav";
@@ -15,9 +13,6 @@ import LanguageDropdown from "../LanguageDropdown/LanguageDropdown";
 
 import Textarea from "./Textarea/Textarea";
 import Textreader from "./Textreader/Textreader";
-import { Logger } from "mongodb";
-import auth from "../../utils/auth";
-// import axios from "axios";
 
 class Read extends Component {
   constructor(props) {
@@ -25,9 +20,7 @@ class Read extends Component {
 
     this.state = {
       currentView: "submit",
-      // knownWords: this.props.knownWords,
-      // unknownWords: this.props.unknownWords,
-      // vocabSize: this.props.vocabSize,
+
       words: [],
       fullText: "",
       fullTextSplit: [],
@@ -199,7 +192,7 @@ class Read extends Component {
   removeWordArrayDupes = (arr) => {
     let noDupes = [];
     let words = [];
-    arr.map(function (x) {
+    arr.forEach(function (x) {
       if (!words.includes(x[0].word)) {
         words.push(x[0].word);
         noDupes.push(x);

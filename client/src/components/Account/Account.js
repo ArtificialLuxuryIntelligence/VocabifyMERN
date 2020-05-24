@@ -1,14 +1,6 @@
 import React, { Component } from "react";
-// import { Redirect } from "react-router-dom";
-// import axios from "axios";
-// import auth from "../../utils/auth";
-
-import SearchForm from "../SearchForm/SearchForm";
-
 import Nav from "../Nav/Nav";
 import Footer from "../Footer/Footer";
-
-// import RandomWord from "../RandomWord/RandomWord";
 import WordDef from "../WordDef/WordDef";
 import LanguageDropdown from "../LanguageDropdown/LanguageDropdown";
 import SidebarLight from "../SidebarLight/SidebarLight";

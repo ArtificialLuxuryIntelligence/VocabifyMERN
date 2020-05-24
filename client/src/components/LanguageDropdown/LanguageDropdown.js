@@ -1,10 +1,6 @@
 import React, { Component } from "react";
 
 class LanguageDropdown extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   // this.state = { lang: this.props.lang };
-  // }
 
   render() {
     return (

@@ -1,12 +1,5 @@
 import React, { Component } from "react";
-// import { Redirect } from "react-router-dom";
-// import axios from "axios";
-// import auth from "../../utils/auth";
-
 import "./Sidebar.scss";
-
-// import Collapsible from "react-collapsible";
-// import Spanner from "../../Spanner/Spanner";
 import WordDef from "../WordDef/WordDef";
 import SearchResults from "../SearchResults/SearchResults";
 import SearchForm from "../SearchForm/SearchForm";
@@ -169,7 +162,7 @@ class Sidebar extends Component {
       this.props.sidebarMessage !== prevProps.sidebarMessage
     ) {
       //opens sidebar on smaller screens
-      if (window.innerWidth < 768 && this.state.sidebarOpen == false) {
+      if (window.innerWidth < 768 && this.state.sidebarOpen === false) {
         this.setState({ sidebarOpen: true });
       }
     }

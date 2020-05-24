@@ -1,11 +1,9 @@
 import React, { Component } from "react";
-// import { Link } from "react-router-dom";
-
 import "./Signin.scss";
 
 import axios from "axios";
 import auth from "../../utils/auth";
-// import auth from "../../utils/auth";
+
 
 class Signin extends Component {
   constructor(props) {

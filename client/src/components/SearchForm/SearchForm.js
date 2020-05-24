@@ -1,13 +1,5 @@
 import React, { Component } from "react";
-
-import WordDef from "../WordDef/WordDef";
-// import "./SearchForm.css";
-
 class SearchForm extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <div className="search-form">

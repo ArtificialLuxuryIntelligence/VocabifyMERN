@@ -2,12 +2,6 @@
 // autoload: boolean          //fetches and autoloads def of word given
 // definition: array          //autoload definition supplied (set autoload true)
 
-// REQUIRED PROPS:
-// ?
-///////////
-// to do:
-// "sorry couldn't find def" for autoload words.. (sometimes no search results - currently defaults to clickable word with no def)
-///
 
 import React, { Component } from "react";
 import "./WordDef.css";

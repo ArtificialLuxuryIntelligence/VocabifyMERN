@@ -3,13 +3,9 @@ import "./RandomWord.css";
 
 import "./RandomWord.css";
 import axios from "axios";
-// import Sidebar from "../Read/Sidebar/Sidebar";
-// import Collapsible from "react-collapsible";
-// import Spanner from "../Spanner/Spanner";
+
 import WordDef from "../WordDef/WordDef";
 
-// import Spanner from "../../Spanner/Spanner";
-// import { Redirect } from "react-router-dom";
 import auth from "../../utils/auth";
 
 class RandomWord extends Component {
@@ -38,6 +34,7 @@ class RandomWord extends Component {
           <p>
             Take this{" "}
             <a
+              href="# "
               className="test-link"
               onClick={() => this.props.redirectToRead()}
             >

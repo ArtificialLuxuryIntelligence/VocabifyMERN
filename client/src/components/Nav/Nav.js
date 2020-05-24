@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 import "./Nav.scss";
-// import axios from "axios";
-// import auth from "../../utils/auth";
 
 class Nav extends Component {
   constructor(props) {

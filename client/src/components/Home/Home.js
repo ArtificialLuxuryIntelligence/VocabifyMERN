@@ -6,12 +6,8 @@ import React, { Component } from "react";
 import Nav from "../Nav/Nav";
 import Footer from "../Footer/Footer";
 import RandomWord from "../RandomWord/RandomWord";
-// import WordDef from "../WordDef/WordDef";
 import LanguageDropdown from "../LanguageDropdown/LanguageDropdown";
-import SearchResults from "../SearchResults/SearchResults";
-import SearchForm from "../SearchForm/SearchForm";
-import WordDef from "../WordDef/WordDef";
-import Sidebar from "../Sidebar/Sidebar";
+
 
 import "./Home.css";
 import SidebarLight from "../SidebarLight/SidebarLight";
