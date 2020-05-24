@@ -1,7 +1,4 @@
 import React, { Component } from "react";
-// import { Redirect } from "react-router-dom";
-// import axios from "axios";
-// import auth from "../../utils/auth";
 
 import Nav from "../Nav/Nav";
 import Footer from "../Footer/Footer";

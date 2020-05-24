@@ -1,12 +1,11 @@
 import React, { Component } from "react";
 import "./RandomWord.css";
-
-import "./RandomWord.css";
 import axios from "axios";
 
 import WordDef from "../WordDef/WordDef";
-
 import auth from "../../utils/auth";
+
+let _isMounted;
 
 class RandomWord extends Component {
   constructor(props) {
@@ -89,6 +88,62 @@ class RandomWord extends Component {
   //   return nextProps.lang == this.props.lang;
   // }
 
+  getNewWord = async () => {
+    this.setState({ isLoading: true });
+    let token = JSON.parse(localStorage.getItem("vocabify")).token;
+    let obj = {
+      vocabSize: this.props.vocabSize,
+      unknownWords: this.props.unknownWords,
+      knownWords: this.props.knownWords,
+      lang: this.props.lang,
+    };
+    let headers = {
+      "Content-Type": "application/json",
+      Authorization: `bearer ${token}`,
+    };
+    // console.log(obj);
+
+    console.log("getting new word");
+    try {
+      let response = await axios.post("/words/random", obj, { headers });
+
+      console.log(response); // this.setState({ definition });
+
+      if (_isMounted) {
+        if (response.data.success) {
+          this.setState({ newWord: response.data.definition[0][0].word });
+          this.setState({ definition: response.data.definition });
+          this.setState({ isLoading: false });
+          this.setState({ wordKnown: false });
+        }
+        this.setState({ isLoading: false });
+        return;
+      }
+    } catch (err) {
+      if (err.response && err.response.status === 401) {
+        console.log("unauthorized.. loggin out");
+        auth.loggingOut();
+        this.props.history.push("/login");
+      }
+      console.log(err);
+    }
+  };
+
+  componentDidMount = () => {
+    _isMounted = true;
+    // console.log("myVOCAB", this.props.vocabSize);
+    // console.log("did mount");
+    if (
+      this.state.definition.length === 0 &&
+      this.props.unknownWords.length > 4
+    ) {
+      this.getNewWord();
+    }
+  };
+  componentWillUnmount = () => {
+    _isMounted = false;
+  };
+
   static getDerivedStateFromProps(props, state) {
     if (props.lang !== state.lang) {
       return {
@@ -109,56 +164,6 @@ class RandomWord extends Component {
       this.getNewWord();
     }
   }
-
-  componentDidMount = () => {
-    // console.log("myVOCAB", this.props.vocabSize);
-    // console.log("did mount");
-    if (
-      this.state.definition.length === 0 &&
-      this.props.unknownWords.length > 4
-    ) {
-      this.getNewWord();
-    }
-  };
-
-  getNewWord = async () => {
-    this.setState({ isLoading: true });
-    let token = JSON.parse(localStorage.getItem("vocabify")).token;
-    let obj = {
-      // token,
-      vocabSize: this.props.vocabSize,
-      unknownWords: this.props.unknownWords,
-      knownWords: this.props.knownWords,
-      lang: this.props.lang,
-    };
-    let headers = {
-      "Content-Type": "application/json",
-      Authorization: `bearer ${token}`,
-    };
-    // console.log(obj);
-
-    console.log("getting new word");
-    try {
-      let response = await axios.post("/words/random", obj, { headers });
-
-      console.log(response); // this.setState({ definition });
-      if (response.data.success) {
-        this.setState({ newWord: response.data.definition[0][0].word });
-        this.setState({ definition: response.data.definition });
-        this.setState({ isLoading: false });
-        this.setState({ wordKnown: false });
-      }
-      this.setState({ isLoading: false });
-      return;
-    } catch (err) {
-      if (err.response && err.response.status === 401) {
-        console.log("unauthorized.. loggin out");
-        auth.loggingOut();
-        this.props.history.push("/login");
-      }
-      console.log(err);
-    }
-  };
 
   handleNewWord = () => {
     this.getNewWord();
