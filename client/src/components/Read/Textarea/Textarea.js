@@ -12,41 +12,6 @@ class Textarea extends Component {
         {/* <h2>Textarea</h2> */}
         {this.props.unknownWords.length < 5 && (
           <>
-            <p> We don't yet have enough words to estimate your level. </p>
-            <h3> Level finder:</h3>
-            <p> Read the following then click submit below</p>
-            <ul>
-              <li>
-                <p>
-                  Click on any word (including in definitions) to look up its
-                  definition.
-                </p>
-              </li>
-              <li>
-                <p>
-                  Click "add" to add a word to your personal vocabulary list.
-                  You can see these words in 'Account'.
-                </p>
-              </li>
-
-              <li>
-                <p> Please add 5 words to get started.</p>
-              </li>
-              <li>
-                <p>
-                  As you continue to use Vocabify, it will get better at
-                  guessing the words you don't know.
-                </p>
-              </li>
-              <li>
-                <p>
-                  If you know all the words listed, then feel free to use the
-                  search bar to add words you have learned recently.
-                </p>
-              </li>
-            </ul>
-
-            <p>Now hit submit below the following text.</p>
             <textarea
               id="textarea"
               value={this.renderText(this.props.lang)}

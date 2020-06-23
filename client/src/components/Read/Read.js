@@ -125,8 +125,7 @@ class Read extends Component {
     //if user vocab test is required.
     if (this.props.unknownWords.length < 5) {
       console.log(this.props.unknownWords);
-
-      this.setState({ testing: true });
+      this.setState({ testing: true }, () => this.handleSubmit());
     }
 
     // hydrate state from local

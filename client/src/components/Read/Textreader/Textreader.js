@@ -22,10 +22,43 @@ class Textreader extends Component {
         <div className="text-reader">
           {this.props.unknownWords.length < 5 && (
             <>
+              <p> We don't yet have enough words to estimate your level. </p>
+              <h3> Level finder:</h3>
+              <ul>
+                <li>
+                  <p>
+                    Click on any word in the list below to look up its
+                    definition.
+                  </p>
+                </li>
+                <li>
+                  <p>
+                    Click "add" to add a word to your personal vocabulary list.
+                    You can see and edit these words in 'Account'.
+                  </p>
+                </li>
+
+                <li>
+                  <p> Please add 5 words to get started.</p>
+                </li>
+                <li>
+                  <p>
+                    As you continue to use Vocabify, it will get better at
+                    guessing the words you don't know.
+                  </p>
+                </li>
+                <li>
+                  <p>
+                    If you know all the words listed, then feel free to use the
+                    search bar to add words you have learned recently.
+                  </p>
+                </li>
+              </ul>
               <p>
                 Tip: In the words sidebar, you can click on words and parts of
                 speech to expand and collapse definitions.
               </p>
+
               <p className="alert-message" key={this.props.unknownWords}>
                 Words left to add: {5 - this.props.unknownWords.length}
               </p>
