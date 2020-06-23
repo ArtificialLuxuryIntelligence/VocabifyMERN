@@ -168,20 +168,24 @@ class Sidebar extends Component {
     }
   }
 
+  //slight hacky way of making the fixed sidebar responsive (and correctly positioned when opened)
   placeSidebar() {
     console.log("placing");
 
     let s = document.querySelector(".sidebar");
     if (s) {
       if (window.innerWidth >= 1440) {
-        let r = (window.innerWidth - 1440) / 2;
-        s.style.right = r + "px";
-
         if (s.classList.contains("sidebar-open")) {
           s.style.width = 1440 * 0.8 + "px";
         } else {
           s.style.width = 1440 * 0.2 + "px";
         }
+
+        let main = document.querySelector(".main").getBoundingClientRect();
+        let right =
+          document.querySelector("body").getBoundingClientRect().width -
+          main.right;
+        s.style.right = right + "px";
       } else {
         s.style.right = 0;
         s.style.width = "auto";
