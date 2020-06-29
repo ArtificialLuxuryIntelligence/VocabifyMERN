@@ -82,6 +82,18 @@ class Textreader extends Component {
       </div>
     );
   }
+
+
+  componentDidUpdate(prevProps) {
+   
+
+    if (this.props.lang !== prevProps.lang) {
+      // redirectToRead();
+      console.log("uh oh");
+      this.props.handleNewText()
+    }
+  }
+
 }
 
 export default Textreader;

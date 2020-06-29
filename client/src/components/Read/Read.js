@@ -124,7 +124,6 @@ class Read extends Component {
 
     //if user vocab test is required.
     if (this.props.unknownWords.length < 5) {
-      console.log(this.props.unknownWords);
       this.setState({ testing: true }, () => this.handleSubmit());
     }
 
@@ -136,13 +135,29 @@ class Read extends Component {
     }
     return null;
 
+    //TODO (for suggested texts)
     //if textId supplied then fetch text, switch views and load text to reader.
-    //TODO
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.unknownWords !== prevProps.unknownWords) {
       console.log("changed");
+    }
+
+    if (
+      this.props.lang !== prevProps.lang &&
+      this.props.unknownWords.length < 5
+    ) {
+      this.setState(
+        { testing: true, currentView: "submit" },
+        this.handleSubmit
+      );
+    }
+    if (
+      this.props.lang !== prevProps.lang &&
+      this.props.unknownWords.length >= 5
+    ) {
+      this.setState({ testing: false, currentView: "submit" });
     }
   }
 
@@ -263,7 +278,6 @@ class Read extends Component {
 
     if (this.state.testing) {
       console.log("testing, no lookups");
-
       this.setState({ currentView: "read", fullText, fullTextSplit });
     } else {
       this.setState({ currentView: "read", fullText, fullTextSplit }, () =>
