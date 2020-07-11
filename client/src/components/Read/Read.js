@@ -111,6 +111,7 @@ class Read extends Component {
             pageNumber={this.state.pageNumber}
             sidebarMessage={this.state.sidebarMessage}
             sidebarMessageButton={this.state.sidebarMessageButton}
+            testing={this.state.testing}
           />
         </div>
         <Footer></Footer>
@@ -123,6 +124,7 @@ class Read extends Component {
     // console.log("SERVER TEXT ID", this.props.serverTextId);
 
     //if user vocab test is required.
+    //textarea is autopopulated with test words
     if (this.props.unknownWords.length < 5) {
       this.setState({ testing: true }, () => this.handleSubmit());
     }
@@ -329,6 +331,10 @@ class Read extends Component {
     let parentWord = e.target.classList[1];
 
     let word = this.props.sanitizeText(e.target.innerText);
+    // if (this.state.testing) {
+    //   console.log("testing mode");
+    //   this.addUnknownWord(word);
+    // }
 
     //definition is already loaded
     if (this.state.sidebarWords.indexOf(word[0]) >= 0) {
@@ -453,7 +459,9 @@ class Read extends Component {
   addUnknownWord = (word) => {
     this.props.addUnknownWord(word);
     if (this.state.testing && this.props.unknownWords.length === 5) {
-      alert("All done");
+      alert(
+        "All done! \nWe've got your basic level. Keep using the application and we'll improve our suggestions as you add more words."
+      );
       this.props.history.push("./");
     }
   };

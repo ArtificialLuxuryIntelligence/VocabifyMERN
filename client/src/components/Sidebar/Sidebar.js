@@ -132,6 +132,7 @@ class Sidebar extends Component {
                           unknownWords={this.props.unknownWords}
                           addToAppState={this.props.addToAppState}
                           deleteButton={true}
+                          testing={this.props.testing}
                         ></WordDef>
                         <hr />
                       </div>
@@ -170,15 +171,17 @@ class Sidebar extends Component {
 
   //slight hacky way of making the fixed sidebar responsive (and correctly positioned when opened)
   placeSidebar() {
+
+    const width = 0.2
     console.log("placing");
 
     let s = document.querySelector(".sidebar");
     if (s) {
       if (window.innerWidth >= 1440) {
         if (s.classList.contains("sidebar-open")) {
-          s.style.width = 1440 * 0.8 + "px";
+          s.style.width = 1440 * (1-width) + "px";
         } else {
-          s.style.width = 1440 * 0.2 + "px";
+          s.style.width = 1440 * width + "px";
         }
 
         let main = document.querySelector(".main").getBoundingClientRect();

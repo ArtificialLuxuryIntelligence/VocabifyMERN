@@ -2,7 +2,6 @@
 // autoload: boolean          //fetches and autoloads def of word given
 // definition: array          //autoload definition supplied (set autoload true)
 
-
 import React, { Component } from "react";
 import "./WordDef.css";
 
@@ -84,7 +83,11 @@ class WordDef extends Component {
                       </button>
                       {this.props.unknownWords.indexOf(word[0].word) === -1 && (
                         <button
-                          className={"add-button"}
+                          className={
+                            this.props.testing
+                              ? "add-button blinking-button"
+                              : "add-button"
+                          }
                           onClick={(e) => this.handleAddWord()}
                         >
                           Add
@@ -151,7 +154,11 @@ class WordDef extends Component {
                             {this.props.unknownWords.indexOf(word.word) ===
                               -1 && (
                               <button
-                                className={"add-button"}
+                                className={
+                                  this.props.testing
+                                    ? "add-button blinking-button"
+                                    : "add-button"
+                                }
                                 onClick={(e) => this.handleAddWord()}
                               >
                                 Add

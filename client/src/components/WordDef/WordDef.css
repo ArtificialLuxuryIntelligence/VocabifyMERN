@@ -39,17 +39,28 @@ span {
 }
 
 .def-buttons {
-  display: block;
-  float: right;
+  /* border: 1px solid red; */
+  display: flex;
+  /* width: auto; */
+  /* height: auto; */
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  /* white-space: wrap; */
+  /* float: right; */
 }
 .def-buttons button {
   margin-left: 0.2rem;
+  font-size: 0.8em;
 }
 /* .add-button,
 .remove-button,
 .translate {
   float: right;
 } */
+
+.blinking-button {
+  animation: blinking-btn 2s ease infinite;
+}
 
 @keyframes fade-in {
   0% {
@@ -63,5 +74,22 @@ span {
   }
   100% {
     color: black;
+  }
+}
+
+@keyframes blinking-btn {
+  0% {
+    color: white;
+
+    background-color: #2a4747;
+  }
+  50% {
+    color: #439775;
+    background-color: white;
+  }
+  100% {
+    color: white;
+
+    background-color: #2a4747;
   }
 }
