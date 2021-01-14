@@ -173,7 +173,7 @@ class Sidebar extends Component {
   placeSidebar() {
 
     const width = 0.2
-    console.log("placing");
+    // console.log("placing");
 
     let s = document.querySelector(".sidebar");
     if (s) {

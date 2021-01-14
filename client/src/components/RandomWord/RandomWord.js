@@ -103,11 +103,11 @@ class RandomWord extends Component {
     };
     // console.log(obj);
 
-    console.log("getting new word");
+    // console.log("getting new word");
     try {
       let response = await axios.post("/words/random", obj, { headers });
 
-      console.log(response); // this.setState({ definition });
+      // console.log(response); // this.setState({ definition });
 
       if (_isMounted) {
         if (response.data.success) {
@@ -125,7 +125,7 @@ class RandomWord extends Component {
         auth.loggingOut();
         this.props.history.push("/login");
       }
-      console.log(err);
+      // console.log(err);
     }
   };
 

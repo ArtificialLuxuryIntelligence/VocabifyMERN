@@ -218,8 +218,8 @@ class WordDef extends Component {
 
   componentDidMount = () => {
     if (this.props.definition) {
-      console.log('got a def');
-      console.log(this.props.definition);
+      // console.log('got a def');
+      // console.log(this.props.definition);
       this.setState({ isLoading: false, defintionToggled: true });
       return;
     }
@@ -237,7 +237,7 @@ class WordDef extends Component {
   // }
 
   componentDidUpdate(prevProps) {
-    console.log('did update');
+    // console.log('did update');
     if (this.props.autoload && this.props.word !== prevProps.word) {
       this.getWordDef();
     }

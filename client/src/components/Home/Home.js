@@ -73,8 +73,8 @@ class Home extends Component {
   componentDidMount() {}
   componentDidUpdate(prevProps) {
     if (this.props.lang !== prevProps.lang) {
-      console.log("updated: HOME language is:", this.props.lang);
-      console.log(this.props.vocabSize);
+      // console.log("updated: HOME language is:", this.props.lang);
+      // console.log(this.props.vocabSize);
 
       // FETCH some texts from server with their titles/ids;
       // render to dom

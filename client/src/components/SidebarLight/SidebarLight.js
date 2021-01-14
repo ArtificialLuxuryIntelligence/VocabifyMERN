@@ -154,7 +154,7 @@ class SidebarLight extends Component {
   }
 
   placeSidebar() {
-    console.log("placing");
+    // console.log("placing");
 
     let s = document.querySelector(".sidebar");
     if (s) {
@@ -203,7 +203,7 @@ class SidebarLight extends Component {
     this.setState({
       searchWord: this.props.sanitizeText(e.target.innerText)[0],
     });
-    console.log(this.props.sanitizeText(e.target.innerText)[0]);
+    // console.log(this.props.sanitizeText(e.target.innerText)[0]);
   };
 }
 

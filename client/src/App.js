@@ -131,10 +131,10 @@ class App extends Component {
       this.setState({ lang, words });
 
       // hydrate state from local (all data, including definitions)
-      console.log("did mount and is logged in");
+      // console.log("did mount and is logged in");
     }
 
-    console.log("did mount");
+    // console.log("did mount");
   }
 
   // util functions -------------------------------------------
@@ -158,7 +158,7 @@ class App extends Component {
   //set global App state
   addToAppState(key, value) {
     this.setState({ [key]: value });
-    console.log("key", key, "value", value);
+    // console.log("key", key, "value", value);
 
     // console.log(this.state);
     this.saveToLocal();
@@ -208,7 +208,7 @@ class App extends Component {
       inputText = inputText.map((word) =>
         word.replace(/^l'|^l’|^m'|^m’|^t'|^t’|^s'|^s’/gi, "")
       );
-      console.log(lang);
+      // console.log(lang);
     }
     return this.uniq(inputText);
   };
@@ -235,8 +235,8 @@ class App extends Component {
     //try catch
     try {
       let json = await axios.post("/words/definitions", obj, { headers });
-      console.log("vocabSize", json.data.vocabSize);
-      console.log(json.data);
+      // console.log("vocabSize", json.data.vocabSize);
+      // console.log(json.data);
 
       // conditionally set vocabsize? (/words/definitions route doesn't need to return vocabSize every request (not if filter = false for example))
       // this.setState({ vocabSize: json.data.vocabSize });
@@ -341,7 +341,7 @@ class App extends Component {
   handleSignout = async (e) => {
     // this.saveToLocal();
     e.preventDefault();
-    console.log("...Signing out");
+    // console.log("...Signing out");
 
     //update user data on server
     let signout = await this.sendAppStateToServer();
@@ -355,7 +355,7 @@ class App extends Component {
   };
 
   toggleNav() {
-    console.log("toggle nav");
+    // console.log("toggle nav");
 
     this.setState({ navOpen: !this.state.navOpen });
   }

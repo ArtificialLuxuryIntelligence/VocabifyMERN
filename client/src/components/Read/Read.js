@@ -143,7 +143,7 @@ class Read extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.unknownWords !== prevProps.unknownWords) {
-      console.log("changed");
+      // console.log("changed");
     }
 
     if (
@@ -279,7 +279,7 @@ class Read extends Component {
     let fullTextSplit = this.splitText(fullText, length);
 
     if (this.state.testing) {
-      console.log("testing, no lookups");
+      // console.log("testing, no lookups");
       this.setState({ currentView: "read", fullText, fullTextSplit });
     } else {
       this.setState({ currentView: "read", fullText, fullTextSplit }, () =>
@@ -306,7 +306,7 @@ class Read extends Component {
         } else {
           this.setState({ isLoading: false });
 
-          console.log("definitions already loaded");
+          // console.log("definitions already loaded");
         }
       }
 
@@ -324,7 +324,7 @@ class Read extends Component {
     //currently doesnt check if word is already in list BEFORE requesting...
 
     this.setState({ isNewWordLoading: true });
-    console.log("is loading");
+    // console.log("is loading");
 
     // console.log(e.target.classList[1]);
 
@@ -368,7 +368,7 @@ class Read extends Component {
       }
 
       let newWord = def[0][0].word;
-      console.log(newWord);
+      // console.log(newWord);
 
       //def already in sidebar
       if (this.state.sidebarWords.indexOf(newWord) >= 0) {
@@ -415,7 +415,7 @@ class Read extends Component {
       setTimeout(this.setState({ sidebarMessage: "" }), 1000);
       this.scrollToDef(newWord);
     } catch (err) {
-      console.log("ERROR", err);
+      // console.log("ERROR", err);
       setTimeout(() => this.setState({ sidebarMessage: "" }), 1500);
       this.setState({
         sidebarMessage: `Network error, try again later`,
@@ -441,7 +441,7 @@ class Read extends Component {
   //NO LONGER NEEDED?
 
   handleAddWord = (e) => {
-    console.log("adding");
+    // console.log("adding");
 
     //remove
     e.stopPropagation();
@@ -452,8 +452,8 @@ class Read extends Component {
     //handle with props
     // e.target.style.display = "none";
     // e.target.previousElementSibling.style.display = "block";
-    console.log(this.props.unknownWords);
-    console.log("adding");
+    // console.log(this.props.unknownWords);
+    // console.log("adding");
   };
 
   addUnknownWord = (word) => {

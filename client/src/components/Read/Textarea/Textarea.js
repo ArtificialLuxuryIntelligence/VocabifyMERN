@@ -39,8 +39,8 @@ class Textarea extends Component {
     this.setState({ value: e.target.value });
   };
   renderText = (lang) => {
-    console.log("render text called");
-    console.log(lang);
+    // console.log("render text called");
+    // console.log(lang);
 
     switch (lang) {
       case "en":

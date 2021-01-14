@@ -1,21 +1,20 @@
-import React, { Component } from "react";
-import "./Signin.scss";
+import React, { Component } from 'react';
+import './Signin.scss';
 
-import axios from "axios";
-import auth from "../../utils/auth";
-
+import axios from 'axios';
+import auth from '../../utils/auth';
 
 class Signin extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      message: "",
-      token: "",
-      signInEmail: "",
-      signInPassword: "",
-      signUpEmail: "",
-      signUpPassword: "",
-      currentView: "signIn",
+      message: '',
+      token: '',
+      signInEmail: '',
+      signInPassword: '',
+      signUpEmail: '',
+      signUpPassword: '',
+      currentView: 'signIn',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -30,7 +29,7 @@ class Signin extends Component {
 
   currentView = () => {
     switch (this.state.currentView) {
-      case "signUp":
+      case 'signUp':
         return (
           <form>
             <h2>Welcome to Vocabify!</h2>
@@ -62,13 +61,13 @@ class Signin extends Component {
               </ul>
             </fieldset>
             <button onClick={(e) => this.handleSignUp(e)}>Sign up</button>
-            <button type="button" onClick={() => this.changeView("signIn")}>
+            <button type="button" onClick={() => this.changeView('signIn')}>
               Have an account?
             </button>
           </form>
         );
       // break;
-      case "signIn":
+      case 'signIn':
         return (
           <form>
             <h2>Welcome to Vocabify!</h2>
@@ -102,7 +101,7 @@ class Signin extends Component {
             <button
               type="button"
               onClick={() => {
-                this.changeView("signUp");
+                this.changeView('signUp');
               }}
             >
               Create an Account
@@ -122,18 +121,18 @@ class Signin extends Component {
     // }]
 
     if (
-      localStorage.getItem("vocabify") &&
-      JSON.parse(localStorage.getItem("vocabify")).token
+      localStorage.getItem('vocabify') &&
+      JSON.parse(localStorage.getItem('vocabify')).token
     ) {
-      let token = JSON.parse(localStorage.getItem("vocabify")).token;
+      let token = JSON.parse(localStorage.getItem('vocabify')).token;
       let headers = {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `bearer ${token}`,
       };
 
-      let res = await axios.post("/users/authcheck", null, { headers });
+      let res = await axios.post('/users/authcheck', null, { headers });
       if (res.status === 200) {
-        this.props.history.push("/");
+        this.props.history.push('/');
       }
     }
   }
@@ -141,7 +140,7 @@ class Signin extends Component {
   changeView = (view) => {
     this.setState({
       currentView: view,
-      message: "",
+      message: '',
     });
   };
 
@@ -157,11 +156,11 @@ class Signin extends Component {
     let obj = { email: signInEmail, password: signInPassword };
 
     axios
-      .post("/users/signin", obj)
+      .post('/users/signin', obj)
       .then((res) => {
         if (res.data.success) {
           auth.loggingIn();
-          console.log(res.data);
+          // console.log(res.data);
 
           let { token, vocabSize, lang, words } = res.data;
 
@@ -169,29 +168,29 @@ class Signin extends Component {
           // this.addToAppState("token", token);
           // this.addToAppState("knownWords", knownWords); // to be removed
           // this.addToAppState("unknownWords", unknownWords); // to be removed
-          this.addToAppState("vocabSize", vocabSize);
-          this.addToAppState("lang", lang);
-          this.addToAppState("words", words);
+          this.addToAppState('vocabSize', vocabSize);
+          this.addToAppState('lang', lang);
+          this.addToAppState('words', words);
           //
 
           //setting local storage ----
-          const local = JSON.parse(localStorage.getItem("vocabify")) || {};
+          const local = JSON.parse(localStorage.getItem('vocabify')) || {};
           local.token = token;
           // local.knownWords = knownWords;
           // local.unknownWords = unknownWords;
           local.vocabSize = vocabSize;
           local.lang = lang;
           local.words = words;
-          localStorage.setItem("vocabify", JSON.stringify(local));
+          localStorage.setItem('vocabify', JSON.stringify(local));
           // --------------------------
-          history.push("/");
+          history.push('/');
           //example of passing data
           // history.push("/", { passedData: "I am the from the login page" });
 
           // console.log(localStorage);
         } else {
           this.setState({ message: res.data.message });
-          console.log(res.data.message);
+          // console.log(res.data.message);
         }
       })
       .catch((err) => console.log(err));
@@ -202,20 +201,20 @@ class Signin extends Component {
     const { signUpEmail, signUpPassword } = this.state;
 
     let obj = { email: signUpEmail, password: signUpPassword };
-    console.log(obj);
+    // console.log(obj);
 
     axios
-      .post("/users/signup", obj)
+      .post('/users/signup', obj)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
 
         if (res.data.success === true) {
-          console.log("SUCCESS");
-          this.setState({ currentView: "signIn", message: "" });
+          // console.log("SUCCESS");
+          this.setState({ currentView: 'signIn', message: '' });
         } else {
           this.setState({ message: res.data.message });
 
-          console.log(res.data.message);
+          // console.log(res.data.message);
         }
       })
       .catch((err) => console.log(err));
