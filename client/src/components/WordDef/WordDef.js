@@ -2,15 +2,15 @@
 // autoload: boolean          //fetches and autoloads def of word given
 // definition: array          //autoload definition supplied (set autoload true)
 
-import React, { Component } from "react";
-import "./WordDef.css";
+import React, { Component } from 'react';
+import './WordDef.css';
 
 // import axios from "axios";
 // import Sidebar from "../Read/Sidebar/Sidebar";
-import Collapsible from "react-collapsible";
+import Collapsible from 'react-collapsible';
 // import Spanner from "../../Spanner/Spanner";
 
-import Spanner from "../Spanner/Spanner";
+import Spanner from '../Spanner/Spanner';
 // import { Redirect } from "react-router-dom";
 // import auth from "../../utils/auth";
 
@@ -85,8 +85,8 @@ class WordDef extends Component {
                         <button
                           className={
                             this.props.testing
-                              ? "add-button blinking-button"
-                              : "add-button"
+                              ? 'add-button blinking-button'
+                              : 'add-button'
                           }
                           onClick={(e) => this.handleAddWord()}
                         >
@@ -96,7 +96,7 @@ class WordDef extends Component {
 
                       {this.props.unknownWords.indexOf(word[0].word) !== -1 && (
                         <button
-                          className={"remove-button"}
+                          className={'remove-button'}
                           onClick={(e) => this.handleRemoveWord()}
                         >
                           Remove
@@ -104,7 +104,7 @@ class WordDef extends Component {
                       )}
                       {this.props.deleteButton && (
                         <button
-                          className={"delete-button"}
+                          className={'delete-button'}
                           onClick={() =>
                             this.props.handleDeleteWord(word[0].word)
                           }
@@ -156,8 +156,8 @@ class WordDef extends Component {
                               <button
                                 className={
                                   this.props.testing
-                                    ? "add-button blinking-button"
-                                    : "add-button"
+                                    ? 'add-button blinking-button'
+                                    : 'add-button'
                                 }
                                 onClick={(e) => this.handleAddWord()}
                               >
@@ -168,7 +168,7 @@ class WordDef extends Component {
                             {this.props.unknownWords.indexOf(word.word) !==
                               -1 && (
                               <button
-                                className={"remove-button"}
+                                className={'remove-button'}
                                 onClick={(e) => this.handleRemoveWord()}
                               >
                                 Remove
@@ -176,7 +176,7 @@ class WordDef extends Component {
                             )}
                             {this.props.deleteButton && (
                               <button
-                                className={"delete-button"}
+                                className={'delete-button'}
                                 onClick={() =>
                                   this.props.handleDeleteWord(word.word)
                                 }
@@ -218,7 +218,8 @@ class WordDef extends Component {
 
   componentDidMount = () => {
     if (this.props.definition) {
-      console.log("got a def");
+      console.log('got a def');
+      console.log(this.props.definition);
       this.setState({ isLoading: false, defintionToggled: true });
       return;
     }
@@ -236,7 +237,7 @@ class WordDef extends Component {
   // }
 
   componentDidUpdate(prevProps) {
-    console.log("did update");
+    console.log('did update');
     if (this.props.autoload && this.props.word !== prevProps.word) {
       this.getWordDef();
     }
@@ -252,7 +253,7 @@ class WordDef extends Component {
     try {
       let definition = await this.props.getDefinitions(
         [this.props.word],
-        "false"
+        'false'
       );
       //handle cant get from server
 
@@ -297,7 +298,7 @@ class WordDef extends Component {
     // );
     window.open(
       `https://translate.google.com/?um=1&ie=UTF-8&hl=en&client=tw-ob#${this.props.lang}/en/${word}`,
-      "translate",
+      'translate',
       params
     );
   };
@@ -374,7 +375,7 @@ function POS(props) {
 function Definition(props) {
   // console.log(props.def);
   switch (props.lang) {
-    case "en":
+    case 'en':
       return (
         <div>
           {props.def.map((def, i) => {
@@ -399,11 +400,11 @@ function Definition(props) {
           })}
         </div>
       );
-    case "fr":
-    case "es":
+    case 'fr':
+    case 'es':
       return (
         <div>
-          {props.def.definitions.map((def, i) => {
+          {props.def.map((def, i) => {
             if (def.definition) {
               return (
                 <div key={i + def.definition.slice(1, 6)}>
