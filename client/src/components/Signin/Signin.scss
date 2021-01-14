@@ -1,12 +1,19 @@
+h1{
+  text-align: center;
+}
 .signin {
-  padding-top: 5rem;
-  min-height: 100vh;
+  margin-top: 4rem;
+  // min-height: 100vh;
+  margin-bottom: 4rem;
   width: 100vw;
   display: flex;
   justify-content: center;
   form {
     text-align: center;
     // min-width: 40%;
+    fieldset {
+      margin-bottom: 1rem;
+    }
     button {
       width: auto;
       margin-right: 0.2rem;
@@ -15,14 +22,16 @@
       padding: 0;
       list-style: none;
       li {
+        width: 100%;
         text-align: initial;
         display: flex;
         justify-content: flex-start;
+        padding: 0.5em 0;
         label {
           width: 40%;
         }
         input {
-          width: 60%;
+          width: 58%;
         }
       }
     }
@@ -31,4 +40,10 @@
       width: 5rem;
     }
   }
+}
+
+.intro-text {
+  margin: 0 auto;
+  max-width: 1280px;
+  padding: 0 5%;
 }

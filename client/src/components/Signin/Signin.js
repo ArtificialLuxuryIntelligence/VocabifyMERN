@@ -24,7 +24,52 @@ class Signin extends Component {
   }
 
   render() {
-    return <div className="signin">{this.currentView()}</div>;
+    return (
+      <>
+        <h1>Welcome to Vocabify</h1>
+
+        <div className="signin">{this.currentView()}</div>
+        <div className="intro-text">
+          <h3> What is Vocabify?</h3>
+          <ul>
+            <li>
+              Vocabify helps you learn new vocabulary in a language of your
+              choosing. (Currently supported: English, French, Spanish).
+            </li>
+          </ul>
+          <h3> How does it work?</h3>
+          <ul>
+            <li>
+              As you use the application and learn new words, it get's an idea
+              of your language level and provides suitable vocabulary for you to
+              learn.
+            </li>
+            <li>
+              You can paste in text of your choosing and the app previews
+              definitions of words you may not be familiar with before reading
+              the text.
+            </li>
+            <li>You can click on any text to look up its definition.</li>
+          </ul>
+
+          <h3> Why is it so great?</h3>
+          <ul>
+            <li>
+              The key to what makes this application great is that it provides
+              you with a targeted list of words to learn <em> before </em> you
+              read a text.
+            </li>
+
+            <li>
+              This way of learning and reading is much more enjoyable, immersive
+              and prevents the familiar upset of flow experienced by a reader of
+              a text that contains words that need to be looked up during
+              reading.
+            </li>
+          </ul>
+        </div>
+      </>
+    );
   }
 
   currentView = () => {
@@ -32,14 +77,13 @@ class Signin extends Component {
       case 'signUp':
         return (
           <form>
-            <h2>Welcome to Vocabify!</h2>
             <fieldset>
               <legend>Sign up</legend>
               <p>{this.state.message}</p>
 
               <ul>
                 <li>
-                  <label>Username:</label>
+                  <label>Username</label>
                   <input
                     value={this.state.signUpEmail}
                     onChange={this.handleChange}
@@ -49,7 +93,7 @@ class Signin extends Component {
                   />
                 </li>
                 <li>
-                  <label>Password:</label>
+                  <label>Password</label>
                   <input
                     value={this.state.signUpPassword}
                     onChange={this.handleChange}
@@ -70,13 +114,12 @@ class Signin extends Component {
       case 'signIn':
         return (
           <form>
-            <h2>Welcome to Vocabify!</h2>
             <fieldset>
-              <legend>Log In</legend>
+              <legend>Sign In</legend>
               <p>{this.state.message}</p>
               <ul>
                 <li>
-                  <label>Username:</label>
+                  <label>Username</label>
                   <input
                     value={this.state.signInEmail}
                     onChange={this.handleChange}
@@ -86,7 +129,7 @@ class Signin extends Component {
                   />
                 </li>
                 <li>
-                  <label>Password:</label>
+                  <label>Password</label>
                   <input
                     value={this.state.signInPassword}
                     onChange={this.handleChange}
@@ -97,7 +140,7 @@ class Signin extends Component {
                 </li>
               </ul>
             </fieldset>
-            <button onClick={(e) => this.handleSignIn(e)}>Login</button>
+            <button onClick={(e) => this.handleSignIn(e)}>Sign in</button>
             <button
               type="button"
               onClick={() => {

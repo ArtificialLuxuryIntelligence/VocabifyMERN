@@ -1,27 +1,27 @@
-var express = require("express");
+var express = require('express');
 var router = express.Router();
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 
-const User = require("../models/User");
+const User = require('../models/User');
 // const UserSession = require("../models/UserSession");
 
-var isAuthenticated = require("../middleware/isAuthenticated");
+var isAuthenticated = require('../middleware/isAuthenticated');
 
 //Signup route
 
-router.post("/signup", (req, res) => {
+router.post('/signup', (req, res) => {
   let { password, email } = req.body;
 
   if (!email) {
     return res.send({
       success: false,
-      message: "Sign up Failed: Email cannot be blank",
+      message: 'Sign up Failed: Username cannot be blank',
     });
   }
   if (!password) {
     return res.send({
       success: false,
-      message: "Sign up Failed: Password cannot be blank",
+      message: 'Sign up Failed: Password cannot be blank',
     });
   }
 
@@ -35,12 +35,12 @@ router.post("/signup", (req, res) => {
       if (err) {
         return res.send({
           success: false,
-          message: "Server error",
+          message: 'Server error',
         });
       } else if (existingUsers.length > 0) {
         return res.send({
           success: false,
-          message: "Sign up failed: Accout already exists with that e-mail",
+          message: 'Sign up failed: Accout already exists with that e-mail',
         });
       }
       const newUser = new User();
@@ -50,12 +50,12 @@ router.post("/signup", (req, res) => {
         if (err) {
           return res.send({
             success: false,
-            message: "Server error",
+            message: 'Server error',
           });
         }
         return res.send({
           success: true,
-          messaged: "Signed up",
+          messaged: 'Signed up',
         });
       });
     }
@@ -64,19 +64,19 @@ router.post("/signup", (req, res) => {
 
 //Signin route
 
-router.post("/signin", (req, res) => {
+router.post('/signin', (req, res) => {
   const { body } = req;
   let { password, email } = body;
   if (!email) {
     return res.send({
       success: false,
-      message: "Sign in Failed: Email cannot be blank",
+      message: 'Sign in Failed: Username cannot be blank',
     });
   }
   if (!password) {
     return res.send({
       success: false,
-      message: "Sign in Failed: Password cannot be blank",
+      message: 'Sign in Failed: Password cannot be blank',
     });
   }
 
@@ -90,19 +90,19 @@ router.post("/signin", (req, res) => {
       if (err) {
         return res.send({
           success: false,
-          message: "Server error",
+          message: 'Server error',
         });
       } else if (users.length != 1) {
         return res.send({
           success: false,
-          message: "Cannot find user",
+          message: 'Cannot find user',
         });
       }
       const user = users[0];
       if (!user.validPassword(password)) {
         return res.send({
           success: false,
-          message: "Wrong password",
+          message: 'Wrong password',
         });
       }
       //success - start session
@@ -126,7 +126,7 @@ router.post("/signin", (req, res) => {
       );
       res.send({
         success: true,
-        message: "Sign in success",
+        message: 'Sign in success',
         // token: user._id, //nothing fancy here, active session is checked with middleware when userdata requests are made.
         token: token,
         // knownWords: user.knownWords,
@@ -143,7 +143,7 @@ router.post("/signin", (req, res) => {
 //Update user
 
 //UPDATE VERB?
-router.post("/updateuser", isAuthenticated, (req, res, next) => {
+router.post('/updateuser', isAuthenticated, (req, res, next) => {
   // let token = req.body.token;
   // let id = req.body.id; //note token is (currently in this version) user id (separate here for clarity)
   // let unknownWords = req.body.unknownWords;
@@ -168,17 +168,17 @@ router.post("/updateuser", isAuthenticated, (req, res, next) => {
           message: err,
         });
       } else {
-        res.send({ message: "User updated", user });
+        res.send({ message: 'User updated', user });
       }
     }
   );
 });
 
-router.post("/authcheck", isAuthenticated, (req, res) => {
+router.post('/authcheck', isAuthenticated, (req, res) => {
   // console.log(req);
 
   if (req.userData) {
-    res.status(200).json({ message: "user is logged in" });
+    res.status(200).json({ message: 'user is logged in' });
   }
 });
 
