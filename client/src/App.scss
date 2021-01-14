@@ -1,9 +1,9 @@
-@import "./styles/mixinresponsive.scss";
+@import './styles/mixinresponsive.scss';
 
-@import url("https://fonts.googleapis.com/css2?family=Roboto&family=Work+Sans&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Roboto&family=Work+Sans&display=swap');
 
 html {
-  font-family: "Work Sans", sans-serif;
+  font-family: 'Work Sans', sans-serif;
   // font-family: 'Roboto', sans-serif;
 }
 
@@ -109,14 +109,6 @@ nav {
 
 @include breakpoint(md) {
   nav {
-    a {
-      border-radius: 3px;
-      color: white;
-      transition: all 0.2s ease;
-      &:hover {
-        background-color: rgba(0, 0, 0, 0.205);
-      }
-    }
   }
 }
 

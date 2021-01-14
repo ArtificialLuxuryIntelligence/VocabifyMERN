@@ -24,7 +24,7 @@
   padding-left: 0rem;
 } */
 
-@import "../../styles/mixinresponsive.scss";
+@import '../../styles/mixinresponsive.scss';
 
 nav {
   // padding: 1rem;
@@ -69,7 +69,7 @@ nav {
       span:before,
       span:after {
         // position: absolute;
-        content: "";
+        content: '';
         display: block;
         height: 3px;
         width: 1.5rem;
@@ -114,6 +114,10 @@ nav {
         padding: 1rem 6rem;
         font-size: 1.3rem;
         text-decoration: none;
+        &:hover {
+          background-color: #2a4747;
+          color: white;
+        }
       }
     }
   }
@@ -164,9 +168,16 @@ nav {
         text-align: center;
         // background-color: red;
         flex: 1;
+
         a {
           margin: 0;
           padding: 0.6rem 1rem;
+          border-radius: 3px;
+          color: white;
+          transition: all 0.2s ease;
+          &:hover {
+            background-color: rgba(0, 0, 0, 0.205);
+          }
         }
       }
     }

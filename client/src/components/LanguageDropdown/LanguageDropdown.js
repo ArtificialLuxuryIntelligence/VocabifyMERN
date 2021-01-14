@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
+import './LanguageDropdown.scss';
 
 class LanguageDropdown extends Component {
-
   render() {
     return (
       <select
